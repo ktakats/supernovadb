@@ -9,7 +9,7 @@ def home(request):
 def add_sn(request):
     if request.method=='POST':
         sn=SN.objects.create(sn_name=request.POST['new_sn'])
-        return redirect('/%d/' % (sn.id))
+        return redirect(sn)
 
 def view_sn(request, sn_id):
     sn=SN.objects.get(id=sn_id)

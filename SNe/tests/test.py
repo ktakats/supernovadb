@@ -12,8 +12,9 @@ class HomeViewTest(TestCase):
         self.assertContains(response, 'id_new_sn')
 
     def test_input_new_sn_redirects_to_sn_page(self):
-        response=self.client.post('/add_sn/', data={'new_sn': 'SN 2017A'})
-        self.assertRedirects(response, '/2/')
+        response=self.client.post('/add_sn/', data={'new_sn': 'SN 2000A'})
+        sn=SN.objects.get(sn_name='SN 2000A')
+        self.assertRedirects(response, '/%d/' % (sn.id))
 
 
 class SNViewTest(TestCase):
