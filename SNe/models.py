@@ -5,6 +5,8 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
 
+
+
 # Create your models here.
 @python_2_unicode_compatible
 class SN(models.Model):
@@ -12,6 +14,8 @@ class SN(models.Model):
         return self.sn_name
 
     sn_name=models.CharField(max_length=100)
+    ra=models.FloatField(default=0.0)
+    dec=models.FloatField(default=0.0)
 
     def get_absolute_url(self):
         return reverse('view_sn', args=[self.id])
