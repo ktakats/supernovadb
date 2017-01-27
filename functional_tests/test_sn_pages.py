@@ -15,7 +15,14 @@ class SnPageTest(FunctionalTest):
         #Finds a button where he can add a new SN. He clicks it
         self.browser.find_element_by_link_text('Add new SN').click()
 
-        #There's a form here to add the name and the coordinates of the new SN. He adds SN 1987A with  05:35:27.99 -69:16:11.50
+        #There's a form here to add the name and the coordinates of the new SN.
+        #First he tries to submit an empty form, which is not accepted
+
+        #Then he makes a mistake with the coordinates.
+
+        #He adds SN 1987A with  05:35:27.99 -69:16:11.50, which is correct form
+
+
         self.browser.find_element_by_id("id_new_sn").send_keys('SN 1987A')
         self.browser.find_element_by_id("id_coord").send_keys('05:35:27.99 -69:16:11.50\n')
 
