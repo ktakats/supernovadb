@@ -13,6 +13,8 @@ def add_sn(request):
         if form.is_valid():
             sn=form.save()
             return redirect(sn)
+        else:
+            return render(request, 'new_sn.html', {'form': form})
     else:
         form=NewSNForm()
         return render(request, 'new_sn.html', {'form':form})

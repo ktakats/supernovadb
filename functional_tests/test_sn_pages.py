@@ -52,5 +52,5 @@ class NewSNPageTest(FunctionalTest):
         self.browser.find_element_by_id("id_sn_name").send_keys('SN 1987A')
         self.browser.find_element_by_id("id_ra").send_keys('05:35:27.99')
         self.browser.find_element_by_id("id_dec").send_keys('-69:16:11.50\n')
-        error=self.browser.find_element_by_css_selector('.has-error')
+        error=self.browser.find_element_by_css_selector('.errorlist')
         self.assertEqual(error.text, 'This SN is already registered')
