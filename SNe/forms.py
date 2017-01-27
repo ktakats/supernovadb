@@ -2,7 +2,7 @@ from astropy.coordinates import SkyCoord
 from astropy import units as u
 
 from django import forms
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from  django.core.validators import RegexValidator
 
 from .models import SN
@@ -23,6 +23,7 @@ class NewSNForm(forms.models.ModelForm):
         widget=forms.TextInput(attrs={'placeholder': '00:00:00.00'}),
         validators=[RegexValidator(regex='^(\+|-?)\d\d:\d\d:\d\d.\d(\d*?)$', message='Incorrect coordinate format'),
         validate_ra,])
+
     dec=forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': '00:00:00.00'}),
         validators=[RegexValidator(regex='^(\+|-?)\d\d:\d\d:\d\d.\d(\d*?)$', message='Incorrect coordinate format'),
@@ -34,8 +35,10 @@ class NewSNForm(forms.models.ModelForm):
         fields=['sn_name']
 
         error_messages={
-        'sn_name': {'required': 'You need to provide the name of the SN'}
+        'sn_name': {'required': 'You need to provide the name of the SN'},
         }
+
+
 
     def save(self):
         data=self.cleaned_data
@@ -43,3 +46,10 @@ class NewSNForm(forms.models.ModelForm):
         sn=SN(sn_name=data['sn_name'], ra=coords.ra.deg, dec=coords.dec.deg)
         sn.save()
         return sn
+
+    def validate_unique(self):
+        try:
+            self.instance.validate_unique()
+        except ValidationError as e:
+            e.error_dict={'sn_name': ['This SN is already registered']}
+            self._update_errors(e)

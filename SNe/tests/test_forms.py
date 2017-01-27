@@ -59,3 +59,9 @@ class NewSNFormTest(TestCase):
         form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '23:55:56.78', 'dec': '-69:53:65.0'})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['dec'], ['Invalid coordinate value'])
+
+    def test_cannot_duplicate_sn(self):
+        sn=SN.objects.create(sn_name='SN 2999A')
+        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '02:34:56.78', 'dec': '-59:53:24.6'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['sn_name'], ['This SN is already registered'])
