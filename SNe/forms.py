@@ -2,17 +2,31 @@ from astropy.coordinates import SkyCoord
 from astropy import units as u
 
 from django import forms
+from django.core.exceptions import ValidationError
 from  django.core.validators import RegexValidator
 
 from .models import SN
 
+
+def validate_ra(value):
+    ra=map(float, value.split(":"))
+    if ra[0]<0 or ra[0]>=24 or ra[1]>=60 or ra[2]>=60:
+        raise ValidationError("Invalid coordinate value")
+
+def validate_dec(value):
+    dec=map(float, value.split(":"))
+    if dec[0]>=90 or dec[0]<=-90 or dec[1]>=60 or dec[2]>=60:
+        raise ValidationError("Invalid coordinate value")
+
 class NewSNForm(forms.models.ModelForm):
     ra=forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': '00:00:00.00'}),
-        validators=[RegexValidator(regex='^(\+|-?)\d\d:\d\d:\d\d.\d(\d*?)$', message='Incorrect coordinate format'),])
+        validators=[RegexValidator(regex='^(\+|-?)\d\d:\d\d:\d\d.\d(\d*?)$', message='Incorrect coordinate format'),
+        validate_ra,])
     dec=forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': '00:00:00.00'}),
-        validators=[RegexValidator(regex='^(\+|-?)\d\d:\d\d:\d\d.\d(\d*?)$', message='Incorrect coordinate format'),])
+        validators=[RegexValidator(regex='^(\+|-?)\d\d:\d\d:\d\d.\d(\d*?)$', message='Incorrect coordinate format'),
+        validate_dec])
 
 
     class Meta:

@@ -30,4 +30,32 @@ class NewSNFormTest(TestCase):
         self.assertEqual(form.errors['ra'], ['Incorrect coordinate format'])
         self.assertEqual(form.errors['dec'], ['Incorrect coordinate format'])
 
-    #test for digit limits!!!
+    def test_invalid_ra_gives_error(self):
+        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '25:45:56.78', 'dec': '-69:53:24.0'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['ra'], ['Invalid coordinate value'])
+
+        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '23:65:56.78', 'dec': '-69:53:24.0'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['ra'], ['Invalid coordinate value'])
+
+        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '23:55:66.78', 'dec': '-69:53:24.0'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['ra'], ['Invalid coordinate value'])
+
+    def test_invalid_dec_gives_error(self):
+        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '23:45:56.78', 'dec': '91:53:24.0'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['dec'], ['Invalid coordinate value'])
+
+        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '23:55:56.78', 'dec': '-95:53:24.0'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['dec'], ['Invalid coordinate value'])
+
+        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '23:55:56.78', 'dec': '-69:63:24.0'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['dec'], ['Invalid coordinate value'])
+
+        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '23:55:56.78', 'dec': '-69:53:65.0'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['dec'], ['Invalid coordinate value'])
