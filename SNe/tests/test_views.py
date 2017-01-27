@@ -1,3 +1,5 @@
+from astropy import units as u
+from astropy.coordinates import SkyCoord
 from django.test import TestCase
 from SNe.models import SN
 
@@ -30,4 +32,19 @@ class AddNewSNViewTest(TestCase):
         response=self.client.get('/add_sn/')
         self.assertTemplateUsed(response, 'new_sn.html')
 
-    
+    def test_new_sn_page_renders_form(self):
+        response=self.client.get('/add_sn/')
+        self.assertContains(response, 'id_sn_name')
+
+    def test_form_creates_new_database_entry(self):
+        self.client.post('/add_sn/', data={'sn_name': 'SN 1999A', 'ra': '01:23:45.6', 'dec': '+65:34:27.3'})
+        sn=SN.objects.first()
+        c=SkyCoord('01:23:45.6', '+65:34:27.3', unit=(u.hourangle, u.deg))
+        self.assertEqual(sn.sn_name, 'SN 1999A')
+        self.assertEqual('%.2f' % (sn.ra), '%.2f' %  (c.ra.deg))
+        self.assertEqual('%.2f' % (sn.dec), '%.2f' % (c.dec.deg))
+
+    def test_form_submission_redirects_to_sn_page(self):
+        response=self.client.post('/add_sn/', data={'sn_name': 'SN 1999A', 'ra': '01:23:45.6', 'dec': '+65:34:27.3'})
+        sn=SN.objects.first()
+        self.assertRedirects(response, '/%d/' % (sn.id))

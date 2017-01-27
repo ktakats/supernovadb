@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from models import SN
+from forms import NewSNForm
 
 # Create your views here.
 
@@ -8,10 +9,13 @@ def home(request):
 
 def add_sn(request):
     if request.method=='POST':
-        sn=SN.objects.create(sn_name=request.POST['new_sn'])
-        return redirect(sn)
+        form=NewSNForm(data=request.POST)
+        if form.is_valid():
+            sn=form.save()
+            return redirect(sn)
     else:
-        return render(request, 'new_sn.html')
+        form=NewSNForm()
+        return render(request, 'new_sn.html', {'form':form})
 
 def view_sn(request, sn_id):
     sn=SN.objects.get(id=sn_id)

@@ -29,3 +29,5 @@ class NewSNFormTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['ra'], ['Incorrect coordinate format'])
         self.assertEqual(form.errors['dec'], ['Incorrect coordinate format'])
+
+    #test for digit limits!!!
