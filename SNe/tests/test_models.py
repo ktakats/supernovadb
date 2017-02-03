@@ -15,4 +15,4 @@ class SNModelTest(TestCase):
 
     def test_get_absolute_url(self):
         sn=SN.objects.create(sn_name='SN 2017A')
-        self.assertIn(sn.get_absolute_url(), '/%d/' % (sn.id))
+        self.assertIn(sn.get_absolute_url(), '/sn/%d/' % (sn.id))

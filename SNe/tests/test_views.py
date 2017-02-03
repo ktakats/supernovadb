@@ -9,26 +9,16 @@ class HomeViewTest(TestCase):
         response=self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
 
-#    def test_home_has_button_to_go_to_new_sn_page(self):
-#        response=self.client.get('/')
-#        self.assertContains(response, 'id_new_sn')
-
-#    def test_input_new_sn_redirects_to_sn_page(self):
-#        response=self.client.post('/add_sn/', data={'new_sn': 'SN 2000A'})
-#        sn=SN.objects.get(sn_name='SN 2000A')
-#        self.assertRedirects(response, '/%d/' % (sn.id))
-
-
 class SNViewTest(TestCase):
 
     def test_view_uses_sn_template(self):
         sn=SN.objects.create(sn_name='SN 2017A')
-        response=self.client.get('/%d/' % (sn.id))
+        response=self.client.get('/sn/%d/' % (sn.id))
         self.assertTemplateUsed(response, 'sn.html')
 
     def test_view_shows_the_name_and_coordinates_of_sn(self):
         sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
-        response=self.client.get('/%d/' % (sn.id))
+        response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'SN 2017A')
         self.assertContains(response, 'RA=01:30:30.000')
         self.assertContains(response, 'Dec=65:34:30.00')
@@ -54,4 +44,4 @@ class AddNewSNViewTest(TestCase):
     def test_form_submission_redirects_to_sn_page(self):
         response=self.client.post('/add_sn/', data={'sn_name': 'SN 1999A', 'ra': '01:23:45.6', 'dec': '+65:34:27.3'})
         sn=SN.objects.first()
-        self.assertRedirects(response, '/%d/' % (sn.id))
+        self.assertRedirects(response, '/sn/%d/' % (sn.id))
