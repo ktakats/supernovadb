@@ -20,7 +20,7 @@ def validate_dec(value):
 
 class NewSNForm(forms.models.ModelForm):
     ra=forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': '00:00:00.00'}),
+        widget=forms.TextInput(attrs={'placeholder': '00:00:00.000'}),
         validators=[RegexValidator(regex='^(\+|-?)\d\d:\d\d:\d\d.\d(\d*?)$', message='Incorrect coordinate format'),
         validate_ra,])
 
@@ -37,8 +37,6 @@ class NewSNForm(forms.models.ModelForm):
         error_messages={
         'sn_name': {'required': 'You need to provide the name of the SN'},
         }
-
-
 
     def save(self):
         data=self.cleaned_data

@@ -26,6 +26,13 @@ class SNViewTest(TestCase):
         response=self.client.get('/%d/' % (sn.id))
         self.assertTemplateUsed(response, 'sn.html')
 
+    def test_view_shows_the_name_and_coordinates_of_sn(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        response=self.client.get('/%d/' % (sn.id))
+        self.assertContains(response, 'SN 2017A')
+        self.assertContains(response, 'RA=01:30:30.000')
+        self.assertContains(response, 'Dec=65:34:30.00')
+
 class AddNewSNViewTest(TestCase):
 
     def test_uses_new_sn_template(self):

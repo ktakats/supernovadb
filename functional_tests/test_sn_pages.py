@@ -1,12 +1,10 @@
 from .base import FunctionalTest
-from django.contrib.auth.models import User
 import time
 
 class NewSNPageTest(FunctionalTest):
 
     def test_user_can_add_SN_and_access_its_page(self):
         #There's a new app for SNe! Joe goes and checks it out
-        user=User.objects.create()
         self.browser.get(self.server_url)
 
         #Sees that it's really about SNe!
@@ -22,9 +20,10 @@ class NewSNPageTest(FunctionalTest):
         self.browser.find_element_by_id("id_ra").send_keys('05:35:27.99')
         self.browser.find_element_by_id("id_dec").send_keys('-69:16:11.50\n')
 
-        #It brings him to the newly created page of the SN
+        #It brings him to the newly created page of the SN, that shows the coordinates too
         title=self.browser.find_element_by_css_selector('h1').text
         self.assertIn('SN 1987A', title)
+        self.assertIn('05:35:27.99', title)
 
     def test_user_cannot_submit_blank_form(self):
         #Joe goes to the New SN form and tries to submit a blank form

@@ -16,8 +16,3 @@ class SNModelTest(TestCase):
     def test_get_absolute_url(self):
         sn=SN.objects.create(sn_name='SN 2017A')
         self.assertIn(sn.get_absolute_url(), '/%d/' % (sn.id))
-
-    def test_coords_are_stored_properly(self):
-        sn_added=SN.objects.create(sn_name='SN2017A', ra=83.866625, dec=-69.26986111)
-        sn_indb=SN.objects.first()
-        self.assertEqual(sn_indb, sn_added)
