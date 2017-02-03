@@ -22,8 +22,9 @@ class NewSNPageTest(FunctionalTest):
 
         #It brings him to the newly created page of the SN, that shows the coordinates too
         title=self.browser.find_element_by_css_selector('h1').text
+        coords=self.browser.find_element_by_css_selector('.coordinates').text
         self.assertIn('SN 1987A', title)
-        self.assertIn('05:35:27.99', title)
+        self.assertIn('05:35:27.99', coords)
 
     def test_user_cannot_submit_blank_form(self):
         #Joe goes to the New SN form and tries to submit a blank form
