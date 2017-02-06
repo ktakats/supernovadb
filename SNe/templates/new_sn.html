@@ -1,7 +1,11 @@
-<h1>Add a new SN</h1>
+{% extends 'layout.html'%}
 
-<form method="POST" action="/add_sn/">
+{% block title %}Add a new SN{% endblock %}
+
+{% block content %}
+<form method="POST" action="/add_sn/" id="id_new_sn_form">
 {% csrf_token%}
 {{form.as_p}}
 <button type="submit">Submit</button>
 </form>
+{% endblock %}

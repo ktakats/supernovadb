@@ -34,6 +34,10 @@ class NewSNForm(forms.models.ModelForm):
         model=SN
         fields=['sn_name']
 
+        labels={
+            'sn_name': 'SN'
+        }
+
         error_messages={
         'sn_name': {'required': 'You need to provide the name of the SN'},
         }

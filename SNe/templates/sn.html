@@ -1,4 +1,8 @@
-<h1>{{sn}}<h1>
+{% extends 'layout.html' %}
+
+{% block title %}{{sn}}{% endblock %}
+{% block content %}
 <div class="coordinates">
 <p>RA={{ra}}, Dec={{dec}}</p>
 </div>
+{% endblock %}

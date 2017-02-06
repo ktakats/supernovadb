@@ -1,0 +1,47 @@
+/*palette: http://colorpalettes.net/color-palette-1797/*/
+body {
+  text-align: center;
+  font-size: 1.5em;
+  color: #565656;
+}
+
+.navbar {
+  background-color: #79ACA9;
+}
+
+.nav.navbar-nav.navbar-right li a {
+    color: #d8d6d6;
+    font-size: 1.5em;
+}
+.navbar-default .navbar-brand {
+  color: #d8d6d6;
+  font-size: 1.5em;
+}
+
+h1 {
+  color: #e98167;
+}
+
+#id_new_sn_form {
+  width: 50%;
+  margin: 5% auto;
+}
+
+#id_new_sn_form label, input {
+  display: inline-block;
+}
+
+#id_new_sn_form label {
+  width: 20%;
+  float: left;
+  text-align: right;
+}
+
+#id_new_sn_form label +input {
+    width: 61%;
+    margin: 0 15% 0 2%;
+}
+
+#id_new_sn_form input+input {
+  float: right;
+}
