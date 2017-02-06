@@ -60,3 +60,5 @@ class ObsLogViewTest(TestCase):
         sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
         response=self.client.get('/sn/%d/obslog/' % (sn.id))
         self.assertContains(response, 'id_obs_date')
+
+    #def test_view_shows_observations_as_table(self):

@@ -1,6 +1,7 @@
 from django.test import TestCase
 from SNe.forms import NewSNForm, ObsLogForm
 from SNe.models import SN, Obs
+from datetime import date
 
 class NewSNFormTest(TestCase):
 
@@ -71,3 +72,13 @@ class ObsLogFormTest(TestCase):
     def test_default(self):
         form=ObsLogForm()
         self.assertIn('Setup', form.as_p())
+
+    def test_form_validation(self):
+        sn=SN.objects.create(sn_name='SN 2999A')
+        form=ObsLogForm(data={'sn': sn, 'obs_date': date.today(), 'obs_type': 'S', 'telescope': 'ntt', 'instrument': 'EFOCS2', 'setup': 'gr11', 'notes': 'bla'})
+        self.assertTrue(form.is_valid())
+
+    def test_not_all_fields_are_required(self):
+        sn=SN.objects.create(sn_name='SN 2999A')
+        form=ObsLogForm(data={'sn': sn, 'obs_date': date.today(), 'telescope': 'ntt'})
+        self.assertTrue(form.is_valid())
