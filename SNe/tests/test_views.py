@@ -61,4 +61,8 @@ class ObsLogViewTest(TestCase):
         response=self.client.get('/sn/%d/obslog/' % (sn.id))
         self.assertContains(response, 'id_obs_date')
 
-    #def test_view_shows_observations_as_table(self):
+    def test_view_shows_observations_as_table(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        obs=Obs.objects.create(sn=sn, obs_date=date.today(), obs_type= 'S', telescope= 'ntt', instrument= 'EFOCS2', setup= 'gr11', notes= 'bla')
+        response=self.client.get('/sn/%d/obslog/' % (sn.id))
+        self.assertContains(response, "ntt")
