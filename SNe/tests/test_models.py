@@ -1,5 +1,7 @@
 from django.test import TestCase
 from SNe.models import SN
+from SNe.models import Obs
+from datetime import date
 
 class SNModelTest(TestCase):
 
@@ -16,3 +18,12 @@ class SNModelTest(TestCase):
     def test_get_absolute_url(self):
         sn=SN.objects.create(sn_name='SN 2017A')
         self.assertIn(sn.get_absolute_url(), '/sn/%d/' % (sn.id))
+
+class ObservationTest(TestCase):
+
+    def test_can_create_observation(self):
+        today=date.today()
+        sn=SN.objects.create(sn_name='SN 2017A')
+        obs=Obs(sn=sn, obs_date=today, obs_type='S', telescope='NTT', instrument='EFOSC2', setup='GR13', notes='experimental')
+        obs.save()
+        self.assertEqual(obs, Obs.objects.first())

@@ -1,6 +1,6 @@
 from django.test import TestCase
-from SNe.forms import NewSNForm
-from SNe.models import SN
+from SNe.forms import NewSNForm, ObsLogForm
+from SNe.models import SN, Obs
 
 class NewSNFormTest(TestCase):
 
@@ -65,3 +65,9 @@ class NewSNFormTest(TestCase):
         form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '02:34:56.78', 'dec': '-59:53:24.6'})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['sn_name'], ['This SN is already registered'])
+
+class ObsLogFormTest(TestCase):
+
+    def test_default(self):
+        form=ObsLogForm()
+        self.assertIn('Setup', form.as_p())

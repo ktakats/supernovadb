@@ -3,6 +3,7 @@ from astropy.coordinates import SkyCoord
 from django.test import TestCase
 from SNe.models import SN
 
+
 class HomeViewTest(TestCase):
 
     def test_uses_home_template(self):
@@ -22,6 +23,8 @@ class SNViewTest(TestCase):
         self.assertContains(response, 'SN 2017A')
         self.assertContains(response, 'RA=01:30:30.000')
         self.assertContains(response, 'Dec=65:34:30.00')
+
+
 
 class AddNewSNViewTest(TestCase):
 
@@ -45,3 +48,15 @@ class AddNewSNViewTest(TestCase):
         response=self.client.post('/add_sn/', data={'sn_name': 'SN 1999A', 'ra': '01:23:45.6', 'dec': '+65:34:27.3'})
         sn=SN.objects.first()
         self.assertRedirects(response, '/sn/%d/' % (sn.id))
+
+class ObsLogViewTest(TestCase):
+
+    def test_view_uses_obslog_template(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        response=self.client.get('/sn/%d/obslog/' % (sn.id))
+        self.assertTemplateUsed(response, 'obslog.html')
+
+    def test_view_renders_form(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        response=self.client.get('/sn/%d/obslog/' % (sn.id))
+        self.assertContains(response, 'id_obs_date')

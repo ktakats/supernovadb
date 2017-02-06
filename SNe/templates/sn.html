@@ -1,8 +1,10 @@
 {% extends 'layout.html' %}
 
-{% block title %}{{sn}}{% endblock %}
+{% block title %}{{sn.sn_name}}{% endblock %}
 {% block content %}
 <div class="coordinates">
 <p>RA={{ra}}, Dec={{dec}}</p>
 </div>
+<p>{% url 'sn_obs' sn.id %}</p>
+<button><a href="{% url 'sn_obs' sn.id %}">Observation log</a></button>
 {% endblock %}

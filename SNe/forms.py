@@ -5,7 +5,9 @@ from django import forms
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from  django.core.validators import RegexValidator
 
-from .models import SN
+from .models import SN, Obs
+
+from django.forms.extras.widgets import SelectDateWidget
 
 
 def validate_ra(value):
@@ -55,3 +57,17 @@ class NewSNForm(forms.models.ModelForm):
         except ValidationError as e:
             e.error_dict={'sn_name': ['This SN is already registered']}
             self._update_errors(e)
+
+
+class ObsLogForm(forms.models.ModelForm):
+
+    class Meta:
+        model=Obs
+        fields=['obs_date', 'obs_type', 'telescope', 'instrument', 'setup', 'notes']
+
+        widgets={
+            'obs_date': SelectDateWidget,
+            'setup': forms.fields.TextInput(attrs={
+                'placeholder': 'e.g. filters, grisms',
+                }),
+        }
