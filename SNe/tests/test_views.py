@@ -1,7 +1,8 @@
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from django.test import TestCase
-from SNe.models import SN
+from SNe.models import SN, Obs
+from datetime import date
 
 
 class HomeViewTest(TestCase):

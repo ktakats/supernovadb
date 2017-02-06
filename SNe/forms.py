@@ -71,3 +71,9 @@ class ObsLogForm(forms.models.ModelForm):
                 'placeholder': 'e.g. filters, grisms',
                 }),
         }
+
+    def save(self, sn):
+        data=self.cleaned_data
+        obs=Obs(obs_date=data['obs_date'], obs_type=data['obs_type'], telescope=data['telescope'], instrument=data['instrument'], setup=data['setup'], notes=data['notes'], sn=sn)
+        obs.save()
+        return obs

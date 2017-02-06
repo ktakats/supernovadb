@@ -1,7 +1,6 @@
 {% extends 'layout.html' %}
 
 {% block title %}{{sn}}{% endblock %}
-
 {% block content %}
 
 <form method="post" action="#">
@@ -10,4 +9,6 @@
   <button type="submit">Submit</button>
 </form>
 
+{% load django_tables2 %}
+{% render_table table %}
 {% endblock %}

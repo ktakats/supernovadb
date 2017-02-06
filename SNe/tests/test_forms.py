@@ -82,3 +82,12 @@ class ObsLogFormTest(TestCase):
         sn=SN.objects.create(sn_name='SN 2999A')
         form=ObsLogForm(data={'sn': sn, 'obs_date': date.today(), 'telescope': 'ntt'})
         self.assertTrue(form.is_valid())
+
+    def test_form_can_be_saved(self):
+        sn=SN.objects.create(sn_name='SN 2999A')
+        today=date.today()
+        form=ObsLogForm(data={'sn': sn, 'obs_date': date.today(), 'telescope': 'ntt'})
+        self.assertTrue(form.is_valid())
+        form.save(sn=sn)
+        obs=Obs.objects.get(obs_date=today)
+        self.assertEqual('ntt', obs.telescope)
