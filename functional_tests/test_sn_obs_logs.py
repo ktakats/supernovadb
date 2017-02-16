@@ -27,5 +27,4 @@ class ObsLogTest(FunctionalTest):
 
         #After submitting the form the page refreshes and he sees his input in a table format
         self.browser.find_element_by_tag_name("table")
-        table=self.browser.find_elements_by_tag_name("td")
-        self.assertContains(table, "NTT")
+        telescope=self.browser.find_element_by_css_selector('.telescope')

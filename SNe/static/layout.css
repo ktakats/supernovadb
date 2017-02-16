@@ -1,4 +1,5 @@
 /*palette: http://colorpalettes.net/color-palette-1797/*/
+/*font-awesome icon to png: http://fa2png.io/*/
 body {
   text-align: center;
   font-size: 1.5em;
@@ -45,3 +46,39 @@ h1 {
 #id_new_sn_form input+input {
   float: right;
 }
+
+/* table*/
+.table-container {
+  overflow-x: auto;
+  margin: 5% auto;
+}
+
+table {
+  display: inline-block;
+  table-layout: fixed;
+}
+
+th > a {
+  color: #e98167;
+}
+
+th, td {
+  width: 60em;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.notes {
+  width: 150em;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2}
+
+
+table thead th.orderable {
+  background: url('images/sort_arrow_down_nonactive_15px.png') no-repeat center left 5px;
+}
+table thead th.asc {
+  background: url('images/sort_arrow_up_active_15px.png') no-repeat center left 5px; }
+table thead th.desc {
+  background: url('images/sort_arrow_down_active_15px.png') no-repeat center left 5px; }

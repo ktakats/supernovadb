@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from models import SN, Obs
 from forms import NewSNForm, ObsLogForm
 from tables import ObsLogTable
+from django_tables2 import RequestConfig
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 # Create your views here.
@@ -38,4 +39,5 @@ def view_obslog(request, sn_id):
     form=ObsLogForm()
     obs=Obs.objects.filter(sn=sn)
     table=ObsLogTable(obs)
+    RequestConfig(request).configure(table)
     return render(request, 'obslog.html', {'sn': sn.sn_name, 'form': form, 'table': table})
