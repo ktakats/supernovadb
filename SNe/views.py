@@ -35,9 +35,18 @@ def view_obslog(request, sn_id):
         form=ObsLogForm(data=request.POST)
         if form.is_valid():
             form.save(sn=sn)
-    sn=SN.objects.get(id=sn_id)
     form=ObsLogForm()
     obs=Obs.objects.filter(sn=sn)
     table=ObsLogTable(obs)
     RequestConfig(request).configure(table)
+    return render(request, 'obslog.html', {'sn': sn.sn_name, 'form': form, 'table': table})
+
+def deleteobs(request, sn_id, obs_id):
+    sn=SN.objects.get(id=sn_id)
+    form=ObsLogForm()
+    Obs.objects.filter(id=obs_id).delete()
+    obs=Obs.objects.filter(sn=sn)
+    table=ObsLogTable(obs)
+    RequestConfig(request).configure(table)
+
     return render(request, 'obslog.html', {'sn': sn.sn_name, 'form': form, 'table': table})
