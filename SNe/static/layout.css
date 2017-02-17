@@ -59,8 +59,12 @@ table {
   table-layout: fixed;
 }
 
-th > a {
+th, th >a {
   color: #e98167;
+}
+
+a:hover {
+  color: #d8d6d6;
 }
 
 th, td {
