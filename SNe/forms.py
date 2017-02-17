@@ -5,7 +5,7 @@ from django import forms
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from  django.core.validators import RegexValidator
 
-from .models import SN, Obs
+from .models import SN, Obs, Photometry
 
 #from django.forms.extras.widgets import SelectDateWidget
 
@@ -81,3 +81,21 @@ class ObsLogForm(forms.models.ModelForm):
             obs.id=id
         obs.save()
         return obs
+
+class PhotometryForm(forms.models.ModelForm):
+
+    class Meta:
+        model=Photometry
+        fields=['MJD', 'Filter', 'magnitude']
+
+        widgets={
+            'MJD': forms.fields.NumberInput(attrs={
+                'placeholder': 'Modified Julian Date',
+            }),
+            'Filter': forms.fields.TextInput(attrs={
+                'placeholder': 'One filter at the time, e.g. B',
+            }),
+            'magnitude': forms.fields.NumberInput(attrs={
+                'placeholder': 'Mag',
+            }),
+        }

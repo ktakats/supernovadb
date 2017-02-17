@@ -25,6 +25,16 @@ class SNViewTest(TestCase):
         self.assertContains(response, 'RA=01:30:30.000')
         self.assertContains(response, 'Dec=65:34:30.00')
 
+    def test_view_has_link_to_obslog(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        response=self.client.get('/sn/%d/' % (sn.id))
+        self.assertContains(response, 'Observation log')
+
+    def test_view_has_link_to_photometry(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        response=self.client.get('/sn/%d/' % (sn.id))
+        self.assertContains(response, 'Photometry')
+
 
 
 class AddNewSNViewTest(TestCase):
@@ -86,3 +96,15 @@ class EditObsViewTest(TestCase):
         response=self.client.get('/sn/%d/obslog/edit/%d/' % (sn.id, obs.id))
         form=response.context['form']
         self.assertIn('value="ntt"', form.as_p())
+
+class PhotometryViewTest(TestCase):
+
+    def test_view_uses_photometry_template(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        response=self.client.get('/sn/%d/photometry/' % (sn.id))
+        self.assertTemplateUsed(response, 'photometry.html')
+
+    def test_view_renders_form(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        response=self.client.get('/sn/%d/photometry/' % (sn.id))
+        self.assertContains(response, "id_MJD")

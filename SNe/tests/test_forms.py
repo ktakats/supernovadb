@@ -1,5 +1,5 @@
 from django.test import TestCase
-from SNe.forms import NewSNForm, ObsLogForm
+from SNe.forms import NewSNForm, ObsLogForm, PhotometryForm
 from SNe.models import SN, Obs
 from datetime import date
 
@@ -99,3 +99,15 @@ class ObsLogFormTest(TestCase):
         self.assertTrue(form.is_valid())
         updated_obs=form.save(sn=sn, id=obs.id)
         self.assertEqual(obs.id, updated_obs.id)
+
+class PhotometryFormTest(TestCase):
+
+    def test_default(self):
+        form=PhotometryForm()
+        self.assertIn('MJD', form.as_p())
+
+    def test_form_has_placeholders(self):
+        form=PhotometryForm()
+        self.assertIn('placeholder="Modified Julian Date"', form.as_p())
+        self.assertIn('placeholder="One filter at the time, e.g. B"', form.as_p())
+        self.assertIn('placeholder="Mag"', form.as_p())

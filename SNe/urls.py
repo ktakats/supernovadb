@@ -8,4 +8,5 @@ urlpatterns=[
     url(r'^sn/(\d+)/obslog/$', views.view_obslog, name='sn_obs'),
     url(r'^sn/(\d+)/obslog/delete/(\d+)/$', views.deleteobs, name='deleteObs'),
     url(r'^sn/(\d+)/obslog/edit/(\d+)/$', views.view_obslog, name='editObs'),
+    url(r'^sn/(\d+)/photometry/$', views.photometry, name='photometry'),
 ]

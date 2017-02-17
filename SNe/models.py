@@ -29,3 +29,11 @@ class Obs(models.Model):
     instrument=models.CharField(max_length=100, blank=True)
     setup=models.CharField(max_length=100, blank=True)
     notes=models.CharField(max_length=200, blank=True)
+
+class Photometry(models.Model):
+
+    sn=models.ForeignKey(SN, on_delete=models.CASCADE, related_name='photometry')
+    MJD=models.DecimalField(max_digits=7, decimal_places=2)
+    Filter=models.CharField(max_length=2)
+    magnitude=models.FloatField()
+    notes=models.CharField(max_length=200, blank=True)

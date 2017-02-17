@@ -1,0 +1,13 @@
+{% extends 'layout.html'%}
+
+{% block title %}{{sn.sn_name}}{%endblock%}
+
+{% block content %}
+
+<form method="post" action="#" id="id_obslogform">
+  {% csrf_token%}
+  {{form.as_p}}
+  <button type="submit">Submit</button>
+</form>
+
+{% endblock %}
