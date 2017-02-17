@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from models import SN, Obs
+from models import SN, Obs, Photometry
 from forms import NewSNForm, ObsLogForm, PhotometryForm
-from tables import ObsLogTable
+from tables import ObsLogTable, PhotometryTable
 from django_tables2 import RequestConfig
 from astropy.coordinates import SkyCoord
 from astropy import units as u
@@ -60,4 +60,7 @@ def deleteobs(request, sn_id, obs_id):
 def photometry(request, sn_id):
     sn=SN.objects.get(id=sn_id)
     form=PhotometryForm()
-    return render(request, 'photometry.html', {'sn': sn, 'form': form})
+    phot=Photometry.objects.filter(sn=sn)
+    table=PhotometryTable(phot)
+    RequestConfig(request).configure(table)
+    return render(request, 'photometry.html', {'sn': sn, 'form': form, 'table': table})

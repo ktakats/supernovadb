@@ -15,7 +15,7 @@ class PhotometryTest(FunctionalTest):
 
         #He sees a form to submit Photometry
         self.browser.find_element_by_id('id_MJD').send_keys('57754.4')
-        self.browser.find_element_by_id('id_filter').send_keys('B')
+        self.browser.find_element_by_id('id_Filter').send_keys('B')
         self.browser.find_element_by_id('id_magnitude').send_keys('15.5')
         self.browser.find_element_by_id('id_notes').send_keys('ntt\n')
 

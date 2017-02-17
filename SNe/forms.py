@@ -86,7 +86,7 @@ class PhotometryForm(forms.models.ModelForm):
 
     class Meta:
         model=Photometry
-        fields=['MJD', 'Filter', 'magnitude']
+        fields=['MJD', 'Filter', 'magnitude', 'notes']
 
         widgets={
             'MJD': forms.fields.NumberInput(attrs={

@@ -111,3 +111,7 @@ class PhotometryFormTest(TestCase):
         self.assertIn('placeholder="Modified Julian Date"', form.as_p())
         self.assertIn('placeholder="One filter at the time, e.g. B"', form.as_p())
         self.assertIn('placeholder="Mag"', form.as_p())
+
+    def test_notes_are_not_required(self):
+        form=PhotometryForm(data={'MJD': 54005.0, 'Filter': 'B', 'magnitude': 15.5})
+        self.assertTrue(form.is_valid())

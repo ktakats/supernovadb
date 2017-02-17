@@ -1,7 +1,7 @@
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from django.test import TestCase
-from SNe.models import SN, Obs
+from SNe.models import SN, Obs, Photometry
 from datetime import date
 
 
@@ -108,3 +108,10 @@ class PhotometryViewTest(TestCase):
         sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
         response=self.client.get('/sn/%d/photometry/' % (sn.id))
         self.assertContains(response, "id_MJD")
+
+    def test_view_renders_table(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        phot=Photometry.objects.create(sn=sn, MJD=53003.5, Filter='V', magnitude=16.7, notes="this sn")
+        response=self.client.get('/sn/%d/photometry/' % (sn.id))
+        self.assertContains(response, 'table-container')
+        self.assertContains(response, '53003.5')
