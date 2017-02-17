@@ -91,3 +91,11 @@ class ObsLogFormTest(TestCase):
         form.save(sn=sn)
         obs=Obs.objects.get(obs_date=today)
         self.assertEqual('ntt', obs.telescope)
+
+    def test_entry_is_updated_if_editing_it(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        obs=Obs.objects.create(sn=sn, obs_date=date.today(), obs_type= 'S', telescope= 'ntt', instrument= 'EFOCS2', setup= 'gr11', notes= 'bla')
+        form=ObsLogForm(data={'sn': sn, 'obs_date': date.today(), 'obs_type': 'S', 'telescope': 'ntt', 'instrument': 'EFOCS2', 'setup': 'gr11, gr16', 'notes': 'bla'})
+        self.assertTrue(form.is_valid())
+        updated_obs=form.save(sn=sn, id=obs.id)
+        self.assertEqual(obs.id, updated_obs.id)

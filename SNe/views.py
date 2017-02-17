@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from models import SN, Obs
 from forms import NewSNForm, ObsLogForm
 from tables import ObsLogTable
@@ -7,13 +7,12 @@ from astropy.coordinates import SkyCoord
 from astropy import units as u
 
 #Helper functions
-def render_obslog_page(sn, request):
-    form=ObsLogForm()
+def render_obslog_page(sn, request, form):
     obs=Obs.objects.filter(sn=sn)
     table=ObsLogTable(obs)
     RequestConfig(request).configure(table)
 
-    return render(request, 'obslog.html', {'sn': sn.sn_name, 'form': form, 'table': table})
+    return render(request, 'obslog.html', {'sn': sn, 'form': form, 'table': table})
 
 
 # Create your views here.
@@ -39,15 +38,21 @@ def view_sn(request, sn_id):
     dec='%02d:%02d:%02.2f' % (c.dec.dms.d, c.dec.dms.m, c.dec.dms.s)
     return render(request, 'sn.html', {'sn': sn, 'ra': ra, 'dec': dec})
 
-def view_obslog(request, sn_id):
+def view_obslog(request, sn_id, obs_id=None):
     sn=SN.objects.get(id=sn_id)
+    try:
+        instance=Obs.objects.get(id=obs_id)
+    except Obs.DoesNotExist:
+        instance=None
+    form=ObsLogForm(request.POST or None, instance=instance)
     if request.method=='POST':
-        form=ObsLogForm(data=request.POST)
         if form.is_valid():
-            form.save(sn=sn)
-    return render_obslog_page(sn, request)
+            form.save(sn=sn, id=obs_id)
+
+    return render_obslog_page(sn, request, form)
 
 def deleteobs(request, sn_id, obs_id):
     sn=SN.objects.get(id=sn_id)
     Obs.objects.filter(id=obs_id).delete()
-    return render_obslog_page(sn, request)
+    form=ObsLogForm()
+    return render_obslog_page(sn, request, form)

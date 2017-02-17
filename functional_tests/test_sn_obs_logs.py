@@ -50,13 +50,21 @@ class ObsLogTest(FunctionalTest):
         self.browser.find_element_by_id('id_notes').send_keys("Trial")
         self.browser.find_element_by_tag_name("button").click()
 
-        #He notices he made a mistake, so wants to delete the observation
-        self.browser.find_element_by_css_selector(".fa-trash-o").click()
-        self.browser.find_element_by_link_text("OK").click()
+        #He made a mistake, and wants to edit the entry
+        self.browser.find_element_by_css_selector(".fa-pencil").click()
+        time.sleep(5)
+        setup=self.browser.find_element_by_id('id_setup').get_attribute('value')
+        self.assertEqual("GR13", setup)
+        self.browser.find_element_by_id('id_setup').send_keys("GR13, GR16")
+        self.browser.find_element_by_tag_name("button").click()
+        body=self.browser.find_element_by_tag_name("body").text
+        self.assertIn("GR13, GR16", body)
 
+
+        #He notices that it's all wrong, so wants to delete the observation
+        self.browser.find_element_by_css_selector(".fa-trash-o").click()
+        #it prompts a pop-up, asking him if he's sure. he says yes
+        self.browser.find_element_by_link_text("OK").click()
+        #Now the observation is deleted.
         body=self.browser.find_element_by_tag_name("body").text
         self.assertNotIn("NTT", body)
-        #it prompts a pop-up, asking him if he's sure. he says yes
-        self.fail()
-
-        #Now the observation is deleted.

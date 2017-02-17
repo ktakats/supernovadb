@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 
-{% block title %}{{sn}} - Observation log{% endblock %}
+{% block title %}{{sn.sn_name}} - Observation log{% endblock %}
 {% block content %}
 
 <form method="post" action="#">
@@ -36,11 +36,9 @@ $('#confirmmodal').on('show.bs.modal', function (event) {
   console.log("bla");
   var button = $(event.relatedTarget); // Button that triggered the modal
   var dataid = button.data('id');
-
   var modal=$(this);
-  var sn=window.location.pathname;
   var link=document.getElementById('delete');
-  link.setAttribute('href', sn+'delete/'+dataid+'/')
+  link.setAttribute('href', '/sn/{{sn.id}}/delete/'+dataid+'/')
 })
 </script>
 {% endblock %}
