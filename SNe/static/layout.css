@@ -23,27 +23,29 @@ h1 {
   color: #e98167;
 }
 
-#id_new_sn_form {
+/*New sn form*/
+
+#id_new_sn_form, #id_obslogform {
   width: 50%;
   margin: 5% auto;
 }
 
-#id_new_sn_form label, input {
+#id_new_sn_form label, input, #id_obslogform label, input, select {
   display: inline-block;
 }
 
-#id_new_sn_form label {
+#id_new_sn_form label, #id_obslogform label {
   width: 20%;
   float: left;
   text-align: right;
 }
 
-#id_new_sn_form label +input {
+#id_new_sn_form label +input, #id_obslogform label + input, label+select {
     width: 61%;
     margin: 0 15% 0 2%;
 }
 
-#id_new_sn_form input+input {
+#id_new_sn_form input+input, #id_obslogform input+input {
   float: right;
 }
 

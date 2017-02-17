@@ -4,7 +4,7 @@
 {% block title %}{{sn.sn_name}} - Observation log{% endblock %}
 {% block content %}
 
-<form method="post" action="#">
+<form method="post" action="#" id="id_obslogform">
   {% csrf_token%}
   {{form.as_p}}
   <button type="submit">Submit</button>

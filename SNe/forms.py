@@ -7,7 +7,7 @@ from  django.core.validators import RegexValidator
 
 from .models import SN, Obs
 
-from django.forms.extras.widgets import SelectDateWidget
+#from django.forms.extras.widgets import SelectDateWidget
 
 
 def validate_ra(value):
@@ -66,7 +66,9 @@ class ObsLogForm(forms.models.ModelForm):
         fields=['obs_date', 'obs_type', 'telescope', 'instrument', 'setup', 'notes']
 
         widgets={
-            'obs_date': SelectDateWidget,
+            'obs_date': forms.widgets.DateInput(format='%Y-%m-%d', attrs={
+                'placeholder': 'e.g. 2017-01-31'
+            }),
             'setup': forms.fields.TextInput(attrs={
                 'placeholder': 'e.g. filters, grisms',
                 }),

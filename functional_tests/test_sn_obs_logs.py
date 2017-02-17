@@ -15,9 +15,7 @@ class ObsLogTest(FunctionalTest):
         self.browser.find_element_by_link_text('Observation log').click()
 
         #Here he sees a form to submit his observations
-        self.browser.find_element_by_id('id_obs_date_month').send_keys("1")
-        self.browser.find_element_by_id('id_obs_date_day').send_keys("1")
-        self.browser.find_element_by_id('id_obs_date_year').send_keys("2017")
+        self.browser.find_element_by_id('id_obs_date').send_keys("2017-01-01")
         self.browser.find_element_by_id('id_obs_type').send_keys('S')
         self.browser.find_element_by_id('id_telescope').send_keys("NTT")
         self.browser.find_element_by_id('id_instrument').send_keys("EFOSC2")
@@ -40,9 +38,7 @@ class ObsLogTest(FunctionalTest):
         self.browser.find_element_by_link_text('Observation log').click()
 
         #Here he sees a form to submit his observations
-        self.browser.find_element_by_id('id_obs_date_month').send_keys("1")
-        self.browser.find_element_by_id('id_obs_date_day').send_keys("1")
-        self.browser.find_element_by_id('id_obs_date_year').send_keys("2017")
+        self.browser.find_element_by_id('id_obs_date').send_keys("2017-01-01")
         self.browser.find_element_by_id('id_obs_type').send_keys('S')
         self.browser.find_element_by_id('id_telescope').send_keys("NTT")
         self.browser.find_element_by_id('id_instrument').send_keys("EFOSC2")
@@ -52,7 +48,6 @@ class ObsLogTest(FunctionalTest):
 
         #He made a mistake, and wants to edit the entry
         self.browser.find_element_by_css_selector(".fa-pencil").click()
-        time.sleep(5)
         setup=self.browser.find_element_by_id('id_setup').get_attribute('value')
         self.assertEqual("GR13", setup)
         self.browser.find_element_by_id('id_setup').send_keys("GR13, GR16")
