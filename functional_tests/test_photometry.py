@@ -1,4 +1,5 @@
 from .base import FunctionalTest
+import time
 
 class PhotometryTest(FunctionalTest):
 
@@ -17,8 +18,9 @@ class PhotometryTest(FunctionalTest):
         self.browser.find_element_by_id('id_MJD').send_keys('57754.4')
         self.browser.find_element_by_id('id_Filter').send_keys('B')
         self.browser.find_element_by_id('id_magnitude').send_keys('15.5')
+        self.browser.find_element_by_id('id_mag_error').send_keys('0.02')
         self.browser.find_element_by_id('id_notes').send_keys('ntt\n')
-
+        time.sleep(5)
         #After submitting the form, the data appears in a table
         self.browser.find_element_by_tag_name("table")
 
@@ -34,5 +36,5 @@ class PhotometryTest(FunctionalTest):
         self.browser.find_element_by_link_text('Photometry').click()
 
         #He sees that he can add photometry by uploading a file
-        self.browser.find_element_by_link_text("Browser").click()
+        self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/testing_tools/test_photometry.txt")
         self.fail()

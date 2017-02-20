@@ -14,6 +14,7 @@ class ObsLogTable(tables.Table):
         exclude=('sn')
 
 class PhotometryTable(tables.Table):
+    mag_error=tables.Column(verbose_name="Error")
 
     class Meta:
         model=Photometry

@@ -1,14 +1,17 @@
 {% extends 'layout.html'%}
 
-{% block title %}{{sn.sn_name}}{%endblock%}
+{% block title %}{{sn.sn_name}} - Photometry{%endblock%}
 
 {% block content %}
 
-<form method="post" action="#" id="id_obslogform">
+<form method="post" action="#" id="id_photometryform">
   {% csrf_token%}
   {{form.as_p}}
+  <p>or upload a file</p>
+  {{uploadform.as_p}}
   <button type="submit">Submit</button>
 </form>
+
 
 {% load django_tables2 %}
 {% render_table table %}

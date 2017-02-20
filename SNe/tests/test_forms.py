@@ -1,6 +1,6 @@
 from django.test import TestCase
-from SNe.forms import NewSNForm, ObsLogForm, PhotometryForm
-from SNe.models import SN, Obs
+from SNe.forms import NewSNForm, ObsLogForm, PhotometryForm, UploadPhotometryFileForm
+from SNe.models import SN, Obs, Photometry
 from datetime import date
 
 class NewSNFormTest(TestCase):
@@ -115,3 +115,17 @@ class PhotometryFormTest(TestCase):
     def test_notes_are_not_required(self):
         form=PhotometryForm(data={'MJD': 54005.0, 'Filter': 'B', 'magnitude': 15.5, 'mag_error': 0.02})
         self.assertTrue(form.is_valid())
+
+    def test_form_saves_data(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        form=PhotometryForm(data={'MJD': 54005.0, 'Filter': 'B', 'magnitude': 15.5, 'mag_error': 0.02})
+        self.assertTrue(form.is_valid())
+        form.save(sn)
+        phot=Photometry.objects.first()
+        self.assertEqual(phot.MJD, 54005.0)
+
+class UploadPhotometryFileFormTest(TestCase):
+
+    def test_default(self):
+        form=UploadPhotometryFileForm()
+        self.assertIn('File', form.as_p())

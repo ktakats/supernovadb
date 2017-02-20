@@ -115,3 +115,4 @@ class PhotometryViewTest(TestCase):
         response=self.client.get('/sn/%d/photometry/' % (sn.id))
         self.assertContains(response, 'table-container')
         self.assertContains(response, '53003.5')
+        
