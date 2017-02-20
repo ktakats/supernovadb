@@ -36,4 +36,5 @@ class Photometry(models.Model):
     MJD=models.DecimalField(max_digits=7, decimal_places=2)
     Filter=models.CharField(max_length=15)
     magnitude=models.FloatField()
+    mag_error=models.FloatField()
     notes=models.CharField(max_length=200, blank=True)

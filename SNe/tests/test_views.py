@@ -111,7 +111,7 @@ class PhotometryViewTest(TestCase):
 
     def test_view_renders_table(self):
         sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
-        phot=Photometry.objects.create(sn=sn, MJD=53003.5, Filter='V', magnitude=16.7, notes="this sn")
+        phot=Photometry.objects.create(sn=sn, MJD=53003.5, Filter='V', magnitude=16.7, mag_error=0.02, notes="this sn")
         response=self.client.get('/sn/%d/photometry/' % (sn.id))
         self.assertContains(response, 'table-container')
         self.assertContains(response, '53003.5')

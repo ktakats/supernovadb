@@ -113,5 +113,5 @@ class PhotometryFormTest(TestCase):
         self.assertIn('placeholder="Mag"', form.as_p())
 
     def test_notes_are_not_required(self):
-        form=PhotometryForm(data={'MJD': 54005.0, 'Filter': 'B', 'magnitude': 15.5})
+        form=PhotometryForm(data={'MJD': 54005.0, 'Filter': 'B', 'magnitude': 15.5, 'mag_error': 0.02})
         self.assertTrue(form.is_valid())
