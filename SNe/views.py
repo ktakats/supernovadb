@@ -59,7 +59,7 @@ def deleteobs(request, sn_id, obs_id):
     form=ObsLogForm()
     return render_obslog_page(sn, request, form)
 
-def photometry(request, sn_id):
+def photometry(request, sn_id, phot_id=None):
     sn=SN.objects.get(id=sn_id)
     out=1
     if request.method=="POST":
@@ -72,8 +72,12 @@ def photometry(request, sn_id):
         else:
             form=PhotometryForm(request.POST)
             if form.is_valid():
-                form.save(sn=sn)
-    form=PhotometryForm()
+                form.save(sn=sn, id=phot_id)
+    try:
+        instance=Photometry.objects.get(id=phot_id)
+    except Photometry.DoesNotExist:
+        instance=None
+    form=PhotometryForm(instance=instance)
     uploadform=UploadPhotometryFileForm()
     if out==-1:
         errors=uploadform.errors.setdefault("file", ErrorList())

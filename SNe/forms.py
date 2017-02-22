@@ -111,9 +111,12 @@ class PhotometryForm(forms.models.ModelForm):
             'mag_error': 'Error'
         }
 
-    def save(self, sn):
+    def save(self, sn, id=None):
         data=self.cleaned_data
-        phot=Photometry.objects.create(MJD=data['MJD'], Filter=data['Filter'], magnitude=data['magnitude'], mag_error=data['mag_error'], notes=data['notes'], sn=sn)
+        phot=Photometry(MJD=data['MJD'], Filter=data['Filter'], magnitude=data['magnitude'], mag_error=data['mag_error'], notes=data['notes'], sn=sn)
+        if not id==None:
+            phot.id=id
+        phot.save()
         return phot
 
 class UploadPhotometryFileForm(forms.Form):
