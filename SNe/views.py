@@ -5,6 +5,7 @@ from tables import ObsLogTable, PhotometryTable
 from django_tables2 import RequestConfig
 from astropy.coordinates import SkyCoord
 from astropy import units as u
+from helpers import uploadPhotometry
 
 #Helper functions
 def render_obslog_page(sn, request, form):
@@ -60,9 +61,14 @@ def deleteobs(request, sn_id, obs_id):
 def photometry(request, sn_id):
     sn=SN.objects.get(id=sn_id)
     if request.method=="POST":
-        form=PhotometryForm(request.POST)
-        if form.is_valid():
-            form.save(sn=sn)
+        if request.FILES:
+            form=UploadPhotometryFileForm(request.POST, request.FILES)
+            if form.is_valid():
+                out=uploadPhotometry(request.FILES['file'], sn)
+        else:
+            form=PhotometryForm(request.POST)
+            if form.is_valid():
+                form.save(sn=sn)
     form=PhotometryForm()
     uploadform=UploadPhotometryFileForm()
     phot=Photometry.objects.filter(sn=sn)

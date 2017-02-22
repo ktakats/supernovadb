@@ -117,4 +117,4 @@ class PhotometryForm(forms.models.ModelForm):
         return phot
 
 class UploadPhotometryFileForm(forms.Form):
-    file=forms.FileField(required=False)
+    file=forms.FileField()

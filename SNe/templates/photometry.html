@@ -7,9 +7,15 @@
 <form method="post" action="#" id="id_photometryform">
   {% csrf_token%}
   {{form.as_p}}
-  <p>or upload a file</p>
+  <button type="submit" id="id_formsubmitbutton">Submit</button>
+</form>
+
+<p>or upload a file</p>
+
+<form enctype="multipart/form-data" method="post" action="#" id="id_uploadphotometryform">
+  {% csrf_token%}
   {{uploadform.as_p}}
-  <button type="submit">Submit</button>
+<button type="submit" id="id_uploadbutton">Submit</button>
 </form>
 
 

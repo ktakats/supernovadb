@@ -129,3 +129,5 @@ class UploadPhotometryFileFormTest(TestCase):
     def test_default(self):
         form=UploadPhotometryFileForm()
         self.assertIn('File', form.as_p())
+
+    
