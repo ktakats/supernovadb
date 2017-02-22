@@ -1,6 +1,6 @@
 from django.test import TestCase
+from Photometry.helpers import uploadPhotometry
 from SNe.models import SN
-from SNe.helpers import uploadPhotometry
 
 class uploadPhotometryTest(TestCase):
 
