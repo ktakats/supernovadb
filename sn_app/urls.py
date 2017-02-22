@@ -19,5 +19,6 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('SNe.urls')),
-    url(r'^sn/(\d+)/photometry/', include('Photometry.urls'))
+    url(r'^sn/(\d+)/photometry/', include('Photometry.urls')),
+    url(r'^sn/(\d+)/obslog/', include('ObservationLogs.urls')),
 ]

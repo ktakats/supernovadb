@@ -5,8 +5,7 @@ from django import forms
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from  django.core.validators import RegexValidator
 
-from .models import SN, Obs
-from Photometry.models import Photometry
+from .models import SN
 
 #from django.forms.extras.widgets import SelectDateWidget
 
@@ -58,67 +57,3 @@ class NewSNForm(forms.models.ModelForm):
         except ValidationError as e:
             e.error_dict={'sn_name': ['This SN is already registered']}
             self._update_errors(e)
-
-
-class ObsLogForm(forms.models.ModelForm):
-
-    class Meta:
-        model=Obs
-        fields=['obs_date', 'obs_type', 'telescope', 'instrument', 'setup', 'notes']
-
-        widgets={
-            'obs_date': forms.widgets.DateInput(format='%Y-%m-%d', attrs={
-                'placeholder': 'e.g. 2017-01-31'
-            }),
-            'setup': forms.fields.TextInput(attrs={
-                'placeholder': 'e.g. filters, grisms',
-                }),
-        }
-
-    def save(self, sn, id=None):
-        data=self.cleaned_data
-        obs=Obs(obs_date=data['obs_date'], obs_type=data['obs_type'], telescope=data['telescope'], instrument=data['instrument'], setup=data['setup'], notes=data['notes'], sn=sn)
-        if not id==None:
-            obs.id=id
-        obs.save()
-        return obs
-
-class PhotometryForm(forms.models.ModelForm):
-
-    class Meta:
-        model=Photometry
-        fields=['MJD', 'Filter', 'magnitude', 'mag_error', 'notes']
-
-        widgets={
-            'MJD': forms.fields.NumberInput(attrs={
-                'placeholder': 'Modified Julian Date',
-            }),
-            'Filter': forms.fields.TextInput(attrs={
-                'placeholder': 'One filter at the time, e.g. B',
-            }),
-            'magnitude': forms.fields.NumberInput(attrs={
-                'placeholder': 'Mag',
-            }),
-            'mag_error': forms.fields.NumberInput(attrs={
-                'placeholder': 'Mag error'
-            }),
-            'notes': forms.Textarea(attrs={
-                'rows': "4",
-                'cols': "25"
-            })
-        }
-
-        labels={
-            'mag_error': 'Error'
-        }
-
-    def save(self, sn, id=None):
-        data=self.cleaned_data
-        phot=Photometry(MJD=data['MJD'], Filter=data['Filter'], magnitude=data['magnitude'], mag_error=data['mag_error'], notes=data['notes'], sn=sn)
-        if not id==None:
-            phot.id=id
-        phot.save()
-        return phot
-
-class UploadPhotometryFileForm(forms.Form):
-    file=forms.FileField()

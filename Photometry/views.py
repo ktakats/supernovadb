@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.forms.utils import ErrorList
+from django_tables2 import RequestConfig
 from SNe.models import SN
 from .models import Photometry
 from .forms import PhotometryForm, UploadPhotometryFileForm
@@ -7,7 +9,7 @@ from helpers import uploadPhotometry
 
 #helper functions
 
-def render_photometry_page(request, sn, form, out):
+def render_photometry_page(request, sn, form, out=1):
     uploadform=UploadPhotometryFileForm()
     #if the file upload was unsuccessful, i.e. out==-1, attach an error to the form
     if out==-1:
