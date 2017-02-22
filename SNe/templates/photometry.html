@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<form method="post" action="#" id="id_photometryform">
+<form method="post" action="" id="id_photometryform">
   {% csrf_token%}
   {{form.as_p}}
   <button type="submit" id="id_formsubmitbutton">Submit</button>
@@ -12,9 +12,14 @@
 
 <p>or upload a file</p>
 
-<form enctype="multipart/form-data" method="post" action="#" id="id_uploadphotometryform">
+<form enctype="multipart/form-data" method="post" action="" id="id_uploadphotometryform">
   {% csrf_token%}
-  {{uploadform.as_p}}
+  {% if uploadform.errors %}
+  <div class="alert alert-danger">
+  {{uploadform.errors.file.as_text}}
+</div>
+  {%endif%}
+  {{uploadform.file}}
 <button type="submit" id="id_uploadbutton">Submit</button>
 </form>
 

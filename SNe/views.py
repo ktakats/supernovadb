@@ -6,6 +6,7 @@ from django_tables2 import RequestConfig
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 from helpers import uploadPhotometry
+from django.forms.utils import ErrorList
 
 #Helper functions
 def render_obslog_page(sn, request, form):
@@ -60,17 +61,24 @@ def deleteobs(request, sn_id, obs_id):
 
 def photometry(request, sn_id):
     sn=SN.objects.get(id=sn_id)
+    out=1
     if request.method=="POST":
         if request.FILES:
             form=UploadPhotometryFileForm(request.POST, request.FILES)
             if form.is_valid():
                 out=uploadPhotometry(request.FILES['file'], sn)
+                #out returns -1 if the file is not correct
+
         else:
             form=PhotometryForm(request.POST)
             if form.is_valid():
                 form.save(sn=sn)
     form=PhotometryForm()
     uploadform=UploadPhotometryFileForm()
+    if out==-1:
+        errors=uploadform.errors.setdefault("file", ErrorList())
+        errors.append(u"The file format is incorrect. Please check the requirements.")
+
     phot=Photometry.objects.filter(sn=sn)
     table=PhotometryTable(phot)
     RequestConfig(request).configure(table)

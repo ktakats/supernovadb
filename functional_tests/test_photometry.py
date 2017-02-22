@@ -40,8 +40,14 @@ class PhotometryTest(FunctionalTest):
         self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry.txt")
         time.sleep(5)
         self.browser.find_element_by_id('id_uploadbutton').click()
-        time.sleep(5)
+
         #After sending the file, the data appears in a table
         body=self.browser.find_element_by_tag_name("body").text
-        time.sleep(5)
         self.assertIn('55213.1', body)
+
+        #He uploads another file, however the format of this is incorrect, so he gets an error
+        self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry_incorrect.txt")
+        self.browser.find_element_by_id('id_uploadbutton').click()
+        body=self.browser.find_element_by_tag_name("body").text
+        time.sleep(5)
+        self.assertIn("The file format is incorrect. Please check the requirements", body)
