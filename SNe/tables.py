@@ -1,5 +1,6 @@
 import django_tables2 as tables
-from .models import Obs, Photometry
+from .models import Obs
+from Photometry.models import Photometry
 
 TEMPLATE_EDITOBS='<a href="/sn/{{sn.id}}/obslog/edit/{{record.pk}}/" title="edit"><i class="fa fa-pencil"></i></a> <a href="#confirmmodal"  data-toggle="modal" data-id="{{record.pk}}" title="delete"><i class="fa fa-trash-o"></i></a>'
 

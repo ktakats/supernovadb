@@ -5,7 +5,8 @@ from django import forms
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from  django.core.validators import RegexValidator
 
-from .models import SN, Obs, Photometry
+from .models import SN, Obs
+from Photometry.models import Photometry
 
 #from django.forms.extras.widgets import SelectDateWidget
 

@@ -1,4 +1,4 @@
-from SNe.models import Photometry
+from Photometry.models import Photometry
 
 FILTERS=['B', 'V', 'R', 'I']
 UPLOAD_PATH='/home/kati/Dropbox/munka/learning/sn_app/test_tools/uploads/tmp.txt'

@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from models import SN, Obs, Photometry
+from models import SN, Obs
+from Photometry.models import Photometry
 from forms import NewSNForm, ObsLogForm, PhotometryForm, UploadPhotometryFileForm
 from tables import ObsLogTable, PhotometryTable
 from django_tables2 import RequestConfig
