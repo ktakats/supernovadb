@@ -85,3 +85,9 @@ class PhotometryTest(FunctionalTest):
         body=self.browser.find_element_by_tag_name("body").text
         self.assertIn("15.4", body)
         self.assertNotIn("15.5", body)
+
+        #He also realizes that he can simply delete this entry
+        self.browser.find_element_by_css_selector(".fa-trash-o").click()
+        self.browser.find_element_by_link_text("OK").click()
+        body=self.browser.find_element_by_tag_name("body").text
+        self.assertNotIn("15.4", body)

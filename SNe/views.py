@@ -87,3 +87,13 @@ def photometry(request, sn_id, phot_id=None):
     table=PhotometryTable(phot)
     RequestConfig(request).configure(table)
     return render(request, 'photometry.html', {'sn': sn, 'form': form, 'uploadform': uploadform, 'table': table})
+
+def deletePhot(request, sn_id, phot_id):
+    sn=SN.objects.get(id=sn_id)
+    Photometry.objects.filter(id=phot_id).delete()
+    form=PhotometryForm()
+    uploadform=UploadPhotometryFileForm()
+    phot=Photometry.objects.filter(sn=sn)
+    table=PhotometryTable(phot)
+    RequestConfig(request).configure(table)
+    return render(request, 'photometry.html', {'sn': sn, 'form': form, 'uploadform': uploadform, 'table': table})

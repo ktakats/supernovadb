@@ -124,3 +124,11 @@ class editPgotViewTest(TestCase):
         response=self.client.get('/sn/%d/photometry/edit/%d/' % (sn.id, phot.id))
         form=response.context['form']
         self.assertIn('value="16.7"', form.as_p())
+
+class deletePhotViewTest(TestCase):
+
+    def test_can_delete_photometry_entry(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        phot=Photometry.objects.create(sn=sn, MJD=53003.5, Filter='V', magnitude=16.7, mag_error=0.02, notes="this sn")
+        response=self.client.get('/sn/%d/photometry/delete/%d/' % (sn.id, phot.id))
+        self.assertEqual(Photometry.objects.count(), 0)
