@@ -6,10 +6,7 @@ class ObsLogTest(FunctionalTest):
     def test_SN_user_can_add_observation_to_obs_log(self):
         #Joe goes to the SN page and adds an SN
         self.browser.get(self.server_url)
-        self.browser.find_element_by_link_text('Add a new SN').click()
-        self.browser.find_element_by_id("id_sn_name").send_keys('SN 1987A')
-        self.browser.find_element_by_id("id_ra").send_keys('05:35:27.99')
-        self.browser.find_element_by_id("id_dec").send_keys('-69:16:11.50\n')
+        self.add_new_sn()
 
         #Redirected to the SN's page, Joe notices that here he can keep track of the observations
         self.browser.find_element_by_link_text('Observation log').click()
@@ -30,10 +27,8 @@ class ObsLogTest(FunctionalTest):
     def test_user_can_edit_and_delete_observation(self):
         #Joe goes to the SN page and adds an SN
         self.browser.get(self.server_url)
-        self.browser.find_element_by_link_text('Add a new SN').click()
-        self.browser.find_element_by_id("id_sn_name").send_keys('SN 1987A')
-        self.browser.find_element_by_id("id_ra").send_keys('05:35:27.99')
-        self.browser.find_element_by_id("id_dec").send_keys('-69:16:11.50\n')
+        self.add_new_sn()
+        
         #Redirected to the SN's page, Joe notices that here he can keep track of the observations
         self.browser.find_element_by_link_text('Observation log').click()
 

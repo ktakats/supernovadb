@@ -41,16 +41,10 @@ class NewSNPageTest(FunctionalTest):
     def test_user_cannot_add_duplicate_sn(self):
         #Joe goes to the New SN form and adds an SN
         self.browser.get(self.server_url)
-        self.browser.find_element_by_link_text('Add a new SN').click()
-        self.browser.find_element_by_id("id_sn_name").send_keys('SN 1987A')
-        self.browser.find_element_by_id("id_ra").send_keys('05:35:27.99')
-        self.browser.find_element_by_id("id_dec").send_keys('-69:16:11.50\n')
+        self.add_new_sn(name='SN 1987A', ra='05:35:27.99', dec='-69:16:11.50')
 
         #Then he goes away. Next day he forgets that he added this SN and tries again, but gets an error telling him this SN is already in the database
         self.browser.get(self.server_url)
-        self.browser.find_element_by_link_text('Add a new SN').click()
-        self.browser.find_element_by_id("id_sn_name").send_keys('SN 1987A')
-        self.browser.find_element_by_id("id_ra").send_keys('05:35:27.99')
-        self.browser.find_element_by_id("id_dec").send_keys('-69:16:11.50\n')
+        self.add_new_sn(name='SN 1987A', ra='05:35:27.99', dec='-69:16:11.50')
         error=self.browser.find_element_by_css_selector('.errorlist')
         self.assertEqual(error.text, 'This SN is already registered')

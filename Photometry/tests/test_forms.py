@@ -1,7 +1,4 @@
 from django.test import TestCase
-from Photometry.forms import PhotometryForm, UploadPhotometryFileForm
-from Photometry.models import Photometry
-from SNe.models import SN
 
 class PhotometryFormTest(TestCase):
 

@@ -28,3 +28,10 @@ class FunctionalTest(StaticLiveServerTestCase):
     def tearDown(self):
         self.browser.quit()
         super(FunctionalTest, self).tearDown()
+
+    #Helper functions
+    def add_new_sn(self, name="SN 1987A", ra='05:35:27.99', dec='-69:16:11.50'):
+        self.browser.find_element_by_link_text('Add a new SN').click()
+        self.browser.find_element_by_id("id_sn_name").send_keys(name)
+        self.browser.find_element_by_id("id_ra").send_keys(ra)
+        self.browser.find_element_by_id("id_dec").send_keys(dec + '\n')
