@@ -4,15 +4,19 @@ from ObservationLogs.forms import ObsLogForm
 from ObservationLogs.models import Obs
 from ObservationLogs.tables import ObsLogTable
 from SNe.models import SN
+from django.shortcuts import redirect, reverse
+
 
 #Helper functions
 def render_obslog_page(sn, request, form):
     obs=Obs.objects.filter(sn=sn)
     table=ObsLogTable(obs)
     RequestConfig(request).configure(table)
-
+    if request.method=='POST':
+        return redirect(reverse('sn_obs', args=(sn.id,)), {'sn': sn, 'form': form, 'table': table})
     return render(request, 'obslog.html', {'sn': sn, 'form': form, 'table': table})
 
+    #    return redirect(reverse('sn_obs', args=(sn.id,)), {'sn': sn, 'form': form, 'table': table})
 
 # Create your views here.
 def view_obslog(request, sn_id, obs_id=None):

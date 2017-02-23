@@ -42,11 +42,12 @@ class PhotometryTest(FunctionalTest):
         #He uploads another file, however the format of this is incorrect, so he gets an error
         self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry_incorrect.txt")
         self.browser.find_element_by_id('id_uploadbutton').click()
+        time.sleep(5)
         body=self.browser.find_element_by_tag_name("body").text
         time.sleep(5)
         self.assertIn("The file format is incorrect. Please check the requirements", body)
 
-    def test_user_can_edit_and_delete_photometric_poin(self):
+    def test_user_can_edit_and_delete_photometric_point(self):
         #Joe goes to the SN page, adds a new SN
         self.browser.get(self.server_url)
         self.add_new_sn()
@@ -67,18 +68,17 @@ class PhotometryTest(FunctionalTest):
         #He also notices that one of the observations have an error, and that he can edit and correct it.
         self.browser.find_element_by_css_selector(".fa-pencil").click()
         setup=self.browser.find_element_by_id('id_magnitude').get_attribute('value')
-        time.sleep(5)
         self.assertEqual("15.5", setup)
         self.browser.find_element_by_id('id_magnitude').clear()
         self.browser.find_element_by_id('id_magnitude').send_keys("15.4")
         self.browser.find_element_by_id("id_formsubmitbutton").click()
-        time.sleep(5)
         body=self.browser.find_element_by_tag_name("body").text
         self.assertIn("15.4", body)
         self.assertNotIn("15.5", body)
 
         #He also realizes that he can simply delete this entry
         self.browser.find_element_by_css_selector(".fa-trash-o").click()
-        self.browser.find_element_by_link_text("OK").click()
+        time.sleep(5)
+        self.browser.find_element_by_id("id_deletebutton").click()
         body=self.browser.find_element_by_tag_name("body").text
         self.assertNotIn("15.4", body)

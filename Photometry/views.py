@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.forms.utils import ErrorList
 from django_tables2 import RequestConfig
 from SNe.models import SN
@@ -12,12 +12,16 @@ from helpers import uploadPhotometry
 def render_photometry_page(request, sn, form, out=1):
     uploadform=UploadPhotometryFileForm()
     #if the file upload was unsuccessful, i.e. out==-1, attach an error to the form
+
     if out==-1:
         errors=uploadform.errors.setdefault("file", ErrorList())
         errors.append(u"The file format is incorrect. Please check the requirements.")
     phot=Photometry.objects.filter(sn=sn)
     table=PhotometryTable(phot)
     RequestConfig(request).configure(table)
+    if request.method=="POST" and not uploadform.errors:
+        return redirect(reverse('photometry', args=(sn.id,)), {'sn': sn, 'form': form, 'uploadform': uploadform, 'table': table})
+
     return render(request, 'photometry.html', {'sn': sn, 'form': form, 'uploadform': uploadform, 'table': table})
 
 # Create your views here.
@@ -31,6 +35,7 @@ def photometry(request, sn_id, phot_id=None):
             if form.is_valid():
                 #out returns -1 if the file is not correct
                 out=uploadPhotometry(request.FILES['file'], sn)
+
 
         #if the user submited the form
         else:

@@ -8,4 +8,4 @@ class uploadPhotometryTest(TestCase):
         sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
         myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry.txt')
         response=self.client.post('/sn/%d/photometry/' % (sn.id), {'file': myfile})
-        self.assertContains(response, '55189.0')
+        self.assertRedirects(response, '/sn/%d/photometry/' % (sn.id))
