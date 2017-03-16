@@ -82,3 +82,17 @@ class PhotometryTest(FunctionalTest):
         self.browser.find_element_by_id("id_deletebutton").click()
         body=self.browser.find_element_by_tag_name("body").text
         self.assertNotIn("15.4", body)
+
+    def test_user_can_plot_light_curve(self):
+        #Joe goes to the SN page, adds a new SN
+        self.browser.get(self.server_url)
+        self.add_new_sn()
+
+        #He uploads his photometry file
+        self.browser.find_element_by_link_text('Photometry').click()
+        self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry_incorrect.txt")
+        self.browser.find_element_by_id('id_uploadbutton').click()
+
+        #He sees a button promising to plot the light curve
+        self.browser.find_element_by_id("id_plotbutton").click()
+        self.fail()

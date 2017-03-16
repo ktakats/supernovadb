@@ -6,8 +6,9 @@ from .models import Photometry
 from .forms import PhotometryForm, UploadPhotometryFileForm
 from .tables import PhotometryTable
 from helpers import uploadPhotometry
-
+import simplejson as json
 #helper functions
+from django.http import HttpResponse
 
 def render_photometry_page(request, sn, form, out=1):
     uploadform=UploadPhotometryFileForm()
@@ -56,3 +57,9 @@ def deletePhot(request, sn_id, phot_id):
     Photometry.objects.filter(id=phot_id).delete()
     form=PhotometryForm()
     return render_photometry_page(request, sn, form)
+
+def queryPhot(request, sn_id):
+    sn=SN.objects.get(id=sn_id)
+    phot=Photometry.objects.filter(sn=sn)
+    photdata=[obj.as_dict() for obj in phot]
+    return HttpResponse(json.dumps({"data": photdata}))

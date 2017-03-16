@@ -12,3 +12,11 @@ class Photometry(models.Model):
     magnitude=models.FloatField()
     mag_error=models.FloatField()
     notes=models.CharField(max_length=200, blank=True)
+
+    def as_dict(self):
+        return {
+            "MJD": self.MJD,
+            "Filter": self.Filter,
+            "magnitude": self.magnitude,
+            "mag_error": self.mag_error,
+        }

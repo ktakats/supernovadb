@@ -49,3 +49,11 @@ class deletePhotViewTest(TestCase):
         phot=Photometry.objects.create(sn=sn, MJD=53003.5, Filter='V', magnitude=16.7, mag_error=0.02, notes="this sn")
         response=self.client.post('/sn/%d/photometry/delete/%d/' % (sn.id, phot.id))
         self.assertRedirects(response, '/sn/%d/photometry/' % (sn.id))
+
+class queryViewTest(TestCase):
+
+    def test_query_returns_photometry_data(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        phot=Photometry.objects.create(sn=sn, MJD=53003.5, Filter='V', magnitude=16.7, mag_error=0.02, notes="this sn")
+        response=self.client.get('/sn/%d/photometry/query/' % (sn.id))
+        self.assertContains(response, "53003.50")

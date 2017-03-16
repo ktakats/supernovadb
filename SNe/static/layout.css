@@ -91,3 +91,13 @@ table thead th.asc {
   background: url('images/sort_arrow_up_active_15px.png') no-repeat center left 5px; }
 table thead th.desc {
   background: url('images/sort_arrow_down_active_15px.png') no-repeat center left 5px; }
+
+.LC {
+  position: relative;
+  margin: auto;
+}
+
+
+.LC.tooltip{
+  position: absolute;
+}
