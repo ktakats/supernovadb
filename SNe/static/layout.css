@@ -52,14 +52,14 @@ h1 {
 
 /* table*/
 .table-container {
-  overflow-x: auto;
-  margin: 5% auto;
-  width: 120%;
+  margin: 3% auto;
+  display: table;
+  text-align: center;
 }
 
 table {
-  display: inline-block;
-  table-layout: fixed;
+  width: 50%;
+  margin: auto;
 }
 
 th, th >a {
@@ -92,12 +92,24 @@ table thead th.asc {
 table thead th.desc {
   background: url('images/sort_arrow_down_active_15px.png') no-repeat center left 5px; }
 
+/*end table*/
+/*LC plot*/
 .LC {
-  position: relative;
-  margin: auto;
+  margin: 2% auto;
+}
+.LC svg{
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.32), 0 3px 12px 0 rgba(0, 0, 0, 0.24);
 }
 
-
-.LC.tooltip{
+.tooltip{
   position: absolute;
+  text-align: center;
+  background-color: #79ACA9;
+  color: white;
+  border-radius: 2px;
+  border: solid #79ACA9;
+}
+
+.axis text{
+  font-size: 1.2em;
 }

@@ -12,7 +12,7 @@
   {% bootstrap_css %}
   {% bootstrap_javascript %}
   <script src="//d3js.org/d3.v4.min.js"></script>
-    <link href="{% static 'layout.css'%}" rel="stylesheet">
+    <link href="{% static 'layout.css'%}?{% now "U" %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -47,5 +47,10 @@
     </div>
   </div>
 
+{% block plot %}
 
+{%endblock %}
+
+{% block table %}
+{% endblock %}
   </body>

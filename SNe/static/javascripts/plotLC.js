@@ -4,33 +4,43 @@ function plotCurve(indata){
   //Remove previous plot from div
   d3.selectAll('.LC svg').remove();
 
-  var width=500;
-  var height=300;
-  var margin={top: 100, bottom:50, left: 60, right: 60};
+  var width=600;
+  var height=400;
+  var margin={top: 50, bottom:50, left: 60, right: 60};
+
+  var x0=[d3.min(data, function(d){return d.MJD})-10, d3.max(data, function(d){return d.MJD;})+10];
+  var y0=[d3.min(data, function(d){return d.magnitude})-2, d3.max(data, function(d){return d.magnitude})+2];
+
 
   var yScale=d3.scaleLinear()
-  .domain([d3.min(data, function(d){return d.magnitude})-2, d3.max(data, function(d){return d.magnitude})+2])
+  .domain(y0)
   .range([0, height]);
 
 
   var xScale=d3.scaleLinear()
-    .domain([d3.min(data, function(d){return d.MJD})-10, d3.max(data, function(d){return d.MJD;})+10])
+    .domain(x0)
     .range([0, width]);
 
-
-
-
-
-    var canvas=d3.select(".LC").append("svg")
+  var canvas=d3.select(".LC").append("svg")
     .attr("class", "plot")
     .attr("width", width+margin.right+margin.left)
     .attr("height", height+margin.top+margin.bottom);
 
+
+
     var tip=d3.select(".LC").append("div")
     .attr("class", "tooltip");
 
+    var brush=d3.brush().on("end", brushended),
+        idleTimeout,
+        idleDelay=350;
+
+    var g=canvas.append("g")
+      .attr("class", "brush")
+      .call(brush);
+
     //data plotting
-    canvas.selectAll("circle")
+    g.selectAll("circle")
       .data(data)
       .enter()
       .append("circle")
@@ -47,61 +57,80 @@ function plotCurve(indata){
         var circ=d3.select(this);
         circ.attr("class", "mouseover");
         circ.transition()
-          .delay(200)
+          .delay(100)
           .attr("r", 10)
         tip.transition()
-          .delay(200)
+          .delay(100)
           .style("opacity", 0.8);
         tip.html("<span>MJD: "+ d.MJD+"</span> </br> <span>Filter: " + d.Filter+"</span> </br> <span>Mag: " + d.magnitude + "+-" + d.mag_error +"</span> ")
-          .style({"right": "550px", "top": "50px", "font-size": "1em"})
+        /*  .style({"left": d3.event.pageX + "px", "top": d3.event.pageY +"px", "font-size": "1em"})*/
+        .style("left", d3.event.pageX + "px")
+        .style("top", d3.event.pageY -80 +"px")
+        .style("font-size", "1.2em")
         })
     .on("mouseout", function(d){
       var circ=d3.select(this);
       circ.attr("class", "mouseout")
       circ.transition()
-        .delay(200)
+        .delay(100)
         .attr("r", 6)
       tip.transition()
-        .delay(1000)
+        .delay(100)
         .style("opacity", 0)
       });
 
       // add axes
    var axisheight=height+margin.top;
    var axiswidth=margin.left;
+   var xAxis=d3.axisBottom(xScale);
+   var yAxis=d3.axisLeft(yScale)
+
 
    canvas.append("g")
-     .call(d3.axisBottom(xScale))
-     .attr("class", "x axis")
+     .call(xAxis)
+     .attr("class", "x-axis")
      .attr("transform", "translate("+margin.left+","+axisheight +")");
 
      canvas.append("g")
-       .call(d3.axisLeft(yScale))
-       .attr("class", "y axis")
+       .call(yAxis)
+       .attr("class", "y-axis")
        .attr("transform", "translate("+margin.left+","+margin.top+")");
 
+  function brushended(){
+    var s = d3.event.selection;
+    if (!s){
+      if (!idleTimeout) {return idleTimeout = setTimeout(idled, idleDelay);}
+      xScale.domain(x0);
+      yScale.domain(y0);
+    }
+    else{
+      xScale.domain([s[0][0]-margin.left, s[1][0]-margin.left].map(xScale.invert,xScale))
+      yScale.domain([s[0][1]-margin.top, s[1][1]-margin.top].map(yScale.invert,yScale))
+      canvas.select(".brush").call(brush.move, null);
+    }
+    zoom();
+  }
 
-  /*     // add legend
-  canvas.append("circle")
-    .attr("cx", xScale(55080))
-    .attr("cy", yScale(22))
-    .attr("r",6)
-    .attr("fill", "#F53D53")
+  function idled(){
+    idleTimeout=null;
+  }
 
-  canvas.append("text")
-    .text("B")
-    .attr("x", xScale(55085))
-    .attr("y", yScale(22))
-
-  canvas.append("circle")
-    .attr("cx", xScale(55080))
-    .attr("cy", yScale(23))
-    .attr("r",6)
-    .attr("fill", "#4D4A4A")
-
-  canvas.append("text")
-    .text("V")
-    .attr("x", xScale(55085))
-    .attr("y", yScale(23))
-*/
+  function zoom(){
+    var t = canvas.transition().duration(750);
+    canvas.select(".x-axis").transition(t).call(xAxis);
+    canvas.select(".y-axis").transition(t).call(yAxis);
+    canvas.selectAll("circle").transition(t)
+      .attr("cx", function(d) {
+        var p= xScale(d.MJD)+margin.left;
+        if (p<margin.left){return p-margin.left}
+        else if (p>width+margin.left){return p+margin.right}
+        else{return p}
+        })
+      .attr("cy", function(d) {
+        var p=yScale(d.magnitude)+margin.top;
+        if(p>height+margin.bottom){return p+margin.top}
+        else if(p<margin.bottom){return p-margin.bottom}
+        else{return p;}
+        });
+  };
 };

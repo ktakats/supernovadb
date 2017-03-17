@@ -22,11 +22,13 @@
   {{uploadform.file}}
 <button type="submit" id="id_uploadbutton">Submit</button>
 </form>
-
+{%endblock%}
+{% block plot %}
 <button id="id_plotbutton">Plot light curve</button>
 <div class="LC" style="display: none"></div>
 
-
+{% endblock %}
+{% block table %}
 {% load django_tables2 %}
 {% render_table table %}
 
@@ -37,18 +39,20 @@
 <script type="text/javascript" src="{% static 'javascripts/plotLC.js'%}"></script>
 <script type="text/javascript">
 $("#id_plotbutton").on("click", function(){
+
   var url=window.location.pathname + "query/";
   $.get(url, function(data){
     data=JSON.parse(data);
     plotCurve(data);
   });
-  console.log($(".LC").is(":visible"))
+
   if($(".LC").is(":visible")){
     $(".LC").hide();
+    $(this).text("Plot light curve");
   }
   else{
     $(".LC").show();
-
+    $(this).text("Hide light curve");
   }
 })
 </script>
