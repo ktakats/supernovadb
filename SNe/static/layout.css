@@ -113,3 +113,7 @@ table thead th.desc {
 .axis text{
   font-size: 1.2em;
 }
+path.err {
+  stroke-width: 1.5px;
+  stroke: blue;
+}

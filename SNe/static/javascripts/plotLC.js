@@ -1,6 +1,9 @@
 function plotCurve(indata){
 
   var data=indata.data;
+  /*var data=dat.slice(0,5)
+  data[0]["mag_error"]=1.5
+  console.log(data[0]["mag_error"])*/
   //Remove previous plot from div
   d3.selectAll('.LC svg').remove();
 
@@ -21,6 +24,18 @@ function plotCurve(indata){
     .domain(x0)
     .range([0, width]);
 
+  var eb = errorBar()
+              .oldXScale(xScale)
+              .xScale(xScale)
+              .oldYScale(yScale)
+              .yScale(yScale)
+              .yValue(function(d){return d.magnitude})
+              .xValue(function(d){return d.MJD})
+              .xError(function(d){return null})
+              .yError(function(d){return d.mag_error});
+
+
+
   var canvas=d3.select(".LC").append("svg")
     .attr("class", "plot")
     .attr("width", width+margin.right+margin.left)
@@ -35,49 +50,115 @@ function plotCurve(indata){
         idleTimeout,
         idleDelay=350;
 
-    var g=canvas.append("g")
+    var gbrush=canvas.append("g")
       .attr("class", "brush")
       .call(brush);
 
+      var errorline = d3.line()
+        .x(function(d) { return yScale(d.magnitude-d.mag_error); })
+        .y(function(d) { return yScale(d.magnitude+d.mag_error); });
     //data plotting
-    g.selectAll("circle")
+
+    var d=gbrush.selectAll("g")
       .data(data)
-      .enter()
-      .append("circle")
-      .attr("cx", function(d){return xScale(d.MJD)+margin.left})
-      .attr("cy", function(d){return yScale(d.magnitude)+margin.top })
-      .attr("r", 6)
-      .attr("fill", function(d){
+    var dEnter=d.enter().append("g")
+
+    dEnter.append("path")
+      .attr("d", function(d){
+        var x1=xScale(d.MJD)+margin.left;
+        var y1=yScale(d.magnitude-d.mag_error)+margin.top;
+        var x2=xScale(d.MJD)+margin.left;
+        var y2=yScale(d.magnitude+d.mag_error)+margin.top;
+        return "M"+x1+","+y1 + " L"+ x2+ ","+ y2})
+      .style("stroke", function(d){
         if(d.Filter=="B"){return "#4D4A4A"}
         else if(d.Filter=="V"){return "#F53D53"}
         else if(d.Filter=="R"){return "#20AB2C"}
         else{return "#4648F0"}
       })
-      .on("mouseover", function(d){
-        var circ=d3.select(this);
-        circ.attr("class", "mouseover");
-        circ.transition()
-          .delay(100)
-          .attr("r", 10)
-        tip.transition()
-          .delay(100)
-          .style("opacity", 0.8);
-        tip.html("<span>MJD: "+ d.MJD+"</span> </br> <span>Filter: " + d.Filter+"</span> </br> <span>Mag: " + d.magnitude + "+-" + d.mag_error +"</span> ")
-        /*  .style({"left": d3.event.pageX + "px", "top": d3.event.pageY +"px", "font-size": "1em"})*/
-        .style("left", d3.event.pageX + "px")
-        .style("top", d3.event.pageY -80 +"px")
-        .style("font-size", "1.2em")
+      .style("stroke-width", "1px")
+
+    dEnter.append("path")
+      .attr("d", function(d){
+        var x1=xScale(d.MJD)-5+margin.left;
+        var y1=yScale(d.magnitude-d.mag_error)+margin.top;
+        var x2=xScale(d.MJD)+5+margin.left;
+        var y2=yScale(d.magnitude-d.mag_error)+margin.top;
+        return "M"+x1+","+y1 + " L"+ x2+ ","+ y2})
+      .style("stroke", function(d){
+        if(d.Filter=="B"){return "#4D4A4A"}
+        else if(d.Filter=="V"){return "#F53D53"}
+        else if(d.Filter=="R"){return "#20AB2C"}
+        else{return "#4648F0"}
+      })
+      .style("stroke-width", "1px")
+
+      dEnter.append("path")
+        .attr("d", function(d){
+          var x1=xScale(d.MJD)-5+margin.left;
+          var y1=yScale(d.magnitude+d.mag_error)+margin.top;
+          var x2=xScale(d.MJD)+5+margin.left;
+          var y2=yScale(d.magnitude+d.mag_error)+margin.top;
+          return "M"+x1+","+y1 + " L"+ x2+ ","+ y2})
+        .style("stroke", function(d){
+          if(d.Filter=="B"){return "#4D4A4A"}
+          else if(d.Filter=="V"){return "#F53D53"}
+          else if(d.Filter=="R"){return "#20AB2C"}
+          else{return "#4648F0"}
         })
-    .on("mouseout", function(d){
-      var circ=d3.select(this);
-      circ.attr("class", "mouseout")
-      circ.transition()
-        .delay(100)
-        .attr("r", 6)
-      tip.transition()
-        .delay(100)
-        .style("opacity", 0)
-      });
+        .style("stroke-width", "1px")
+
+
+    dEnter.append("circle")
+          .attr("cx", function(d){return xScale(d.MJD)+margin.left})
+          .attr("cy", function(d){return yScale(d.magnitude)+margin.top })
+          .attr("r", 6)
+          .attr("fill", function(d){
+            if(d.Filter=="B"){return "#4D4A4A"}
+            else if(d.Filter=="V"){return "#F53D53"}
+            else if(d.Filter=="R"){return "#20AB2C"}
+            else{return "#4648F0"}
+          })
+        .on("mouseover", function(d){
+          var circ=d3.select(this);
+          circ.attr("class", "mouseover");
+          circ.transition()
+            .delay(100)
+            .attr("r", 10)
+          tip.transition()
+            .delay(100)
+            .style("opacity", 0.8);
+          tip.html("<span>MJD: "+ d.MJD+"</span> </br> <span>Filter: " + d.Filter+"</span> </br> <span>Mag: " + d.magnitude + "+-" + d.mag_error +"</span> ")
+            .style("left", d3.event.pageX + "px")
+            .style("top", d3.event.pageY -80 +"px")
+            .style("font-size", "1.2em")
+          })
+        .on("mouseout", function(d){
+            var circ=d3.select(this);
+            circ.attr("class", "mouseout")
+            circ.transition()
+              .delay(100)
+              .attr("r", 6)
+            tip.transition()
+              .delay(100)
+              .style("opacity", 0)
+          })
+
+
+
+
+        /*  d.selectAll("path")
+          .data(data)
+          .enter()
+          .append("path")
+          .attr("d", function(d){console.log(d.MJD); return "M"+xScale(d.MJD)+","+yScale(15)+"L"+xScale(55052)+","+yScale(16)})
+          .style("stroke-width", "1px")
+          .style("stroke", "black")*/
+
+
+
+
+
 
       // add axes
    var axisheight=height+margin.top;
