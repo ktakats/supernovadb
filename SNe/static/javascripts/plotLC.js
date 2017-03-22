@@ -1,20 +1,20 @@
 function plotCurve(indata){
 
+  /*Get data from input*/
   var data=indata.data;
-  /*var data=dat.slice(0,5)
-  data[0]["mag_error"]=1.5
-  console.log(data[0]["mag_error"])*/
-  //Remove previous plot from div
+  /*remove old plot*/
   d3.selectAll('.LC svg').remove();
 
+  /*dimensions*/
   var width=600;
   var height=400;
   var margin={top: 50, bottom:50, left: 60, right: 60};
 
+  /*Default x and y range*/
   var x0=[d3.min(data, function(d){return d.MJD})-10, d3.max(data, function(d){return d.MJD;})+10];
   var y0=[d3.min(data, function(d){return d.magnitude})-2, d3.max(data, function(d){return d.magnitude})+2];
 
-
+  /*Scales*/
   var yScale=d3.scaleLinear()
   .domain(y0)
   .range([0, height]);
@@ -24,89 +24,33 @@ function plotCurve(indata){
     .domain(x0)
     .range([0, width]);
 
-  var eb = errorBar()
-              .oldXScale(xScale)
-              .xScale(xScale)
-              .oldYScale(yScale)
-              .yScale(yScale)
-              .yValue(function(d){return d.magnitude})
-              .xValue(function(d){return d.MJD})
-              .xError(function(d){return null})
-              .yError(function(d){return d.mag_error});
-
-
-
+  /*add svg*/
   var canvas=d3.select(".LC").append("svg")
     .attr("class", "plot")
     .attr("width", width+margin.right+margin.left)
     .attr("height", height+margin.top+margin.bottom);
 
 
-
-    var tip=d3.select(".LC").append("div")
+  /*Define tooltip div*/
+  var tip=d3.select(".LC").append("div")
     .attr("class", "tooltip");
 
-    var brush=d3.brush().on("end", brushended),
+  /*Define brush*/
+  var brush=d3.brush().on("end", brushended),
         idleTimeout,
         idleDelay=350;
-
-    var gbrush=canvas.append("g")
+  /*Define brush container */
+  var gbrush=canvas.append("g")
       .attr("class", "brush")
       .call(brush);
 
-      var errorline = d3.line()
-        .x(function(d) { return yScale(d.magnitude-d.mag_error); })
-        .y(function(d) { return yScale(d.magnitude+d.mag_error); });
+
     //data plotting
 
     var d=gbrush.selectAll("g")
       .data(data)
+
     var dEnter=d.enter().append("g")
-
-    dEnter.append("path")
-      .attr("d", function(d){
-        var x1=xScale(d.MJD)+margin.left;
-        var y1=yScale(d.magnitude-d.mag_error)+margin.top;
-        var x2=xScale(d.MJD)+margin.left;
-        var y2=yScale(d.magnitude+d.mag_error)+margin.top;
-        return "M"+x1+","+y1 + " L"+ x2+ ","+ y2})
-      .style("stroke", function(d){
-        if(d.Filter=="B"){return "#4D4A4A"}
-        else if(d.Filter=="V"){return "#F53D53"}
-        else if(d.Filter=="R"){return "#20AB2C"}
-        else{return "#4648F0"}
-      })
-      .style("stroke-width", "1px")
-
-    dEnter.append("path")
-      .attr("d", function(d){
-        var x1=xScale(d.MJD)-5+margin.left;
-        var y1=yScale(d.magnitude-d.mag_error)+margin.top;
-        var x2=xScale(d.MJD)+5+margin.left;
-        var y2=yScale(d.magnitude-d.mag_error)+margin.top;
-        return "M"+x1+","+y1 + " L"+ x2+ ","+ y2})
-      .style("stroke", function(d){
-        if(d.Filter=="B"){return "#4D4A4A"}
-        else if(d.Filter=="V"){return "#F53D53"}
-        else if(d.Filter=="R"){return "#20AB2C"}
-        else{return "#4648F0"}
-      })
-      .style("stroke-width", "1px")
-
-      dEnter.append("path")
-        .attr("d", function(d){
-          var x1=xScale(d.MJD)-5+margin.left;
-          var y1=yScale(d.magnitude+d.mag_error)+margin.top;
-          var x2=xScale(d.MJD)+5+margin.left;
-          var y2=yScale(d.magnitude+d.mag_error)+margin.top;
-          return "M"+x1+","+y1 + " L"+ x2+ ","+ y2})
-        .style("stroke", function(d){
-          if(d.Filter=="B"){return "#4D4A4A"}
-          else if(d.Filter=="V"){return "#F53D53"}
-          else if(d.Filter=="R"){return "#20AB2C"}
-          else{return "#4648F0"}
-        })
-        .style("stroke-width", "1px")
 
 
     dEnter.append("circle")
@@ -144,23 +88,10 @@ function plotCurve(indata){
               .style("opacity", 0)
           })
 
+      dEnter.call(addError)
 
 
-
-        /*  d.selectAll("path")
-          .data(data)
-          .enter()
-          .append("path")
-          .attr("d", function(d){console.log(d.MJD); return "M"+xScale(d.MJD)+","+yScale(15)+"L"+xScale(55052)+","+yScale(16)})
-          .style("stroke-width", "1px")
-          .style("stroke", "black")*/
-
-
-
-
-
-
-      // add axes
+  // add axes
    var axisheight=height+margin.top;
    var axiswidth=margin.left;
    var xAxis=d3.axisBottom(xScale);
@@ -172,10 +103,65 @@ function plotCurve(indata){
      .attr("class", "x-axis")
      .attr("transform", "translate("+margin.left+","+axisheight +")");
 
-     canvas.append("g")
-       .call(yAxis)
-       .attr("class", "y-axis")
-       .attr("transform", "translate("+margin.left+","+margin.top+")");
+  canvas.append("g")
+    .call(yAxis)
+    .attr("class", "y-axis")
+    .attr("transform", "translate("+margin.left+","+margin.top+")");
+
+
+//Functions
+
+//add errorbars
+  function addError(){
+    dEnter.append("path")
+    .attr("class", "errorbar")
+    .attr("d", function(d){
+       var x1=xScale(d.MJD)+margin.left;
+       var y1=yScale(d.magnitude-d.mag_error)+margin.top;
+       var x2=xScale(d.MJD)+margin.left;
+       var y2=yScale(d.magnitude+d.mag_error)+margin.top;
+       return "M"+x1+","+y1 + " L"+ x2+ ","+ y2})
+    .style("stroke", function(d){
+       if(d.Filter=="B"){return "#4D4A4A"}
+       else if(d.Filter=="V"){return "#F53D53"}
+       else if(d.Filter=="R"){return "#20AB2C"}
+         else{return "#4648F0"}
+       })
+    .style("stroke-width", "1px")
+
+    dEnter.append("path")
+       .attr("class", "errorbottom")
+       .attr("d", function(d){
+         var x1=xScale(d.MJD)-5+margin.left;
+         var y1=yScale(d.magnitude-d.mag_error)+margin.top;
+         var x2=xScale(d.MJD)+5+margin.left;
+         var y2=yScale(d.magnitude-d.mag_error)+margin.top;
+         return "M"+x1+","+y1 + " L"+ x2+ ","+ y2})
+      .style("stroke", function(d){
+         if(d.Filter=="B"){return "#4D4A4A"}
+         else if(d.Filter=="V"){return "#F53D53"}
+         else if(d.Filter=="R"){return "#20AB2C"}
+         else{return "#4648F0"}
+        })
+      .style("stroke-width", "1px")
+
+    dEnter.append("path")
+       .attr("class", "errortop")
+       .attr("d", function(d){
+         var x1=xScale(d.MJD)-5+margin.left;
+         var y1=yScale(d.magnitude+d.mag_error)+margin.top;
+         var x2=xScale(d.MJD)+5+margin.left;
+         var y2=yScale(d.magnitude+d.mag_error)+margin.top;
+         return "M"+x1+","+y1 + " L"+ x2+ ","+ y2})
+       .style("stroke", function(d){
+         if(d.Filter=="B"){return "#4D4A4A"}
+         else if(d.Filter=="V"){return "#F53D53"}
+         else if(d.Filter=="R"){return "#20AB2C"}
+         else{return "#4648F0"}
+       })
+       .style("stroke-width", "1px")
+    }
+
 
   function brushended(){
     var s = d3.event.selection;
@@ -209,9 +195,30 @@ function plotCurve(indata){
         })
       .attr("cy", function(d) {
         var p=yScale(d.magnitude)+margin.top;
-        if(p>height+margin.bottom){return p+margin.top}
-        else if(p<margin.bottom){return p-margin.bottom}
+        if(p>height+margin.bottom){return p+5*margin.bottom}
+        else if(p<margin.bottom){return p-5*margin.bottom}
         else{return p;}
         });
+
+      [".errorbar", ".errortop", ".errorbottom"].forEach(function(myclass, index){
+        canvas.selectAll(myclass).transition(t)
+          .attr("d", function(d){
+            var cx=xScale(d.MJD)+margin.left;
+            var cy=yScale(d.magnitude)+margin.top;
+            var x1=xScale(d.MJD)+margin.left;
+            var y1=yScale(d.magnitude-d.mag_error)+margin.top;
+            var x2=xScale(d.MJD)+margin.left;
+            var y2=yScale(d.magnitude+d.mag_error)+margin.top;
+            if(index==1 || index==2){x1-=5; x2+=5;}
+            if(index==1){y1=yScale(d.magnitude+d.mag_error)+margin.top;}
+            if(index==2){y2=yScale(d.magnitude-d.mag_error)+margin.top;}
+            if (cx<margin.left){x1-=margin.left; x2-=margin.left}
+            else if(cx>width+margin.left){x1+=margin.right; x2+=margin.right}
+            if(cy>height+margin.bottom){y1+=5*margin.top; y2+=5*margin.top}
+            else if(cy<margin.bottom){y1-=5*margin.bottom; y2-=5*margin.bottom}
+
+            return "M"+x1+","+y1 + " L"+ x2+ ","+ y2
+          });
+      });
   };
 };
