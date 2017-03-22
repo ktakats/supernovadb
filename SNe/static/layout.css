@@ -26,27 +26,27 @@ h1 {
 
 /*New sn form*/
 
-#id_new_sn_form, #id_obslogform {
-  width: 50%;
+#id_new_sn_form, #id_obslogform, #id_photometryform, #id_uploadphotometryform {
+  width: 60%;
   margin: 5% auto;
 }
 
-#id_new_sn_form label, input, #id_obslogform label, input, select {
+#id_new_sn_form label, input, #id_obslogform label, input, select, #id_photometryform label, input, #id_uploadphotometryform input, textarea {
   display: inline-block;
 }
 
-#id_new_sn_form label, #id_obslogform label {
+#id_new_sn_form label, #id_obslogform label,  #id_photometryform label, #id_uploadphotometryform label {
   width: 20%;
   float: left;
   text-align: right;
 }
 
-#id_new_sn_form label +input, #id_obslogform label + input, label+select {
+#id_new_sn_form label +input, #id_obslogform label + input, label+select, #id_photometryform label+input, #id_uploadphotometryform label+input, label+textarea {
     width: 61%;
     margin: 0 15% 0 2%;
 }
 
-#id_new_sn_form input+input, #id_obslogform input+input {
+#id_new_sn_form input+input, #id_obslogform input+input, #id_photometryform input+input, #id_uploadphotometryform input+input {
   float: right;
 }
 
@@ -112,8 +112,4 @@ table thead th.desc {
 
 .axis text{
   font-size: 1.2em;
-}
-path.err {
-  stroke-width: 1.5px;
-  stroke: blue;
 }
