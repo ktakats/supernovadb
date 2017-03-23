@@ -115,6 +115,26 @@ function plotCurve(indata){
     .attr("class", "y-axis")
     .attr("transform", "translate("+margin.left+","+margin.top+")");
 
+// add labels
+
+    var xlabel=canvas.select(".x-axis")
+      .append("text")
+      .text("MJD")
+      .attr("text-anchor", "middle")
+      .attr("dx", (width)/2)
+      .attr("dy", margin.bottom*0.8)
+      .style("fill", "black")
+
+    console.log(xlabel)
+
+    canvas.select(".y-axis")
+      .append("text")
+      .text("Magnitude")
+      .attr("text-anchor", "middle")
+      .attr("dx", -height/2)
+      .attr("dy", -margin.left*0.7)
+      .attr("transform", "rotate(-90)")
+      .style("fill", "black")
 
 //Functions
 
