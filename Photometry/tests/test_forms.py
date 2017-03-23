@@ -12,7 +12,6 @@ class PhotometryFormTest(TestCase):
     def test_form_has_placeholders(self):
         form=PhotometryForm()
         self.assertIn('placeholder="Modified Julian Date"', form.as_p())
-        self.assertIn('placeholder="One filter at the time, e.g. B"', form.as_p())
         self.assertIn('placeholder="Mag"', form.as_p())
 
     def test_notes_are_not_required(self):

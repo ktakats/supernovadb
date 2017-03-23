@@ -1,6 +1,6 @@
-from Photometry.models import Photometry
+from Photometry.models import Photometry, FILTERCHOICES
 
-FILTERS=['B', 'V', 'R', 'I']
+FILTERS=[c[0] for c in FILTERCHOICES]
 UPLOAD_PATH='/home/kati/Dropbox/munka/learning/sn_app/test_tools/uploads/tmp.txt'
 
 def uploadPhotometry(f, sn):

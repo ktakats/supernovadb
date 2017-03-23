@@ -11,9 +11,6 @@ class PhotometryForm(forms.models.ModelForm):
             'MJD': forms.fields.NumberInput(attrs={
                 'placeholder': 'Modified Julian Date',
             }),
-            'Filter': forms.fields.TextInput(attrs={
-                'placeholder': 'One filter at the time, e.g. B',
-            }),
             'magnitude': forms.fields.NumberInput(attrs={
                 'placeholder': 'Mag',
             }),
@@ -39,4 +36,4 @@ class PhotometryForm(forms.models.ModelForm):
         return phot
 
 class UploadPhotometryFileForm(forms.Form):
-    file=forms.FileField(help_text="First line is the header, first column is MJD, then the filter names, and errors. Last column is optionally notes.\n Filter names have to be as in the form above.\n Format of the first line e.g.: 'MJD B B_err V V_err R R_err I I_err notes' (do not comment it out!)\n Separator has to be a space \n Notes has to be in quotes")
+    file=forms.FileField(help_text="First line is the header, first column is MJD, then the filter names, and errors. Last column is optionally notes.\n Filter names have to be as in the Filter input of the form above.\n Format of the first line e.g.: 'MJD B B_err V V_err R R_err I I_err notes' (do not comment it out!)\n Separator has to be a space \n Notes has to be in quotes \n Missing data have to be NA")
