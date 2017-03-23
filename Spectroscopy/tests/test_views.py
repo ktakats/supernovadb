@@ -12,3 +12,8 @@ class SpectroscopyViewTest(TestCase):
         sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
         response=self.client.get('/sn/%d/spectroscopy/' % (sn.id))
         self.assertContains(response, 'SN 2017A')
+
+    def test_view_renders_form(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        response=self.client.get('/sn/%d/spectroscopy/' % (sn.id))
+        self.assertContains(response, "id_file")
