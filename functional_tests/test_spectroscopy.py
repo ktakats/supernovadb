@@ -15,10 +15,11 @@ class SpectroscopyTest(FunctionalTest):
         self.assertIn('SN 1987A - Spectroscopy', body)
 
         #Here he sees a form to submit a spectra as a file
+        self.browser.find_element_by_id("id_MJD").send_keys("55043.2")
         self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.dat")
         self.browser.find_element_by_id('id_uploadbutton').click()
 
         #After sending the file, the data appears in a table
         body=self.browser.find_element_by_tag_name("body").text
         self.fail()
-        self.assertIn('55213.1', body)
+        self.assertIn('55043.2', body)

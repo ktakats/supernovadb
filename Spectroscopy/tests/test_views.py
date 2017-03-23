@@ -17,3 +17,9 @@ class SpectroscopyViewTest(TestCase):
         sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
         response=self.client.get('/sn/%d/spectroscopy/' % (sn.id))
         self.assertContains(response, "id_file")
+
+    def test_uploading_file_redirects_back(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.dat')
+        response=self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0})
+        self.assertRedirects(response, '/sn/%d/spectroscopy/' % (sn.id))
