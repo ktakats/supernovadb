@@ -10,6 +10,7 @@ class Spectrum(models.Model):
 
     sn=models.ForeignKey(SN, on_delete=models.CASCADE, related_name='spectroscopy')
     MJD=models.FloatField()
+    notes=models.CharField(max_length=200, blank=True)
 
 class SpectrumDataPoint(models.Model):
 

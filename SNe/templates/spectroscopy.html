@@ -11,11 +11,16 @@
   {{uploadform.errors.file.as_text}}
 </div>
   {%endif%}
-  {{uploadform.MJD}}
+  <p>{{uploadform.MJD}}</p>
   <p><i class="fa fa-question-circle-o" title="{{uploadform.file.help_text | safe}}"></i>  {{uploadform.file}} </p>
-
+  <p>{{uploadform.notes}}</p>
 <button type="submit" id="id_uploadbutton">Submit</button>
 </form>
 
 
+{% endblock %}
+
+{% block table %}
+{% load django_tables2 %}
+{% render_table table %}
 {% endblock %}

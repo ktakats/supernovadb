@@ -1,4 +1,5 @@
 from .base import FunctionalTest
+import time
 
 class SpectroscopyTest(FunctionalTest):
 
@@ -21,5 +22,5 @@ class SpectroscopyTest(FunctionalTest):
 
         #After sending the file, the data appears in a table
         body=self.browser.find_element_by_tag_name("body").text
-        self.fail()
+        time.sleep(5)
         self.assertIn('55043.2', body)

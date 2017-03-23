@@ -23,3 +23,11 @@ class SpectroscopyViewTest(TestCase):
         myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.dat')
         response=self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0})
         self.assertRedirects(response, '/sn/%d/spectroscopy/' % (sn.id))
+
+    def test_view_renders_table(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.dat')
+        self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0})
+        response=self.client.get('/sn/%d/spectroscopy/' % (sn.id))
+        self.assertContains(response, 'table-container')
+        self.assertContains(response, '55055.0')
