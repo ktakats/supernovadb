@@ -33,6 +33,11 @@ class SNViewTest(TestCase):
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'Photometry')
 
+    def test_view_has_link_to_spectroscopy(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        response=self.client.get('/sn/%d/' % (sn.id))
+        self.assertContains(response, 'Spectroscopy')
+
 
 
 class AddNewSNViewTest(TestCase):
