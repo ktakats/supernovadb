@@ -12,7 +12,14 @@ function plotCurve(indata){
 
   /*Default x and y range*/
   var x0=[d3.min(data, function(d){return d.MJD})-10, d3.max(data, function(d){return d.MJD;})+10];
-  var y0=[d3.min(data, function(d){return d.magnitude})-2, d3.max(data, function(d){return d.magnitude})+2];
+  var y0=[d3.min(data, function(d){return d.magnitude})-2, d3.max(data, function(d){return d.magnitude})+2]
+
+  var Filters=[];
+  for (var i=0; i<data.length; i++){
+    if(Filters.indexOf(data[i].Filter)==-1){
+      Filters.push(data[i].Filter);
+    }
+  };
 
   /*Scales*/
   var yScale=d3.scaleLinear()
@@ -23,6 +30,11 @@ function plotCurve(indata){
   var xScale=d3.scaleLinear()
     .domain(x0)
     .range([0, width]);
+
+
+  var colors=d3.scaleSequential()
+    .domain([0,Filters.length])
+    .interpolator(d3.interpolateRainbow);
 
   /*add svg*/
   var canvas=d3.select(".LC").append("svg")
@@ -57,12 +69,7 @@ function plotCurve(indata){
           .attr("cx", function(d){return xScale(d.MJD)+margin.left})
           .attr("cy", function(d){return yScale(d.magnitude)+margin.top })
           .attr("r", 6)
-          .attr("fill", function(d){
-            if(d.Filter=="B"){return "#4D4A4A"}
-            else if(d.Filter=="V"){return "#F53D53"}
-            else if(d.Filter=="R"){return "#20AB2C"}
-            else{return "#4648F0"}
-          })
+          .attr("fill", function(d){return colors(Filters.indexOf(d.Filter))})
         .on("mouseover", function(d){
           var circ=d3.select(this);
           circ.attr("class", "mouseover");
@@ -121,12 +128,7 @@ function plotCurve(indata){
        var x2=xScale(d.MJD)+margin.left;
        var y2=yScale(d.magnitude+d.mag_error)+margin.top;
        return "M"+x1+","+y1 + " L"+ x2+ ","+ y2})
-    .style("stroke", function(d){
-       if(d.Filter=="B"){return "#4D4A4A"}
-       else if(d.Filter=="V"){return "#F53D53"}
-       else if(d.Filter=="R"){return "#20AB2C"}
-         else{return "#4648F0"}
-       })
+    .style("stroke", function(d){return colors(Filters.indexOf(d.Filter))})
     .style("stroke-width", "1px")
 
     dEnter.append("path")
@@ -137,12 +139,7 @@ function plotCurve(indata){
          var x2=xScale(d.MJD)+5+margin.left;
          var y2=yScale(d.magnitude-d.mag_error)+margin.top;
          return "M"+x1+","+y1 + " L"+ x2+ ","+ y2})
-      .style("stroke", function(d){
-         if(d.Filter=="B"){return "#4D4A4A"}
-         else if(d.Filter=="V"){return "#F53D53"}
-         else if(d.Filter=="R"){return "#20AB2C"}
-         else{return "#4648F0"}
-        })
+      .style("stroke", function(d){return colors(Filters.indexOf(d.Filter))})
       .style("stroke-width", "1px")
 
     dEnter.append("path")
@@ -153,12 +150,7 @@ function plotCurve(indata){
          var x2=xScale(d.MJD)+5+margin.left;
          var y2=yScale(d.magnitude+d.mag_error)+margin.top;
          return "M"+x1+","+y1 + " L"+ x2+ ","+ y2})
-       .style("stroke", function(d){
-         if(d.Filter=="B"){return "#4D4A4A"}
-         else if(d.Filter=="V"){return "#F53D53"}
-         else if(d.Filter=="R"){return "#20AB2C"}
-         else{return "#4648F0"}
-       })
+       .style("stroke", function(d){return colors(Filters.indexOf(d.Filter))})
        .style("stroke-width", "1px")
     }
 
