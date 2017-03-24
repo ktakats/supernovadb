@@ -23,4 +23,7 @@
 {% block table %}
 {% load django_tables2 %}
 {% render_table table %}
+
+{%include "modal.html" with sn_id=sn.id mode="spectroscopy"%}
+
 {% endblock %}
