@@ -21,7 +21,7 @@ def render_photometry_page(request, sn, form, out=1):
     table=PhotometryTable(phot)
     RequestConfig(request).configure(table)
     if request.method=="POST" and not uploadform.errors:
-        return redirect(reverse('photometry', args=(sn.id,)), {'sn': sn, 'form': form, 'uploadform': uploadform, 'table': table})
+        return redirect(reverse('photometry', args=(sn.id,)))
 
     return render(request, 'photometry.html', {'sn': sn, 'form': form, 'uploadform': uploadform, 'table': table})
 
