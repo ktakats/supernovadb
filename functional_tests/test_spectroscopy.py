@@ -21,15 +21,30 @@ class SpectroscopyTest(FunctionalTest):
         self.browser.find_element_by_id("id_notes").send_keys("test spectrum")
         self.browser.find_element_by_id('id_uploadbutton').click()
 
+
         #After sending the file, the data appears in a table
         body=self.browser.find_element_by_tag_name("body").text
         time.sleep(5)
         self.assertIn('55043.2', body)
         self.assertIn('test spectrum', body)
 
+        #He uploads another spectrum
+        self.browser.find_element_by_id("id_MJD").send_keys("55053.3")
+        self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum2.dat")
+        self.browser.find_element_by_id("id_notes").send_keys("Second test spectrum")
+        self.browser.find_element_by_id('id_uploadbutton').click()
+
+        #Now both spectra are in the table
+        body=self.browser.find_element_by_tag_name("body").text
+        time.sleep(5)
+        self.assertIn('55043.2', body)
+        self.assertIn('55053.3', body)
+
         #There's also a button in the table to delete the spectrum if necessary
+        
         self.browser.find_element_by_css_selector(".fa-trash-o").click()
         time.sleep(2)
         self.browser.find_element_by_id("id_deletebutton").click()
         body=self.browser.find_element_by_tag_name("body").text
         self.assertNotIn('55043.2', body)
+        self.assertIn('55053.3', body)

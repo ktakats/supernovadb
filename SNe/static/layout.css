@@ -26,29 +26,27 @@ h1 {
 
 /*New sn form*/
 
-#id_new_sn_form, #id_obslogform, #id_photometryform, #id_uploadphotometryform {
+#id_new_sn_form, #id_obslogform, #id_photometryform, #id_uploadphotometryform, #id_uploadspectroscopyform {
   width: 60%;
   margin: 5% auto;
 }
 
-#id_new_sn_form label, input, #id_obslogform label, input, select, #id_photometryform label, input, #id_uploadphotometryform input, textarea {
+#id_new_sn_form label, input, #id_obslogform label, input, select, #id_photometryform label, input, #id_uploadphotometryform input, textarea, #id_uploadspectroscopyform label, input, textarea,i,input[type="file"] {
   display: inline-block;
 }
 
-#id_new_sn_form label, #id_obslogform label,  #id_photometryform label, #id_uploadphotometryform label {
+#id_new_sn_form label, #id_obslogform label,  #id_photometryform label, #id_uploadphotometryform label, #id_uploadspectroscopyform label {
   width: 20%;
   float: left;
   text-align: right;
 }
 
-#id_new_sn_form label +input, #id_obslogform label + input, label+select, #id_photometryform label+input, #id_uploadphotometryform label+input, label+textarea {
+#id_new_sn_form label +input, #id_obslogform label + input, label+select, #id_photometryform label+input, #id_uploadphotometryform label+input, label+textarea, #id_uploadspectroscopyform label+input, label+textarea, label+input[type="file"] {
     width: 61%;
     margin: 0 15% 0 2%;
 }
 
-#id_new_sn_form input+input, #id_obslogform input+input, #id_photometryform input+input, #id_uploadphotometryform input+input {
-  float: right;
-}
+
 
 /* table*/
 .table-container {

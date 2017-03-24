@@ -20,7 +20,7 @@ def spectroscopy(request, sn_id):
                 return redirect(reverse('spectroscopy', args=(sn.id,)))
 
     Sp=Spectrum.objects.filter(sn=sn)
-    table=SpectroscopyTable(Sp)
+    table=SpectroscopyTable(Sp, order_by="id")
     form=UploadSpectrumForm()
     return render(request, 'spectroscopy.html', {'sn': sn, 'uploadform': form, 'table': table})
 
