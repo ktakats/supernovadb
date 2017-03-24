@@ -21,10 +21,38 @@
 
 {% endblock %}
 
+{% block plot %}
+<button id="id_plotbutton">Plot spectra</button>
+<div class="SP" style="display: none"></div>
+
+{% endblock %}
+
+
 {% block table %}
 {% load django_tables2 %}
 {% render_table table %}
 
 {%include "modal.html" with sn_id=sn.id mode="spectroscopy"%}
+
+{%load static%}
+<script type="text/javascript" src="{% static 'javascripts/plotSP.js'%}"></script>
+<script type="text/javascript">
+$("#id_plotbutton").on("click", function(){
+  var url=window.location.pathname + "query/";
+  $.get(url, function(data){
+    data=JSON.parse(data);
+    plotSpectrum(data);
+  });
+
+  if($(".SP").is(":visible")){
+    $(".SP").hide();
+    $(this).text("Plot spectra");
+  }
+  else{
+    $(".SP").show();
+    $(this).text("Hide spectra");
+  }
+})
+</script>
 
 {% endblock %}

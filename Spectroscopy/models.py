@@ -12,8 +12,20 @@ class Spectrum(models.Model):
     MJD=models.FloatField()
     notes=models.CharField(max_length=200, blank=True)
 
+    def as_dict(self):
+        return {
+            "MJD": self.MJD,
+        }
+
+
 class SpectrumDataPoint(models.Model):
 
     spectrum=models.ForeignKey(Spectrum, on_delete=models.CASCADE, related_name="datapoint")
     wavelength=models.FloatField()
     flux=models.DecimalField(max_digits=15, decimal_places=5)
+
+    def as_dict(self):
+        return {
+            "wavelength": self.wavelength,
+            "flux": self.flux
+        }

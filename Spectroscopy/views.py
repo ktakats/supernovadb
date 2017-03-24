@@ -1,9 +1,15 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, reverse
 from SNe.models import SN
 from .forms import UploadSpectrumForm
 from .helpers import uploadSpectrum
-from .models import Spectrum
+from .models import Spectrum, SpectrumDataPoint
 from .tables import SpectroscopyTable
+
+import simplejson as json
+from decimal import Decimal
+import math
+
 
 # Create your views here.
 
@@ -27,3 +33,12 @@ def spectroscopy(request, sn_id):
 def delSpectrum(request, sn_id, sp_id):
     Spectrum.objects.filter(id=sp_id).delete()
     return redirect(reverse('spectroscopy', args=(sn_id,)))
+
+def query(request, sn_id):
+        sn=SN.objects.get(id=sn_id)
+        spectra=Spectrum.objects.filter(sn=sn)
+        spdata=[]
+        for obj in spectra:
+            points=SpectrumDataPoint.objects.filter(spectrum=obj)
+            spdata.append({"MJD": obj.MJD, "spectrum": [p.as_dict() for p in points if not math.isnan(p.flux)]})
+        return HttpResponse(json.dumps({"data": spdata}))

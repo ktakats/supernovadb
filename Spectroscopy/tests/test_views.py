@@ -50,3 +50,15 @@ class deleteSpectrumViewTest(TestCase):
         sp=Spectrum.objects.first()
         response=self.client.get('/sn/%d/spectroscopy/delete/%d/' % (sn.id, sp.id))
         self.assertRedirects(response, '/sn/%d/spectroscopy/' % (sn.id))
+
+class queryViewTest(TestCase):
+
+    def test_query_returns_spectroscopy_data(self):
+        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.dat')
+        self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': ""})
+        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum2.dat')
+        self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55045.0, 'notes': ""})
+        response=self.client.get('/sn/%d/spectroscopy/query/' % (sn.id))
+        self.assertContains(response, "55055.0")
+        self.assertContains(response, "55045.0")

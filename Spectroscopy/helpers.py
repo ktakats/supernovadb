@@ -16,6 +16,7 @@ def uploadSpectrum(f, sn, mjd, notes):
     for line in f:
         line=line.split(' ')
         p=SpectrumDataPoint(spectrum=Sp, wavelength=line[0], flux=line[1])
+        print p.flux
         p.save()
     f.close()
     return 1
