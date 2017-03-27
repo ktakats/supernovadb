@@ -51,6 +51,21 @@ function plotCurve(indata){
   var brush=d3.brush().on("end", brushended),
         idleTimeout,
         idleDelay=350;
+
+  /*Add clip-path, so the lines do not go out of the margins*/
+  var clip = canvas.append("defs").append("clipPath")
+     .attr("id", "clipBox");
+
+  canvas.append('rect') // outline for reference
+    .attr('x', margin.left)
+    .attr('y', margin.top)
+    .attr("width", width)
+    .attr("height", height)
+    .attr("id", "xSliceBox")
+    .attr("fill", "white")
+
+  clip.append("use").attr("xlink:href", "#xSliceBox");
+
   /*Define brush container */
   var gbrush=canvas.append("g")
       .attr("class", "brush")
@@ -69,6 +84,7 @@ function plotCurve(indata){
           .attr("cx", function(d){return xScale(d.MJD)+margin.left})
           .attr("cy", function(d){return yScale(d.magnitude)+margin.top })
           .attr("r", 6)
+          .attr("clip-path", "url(#clipBox)")
           .attr("fill", function(d){return colors(Filters.indexOf(d.Filter))})
         .on("mouseover", function(d){
           var circ=d3.select(this);
@@ -125,8 +141,6 @@ function plotCurve(indata){
       .attr("dy", margin.bottom*0.8)
       .style("fill", "black")
 
-    console.log(xlabel)
-
     canvas.select(".y-axis")
       .append("text")
       .text("Magnitude")
@@ -142,6 +156,7 @@ function plotCurve(indata){
   function addError(){
     dEnter.append("path")
     .attr("class", "errorbar")
+    .attr("clip-path", "url(#clipBox)")
     .attr("d", function(d){
        var x1=xScale(d.MJD)+margin.left;
        var y1=yScale(d.magnitude-d.mag_error)+margin.top;
@@ -153,6 +168,7 @@ function plotCurve(indata){
 
     dEnter.append("path")
        .attr("class", "errorbottom")
+       .attr("clip-path", "url(#clipBox)")
        .attr("d", function(d){
          var x1=xScale(d.MJD)-5+margin.left;
          var y1=yScale(d.magnitude-d.mag_error)+margin.top;
@@ -164,6 +180,7 @@ function plotCurve(indata){
 
     dEnter.append("path")
        .attr("class", "errortop")
+       .attr("clip-path", "url(#clipBox)")
        .attr("d", function(d){
          var x1=xScale(d.MJD)-5+margin.left;
          var y1=yScale(d.magnitude+d.mag_error)+margin.top;
@@ -203,15 +220,11 @@ function plotCurve(indata){
     canvas.selectAll("circle").transition(t)
       .attr("cx", function(d) {
         var p= xScale(d.MJD)+margin.left;
-        if (p<margin.left){return p-margin.left}
-        else if (p>width+margin.left){return p+margin.right}
-        else{return p}
+        return p
         })
       .attr("cy", function(d) {
         var p=yScale(d.magnitude)+margin.top;
-        if(p>height+margin.bottom){return p+5*margin.bottom}
-        else if(p<margin.bottom){return p-5*margin.bottom}
-        else{return p;}
+        return p;
         });
 
       [".errorbar", ".errortop", ".errorbottom"].forEach(function(myclass, index){
@@ -226,10 +239,6 @@ function plotCurve(indata){
             if(index==1 || index==2){x1-=5; x2+=5;}
             if(index==1){y1=yScale(d.magnitude+d.mag_error)+margin.top;}
             if(index==2){y2=yScale(d.magnitude-d.mag_error)+margin.top;}
-            if (cx<margin.left){x1-=margin.left; x2-=margin.left}
-            else if(cx>width+margin.left){x1+=margin.right; x2+=margin.right}
-            if(cy>height+margin.bottom){y1+=5*margin.top; y2+=5*margin.top}
-            else if(cy<margin.bottom){y1-=5*margin.bottom; y2-=5*margin.bottom}
 
             return "M"+x1+","+y1 + " L"+ x2+ ","+ y2
           });
