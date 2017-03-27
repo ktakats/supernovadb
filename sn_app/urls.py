@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^sn/(\d+)/photometry/', include('Photometry.urls')),
     url(r'^sn/(\d+)/obslog/', include('ObservationLogs.urls')),
     url(r'sn/(\d+)/spectroscopy/', include('Spectroscopy.urls')),
+    url(r'^accounts/', include('accounts.urls'))
 ]
