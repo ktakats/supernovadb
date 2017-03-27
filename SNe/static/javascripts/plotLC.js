@@ -177,6 +177,8 @@ function plotCurve(indata){
 
   function brushended(){
     var s = d3.event.selection;
+    console.log(d3.event);
+    console.log(s)
     if (!s){
       if (!idleTimeout) {return idleTimeout = setTimeout(idled, idleDelay);}
       xScale.domain(x0);
