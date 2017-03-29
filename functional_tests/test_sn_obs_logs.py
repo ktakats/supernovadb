@@ -5,7 +5,7 @@ class ObsLogTest(FunctionalTest):
 
     def test_SN_user_can_add_observation_to_obs_log(self):
         #Joe goes to the SN page and adds an SN
-        self.browser.get(self.server_url)
+        self.go_to_page_and_log_in()
         self.add_new_sn()
 
         #Redirected to the SN's page, Joe notices that here he can keep track of the observations
@@ -26,7 +26,7 @@ class ObsLogTest(FunctionalTest):
 
     def test_user_can_edit_and_delete_observation(self):
         #Joe goes to the SN page and adds an SN
-        self.browser.get(self.server_url)
+        self.go_to_page_and_log_in()
         self.add_new_sn()
 
         #Redirected to the SN's page, Joe notices that here he can keep track of the observations
@@ -62,7 +62,7 @@ class ObsLogTest(FunctionalTest):
 
     def test_user_can_add_new_entry_after_editing(self):
         #Joe goes to the SN page and adds an SN
-        self.browser.get(self.server_url)
+        self.go_to_page_and_log_in()
         self.add_new_sn()
 
         #Redirected to the SN's page, Joe notices that here he can keep track of the observations

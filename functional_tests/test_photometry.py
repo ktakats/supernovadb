@@ -5,7 +5,7 @@ class PhotometryTest(FunctionalTest):
 
     def test_user_can_add_photometric_point_to_light_curve_log(self):
         #Joe goes to the SN page, adds a new SN
-        self.browser.get(self.server_url)
+        self.go_to_page_and_log_in()
         self.add_new_sn()
 
         #Redirected to the SN's page, Joe notices that here he can keep track of the photometry of the SN
@@ -24,7 +24,7 @@ class PhotometryTest(FunctionalTest):
 
     def test_user_can_upload_a_photometry_file(self):
         #Joe goes to the SN page, adds a new SN
-        self.browser.get(self.server_url)
+        self.go_to_page_and_log_in()
         self.add_new_sn()
 
         #Redirected to the SN's page, Joe notices that here he can keep track of the photometry of the SN
@@ -46,7 +46,7 @@ class PhotometryTest(FunctionalTest):
 
     def test_user_can_edit_and_delete_photometric_point(self):
         #Joe goes to the SN page, adds a new SN
-        self.browser.get(self.server_url)
+        self.go_to_page_and_log_in()
         self.add_new_sn()
 
         #Redirected to the SN's page, Joe notices that here he can keep track of the photometry of the SN
@@ -82,7 +82,7 @@ class PhotometryTest(FunctionalTest):
 
     def test_user_can_plot_light_curve(self):
         #Joe goes to the SN page, adds a new SN
-        self.browser.get(self.server_url)
+        self.go_to_page_and_log_in()
         self.add_new_sn()
 
         #He uploads his photometry file

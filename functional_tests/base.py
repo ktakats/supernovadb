@@ -2,6 +2,9 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.conf import settings
 from selenium import webdriver
 import sys
+from django.contrib import auth
+
+User=auth.get_user_model()
 
 class FunctionalTest(StaticLiveServerTestCase):
 
@@ -30,6 +33,13 @@ class FunctionalTest(StaticLiveServerTestCase):
         super(FunctionalTest, self).tearDown()
 
     #Helper functions
+    def go_to_page_and_log_in(self):
+        self.browser.get(self.server_url)
+        User.objects.create_user(username="joe@example.com", password="joepassword", first_name="Joe")
+        self.browser.find_element_by_id("id_username").send_keys("joe@example.com")
+        self.browser.find_element_by_id("id_password").send_keys("joepassword\n")
+
+
     def add_new_sn(self, name="SN 1987A", ra='05:35:27.99', dec='-69:16:11.50'):
         self.browser.find_element_by_link_text('Add a new SN').click()
         self.browser.find_element_by_id("id_sn_name").send_keys(name)

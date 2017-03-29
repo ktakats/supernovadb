@@ -5,7 +5,7 @@ class NewSNPageTest(FunctionalTest):
 
     def test_user_can_add_SN_and_access_its_page(self):
         #There's a new app for SNe! Joe goes and checks it out
-        self.browser.get(self.server_url)
+        self.go_to_page_and_log_in()
 
         #Sees that it's really about SNe!
         title=self.browser.find_element_by_css_selector('h1').text
@@ -28,7 +28,7 @@ class NewSNPageTest(FunctionalTest):
 
     def test_user_cannot_submit_blank_form(self):
         #Joe goes to the New SN form and tries to submit a blank form
-        self.browser.get(self.server_url)
+        self.go_to_page_and_log_in()
         self.browser.find_element_by_link_text('Add a new SN').click()
 
         self.browser.find_element_by_id("id_sn_name").send_keys('\n')
@@ -40,7 +40,7 @@ class NewSNPageTest(FunctionalTest):
 
     def test_user_cannot_add_duplicate_sn(self):
         #Joe goes to the New SN form and adds an SN
-        self.browser.get(self.server_url)
+        self.go_to_page_and_log_in()
         self.add_new_sn(name='SN 1987A', ra='05:35:27.99', dec='-69:16:11.50')
 
         #Then he goes away. Next day he forgets that he added this SN and tries again, but gets an error telling him this SN is already in the database

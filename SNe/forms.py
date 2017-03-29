@@ -44,10 +44,10 @@ class NewSNForm(forms.models.ModelForm):
         'sn_name': {'required': 'You need to provide the name of the SN'},
         }
 
-    def save(self):
+    def save(self, pi):
         data=self.cleaned_data
         coords=SkyCoord(data['ra'], data['dec'], unit=(u.hourangle, u.deg))
-        sn=SN(sn_name=data['sn_name'], ra=coords.ra.deg, dec=coords.dec.deg)
+        sn=SN(sn_name=data['sn_name'], ra=coords.ra.deg, dec=coords.dec.deg, pi=pi)
         sn.save()
         return sn
 

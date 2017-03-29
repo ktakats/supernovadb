@@ -1,6 +1,9 @@
 from django.test import TestCase
 from SNe.forms import NewSNForm
 from SNe.models import SN
+from django.contrib import auth
+
+User=auth.get_user_model()
 
 class NewSNFormTest(TestCase):
 
@@ -18,9 +21,10 @@ class NewSNFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_coords_are_saved_to_database(self):
+        user=User.objects.create_user(username='test@test.com', password="bla")
         form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '01:34:56.78', 'dec': '-69:53:24.6'})
         self.assertTrue(form.is_valid())
-        form.save()
+        form.save(user)
         sn=SN.objects.get(sn_name='SN 2999A')
         self.assertEqual(sn.ra, 23.7365833333333)
 
@@ -61,7 +65,8 @@ class NewSNFormTest(TestCase):
         self.assertEqual(form.errors['dec'], ['Invalid coordinate value'])
 
     def test_cannot_duplicate_sn(self):
-        sn=SN.objects.create(sn_name='SN 2999A')
-        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '02:34:56.78', 'dec': '-59:53:24.6'})
+        user=User.objects.create_user(username='test@test.com', password="bla")
+        sn=SN.objects.create(sn_name='SN 2999A', pi=user)
+        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '02:34:56.78', 'dec': '-59:53:24.6', 'pi': user})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['sn_name'], ['This SN is already registered'])

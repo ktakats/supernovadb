@@ -6,6 +6,12 @@ from django.contrib import auth
 
 User=auth.get_user_model()
 
+def create_new_SN():
+    user=User.objects.create_user(username='test@test.com', password="bla")
+    sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575, pi=user)
+    return sn
+
+
 class HomeViewTest(TestCase):
 
     def test_uses_home_template(self):
@@ -22,29 +28,30 @@ class HomeViewTest(TestCase):
 class SNViewTest(TestCase):
 
     def test_view_uses_sn_template(self):
-        sn=SN.objects.create(sn_name='SN 2017A')
+        user=User.objects.create_user(username='test@test.com', password="bla")
+        sn=SN.objects.create(sn_name='SN 2017A', pi=user)
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertTemplateUsed(response, 'sn.html')
 
     def test_view_shows_the_name_and_coordinates_of_sn(self):
-        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        sn=create_new_SN()
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'SN 2017A')
         self.assertContains(response, 'RA=01:30:30.000')
         self.assertContains(response, 'Dec=65:34:30.00')
 
     def test_view_has_link_to_obslog(self):
-        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        sn=create_new_SN()
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'Observation log')
 
     def test_view_has_link_to_photometry(self):
-        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        sn=create_new_SN()
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'Photometry')
 
     def test_view_has_link_to_spectroscopy(self):
-        sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575)
+        sn=create_new_SN()
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'Spectroscopy')
 
@@ -61,7 +68,8 @@ class AddNewSNViewTest(TestCase):
         self.assertContains(response, 'id_sn_name')
 
     def test_form_creates_new_database_entry(self):
-        self.client.post('/add_sn/', data={'sn_name': 'SN 1999A', 'ra': '01:23:45.6', 'dec': '+65:34:27.3'})
+        user=User.objects.create_user(username='test@test.com', password="bla")
+        self.client.post('/add_sn/', data={'sn_name': 'SN 1999A', 'ra': '01:23:45.6', 'dec': '+65:34:27.3', 'pi': user})
         sn=SN.objects.first()
         c=SkyCoord('01:23:45.6', '+65:34:27.3', unit=(u.hourangle, u.deg))
         self.assertEqual(sn.sn_name, 'SN 1999A')
@@ -69,6 +77,7 @@ class AddNewSNViewTest(TestCase):
         self.assertEqual('%.2f' % (sn.dec), '%.2f' % (c.dec.deg))
 
     def test_form_submission_redirects_to_sn_page(self):
-        response=self.client.post('/add_sn/', data={'sn_name': 'SN 1999A', 'ra': '01:23:45.6', 'dec': '+65:34:27.3'})
+        user=User.objects.create_user(username='test@test.com', password="bla")
+        response=self.client.post('/add_sn/', data={'sn_name': 'SN 1999A', 'ra': '01:23:45.6', 'dec': '+65:34:27.3', 'pi': user})
         sn=SN.objects.first()
         self.assertRedirects(response, '/sn/%d/' % (sn.id))

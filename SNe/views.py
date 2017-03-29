@@ -6,6 +6,9 @@ from django_tables2 import RequestConfig
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 from django.contrib.auth import authenticate, login
+from django.contrib import auth
+
+User=auth.get_user_model()
 
 
 # Create your views here.
@@ -26,7 +29,7 @@ def add_sn(request):
     if request.method=='POST':
         form=NewSNForm(data=request.POST)
         if form.is_valid():
-            sn=form.save()
+            sn=form.save(request.user)
             return redirect(sn)
         else:
             return render(request, 'new_sn.html', {'form': form})
