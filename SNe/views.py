@@ -1,15 +1,26 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from models import SN
 from forms import NewSNForm
+from accounts.forms import LoginForm
 from django_tables2 import RequestConfig
 from astropy.coordinates import SkyCoord
 from astropy import units as u
-
+from django.contrib.auth import authenticate, login
 
 
 # Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    if request.method=="POST":
+        form=LoginForm(request.POST)
+        email=request.POST['username']
+        password=request.POST['password']
+        if form.is_valid():
+            user=authenticate(username=email, password=password)
+            if user:
+                login(request, user)
+    else:
+        form=LoginForm()
+    return render(request, 'home.html', {'form': form})
 
 def add_sn(request):
     if request.method=='POST':

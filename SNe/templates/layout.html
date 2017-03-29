@@ -25,11 +25,15 @@
     <div class="container-fluid">
       <a class="navbar-brand" href="/">MAS Supernovae</a>
       <ul class="nav navbar-nav navbar-right">
+        {% if user.is_authenticated %}
+        <li><a href="#">Hola, {{user.first_name}}</a></li>
+        {% endif %}
         <li><a href="{% url 'add_sn'%}">Add a new SN</a></li>
         <li><a href="">SNe</a></li>
       </ul>
     </div>
   </nav>
+
 
   <div class="row">
     <div class="col-md-6 col-md-offset-3">

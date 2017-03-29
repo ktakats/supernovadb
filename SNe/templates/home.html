@@ -4,4 +4,17 @@
 
 {% block content %}
 <h3>Please log in</h3>
+
+
+<form method="post" action="" id="id_photometryform">
+  {% csrf_token%}
+  {% if form.errors %}
+  <div class="alert alert-danger">
+  {{form.non_field_errors.as_text}}
+</div>
+  {%endif%}
+  <p>{{form.username.label}} {{form.username}}</p>
+  <p>{{form.password.label}} {{form.password}}</p>
+  <button type="submit" id="id_formsubmitbutton">Submit</button>
+</form>
 {% endblock %}

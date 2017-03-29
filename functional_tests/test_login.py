@@ -1,6 +1,10 @@
 from .base import FunctionalTest
 import time
 
+from django.contrib import auth
+
+User=auth.get_user_model()
+
 class LoginTest(FunctionalTest):
 
     def test_user_can_log_in(self):
@@ -8,13 +12,21 @@ class LoginTest(FunctionalTest):
         self.browser.get(self.server_url)
 
         #The page is asking him to log in
+        User.objects.create_user(username="joe@example.com", password="joepassword", first_name="Joe")
         body=self.browser.find_element_by_tag_name("body").text
         self.assertIn("Please log in", body)
 
-        #Luckily he already has a password, so he logs in
-        self.browser.find_element_by_id("id_email").send_keys("joe@example.com")
+        #He tries to log in, but puts a wrong password so gets an error
+        self.browser.find_element_by_id("id_username").send_keys("joe@example.com")
+        self.browser.find_element_by_id("id_password").send_keys("joe\n")
+        error=self.browser.find_element_by_tag_name('body').text
+
+        self.assertIn("Login is invalid. Please try again.", error)
+        time.sleep(5)
+        #Luckily he remembers his password, so he logs in
+
         self.browser.find_element_by_id("id_password").send_keys("joepassword\n")
 
         #After loggin in, he finds himself at his account page
         self.browser.find_element_by_link_text("Hola, Joe")
-        self.fail()
+        time.sleep(5)

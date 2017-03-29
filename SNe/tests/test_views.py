@@ -2,13 +2,22 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 from django.test import TestCase
 from SNe.models import SN
+from django.contrib import auth
+
+User=auth.get_user_model()
 
 class HomeViewTest(TestCase):
 
     def test_uses_home_template(self):
         response=self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
-        
+
+    def test_user_can_log_in(self):
+        User.objects.create_user(username="test@test.com", password="bla")
+        response=self.client.post('/', data={'username': 'test@test.com', 'password': 'bla'})
+        user=auth.get_user(self.client)
+        self.assertTrue(user.is_authenticated())
+
 
 class SNViewTest(TestCase):
 
