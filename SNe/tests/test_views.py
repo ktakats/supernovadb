@@ -1,23 +1,20 @@
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-from django.test import TestCase
+from .base import UnitTests
 from SNe.models import SN
+
 from django.contrib import auth
 
 User=auth.get_user_model()
 
-def create_new_SN(self):
-    user=User.objects.create_user(username='test@test.com', password="bla")
-    self.client.force_login(user)
-    sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575, pi=user)
-    return sn
+
 
 def user_login(self):
     user=User.objects.create_user(username='test@test.com', password="bla")
     self.client.force_login(user)
     return user
 
-class HomeViewTest(TestCase):
+class HomeViewTest(UnitTests):
 
     def test_uses_home_template(self):
         response=self.client.get('/')
@@ -30,7 +27,7 @@ class HomeViewTest(TestCase):
         self.assertTrue(user.is_authenticated())
 
 
-class SNViewTest(TestCase):
+class SNViewTest(UnitTests):
 
     def test_view_uses_sn_template(self):
         user=User.objects.create_user(username='test@test.com', password="bla")
@@ -40,24 +37,24 @@ class SNViewTest(TestCase):
         self.assertTemplateUsed(response, 'sn.html')
 
     def test_view_shows_the_name_and_coordinates_of_sn(self):
-        sn=create_new_SN(self)
+        sn=self.login_and_create_new_SN()
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'SN 2017A')
         self.assertContains(response, 'RA=01:30:30.000')
         self.assertContains(response, 'Dec=65:34:30.00')
 
     def test_view_has_link_to_obslog(self):
-        sn=create_new_SN(self)
+        sn=self.login_and_create_new_SN(self)
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'Observation log')
 
     def test_view_has_link_to_photometry(self):
-        sn=create_new_SN(self)
+        sn=self.login_and_create_new_SN(self)
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'Photometry')
 
     def test_view_has_link_to_spectroscopy(self):
-        sn=create_new_SN(self)
+        sn=self.login_and_create_new_SN(self)
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'Spectroscopy')
 
@@ -68,7 +65,7 @@ class SNViewTest(TestCase):
         self.assertRedirects(response, '/?next=/sn/%d/' % (sn.id))
 
 
-class AddNewSNViewTest(TestCase):
+class AddNewSNViewTest(UnitTests):
 
     def test_uses_new_sn_template(self):
         user=user_login(self)
