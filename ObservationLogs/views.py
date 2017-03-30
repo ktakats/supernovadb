@@ -5,6 +5,7 @@ from ObservationLogs.models import Obs
 from ObservationLogs.tables import ObsLogTable
 from SNe.models import SN
 from django.shortcuts import redirect, reverse
+from django.contrib.auth.decorators import login_required
 
 
 #Helper functions
@@ -19,6 +20,7 @@ def render_obslog_page(sn, request, form):
     #    return redirect(reverse('sn_obs', args=(sn.id,)), {'sn': sn, 'form': form, 'table': table})
 
 # Create your views here.
+@login_required(login_url="/")
 def view_obslog(request, sn_id, obs_id=None):
     sn=SN.objects.get(id=sn_id)
     try:
@@ -32,6 +34,7 @@ def view_obslog(request, sn_id, obs_id=None):
 
     return render_obslog_page(sn, request, form)
 
+@login_required(login_url="/")
 def deleteobs(request, sn_id, obs_id):
     sn=SN.objects.get(id=sn_id)
     Obs.objects.filter(id=obs_id).delete()

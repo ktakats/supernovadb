@@ -9,6 +9,7 @@ from helpers import uploadPhotometry
 import simplejson as json
 #helper functions
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 def render_photometry_page(request, sn, form, out=1):
     uploadform=UploadPhotometryFileForm()
@@ -26,6 +27,7 @@ def render_photometry_page(request, sn, form, out=1):
     return render(request, 'photometry.html', {'sn': sn, 'form': form, 'uploadform': uploadform, 'table': table})
 
 # Create your views here.
+@login_required(login_url="/")
 def photometry(request, sn_id, phot_id=None):
     sn=SN.objects.get(id=sn_id)
     out=1
@@ -52,12 +54,14 @@ def photometry(request, sn_id, phot_id=None):
 
     return render_photometry_page(request, sn, form, out)
 
+@login_required(login_url="/")
 def deletePhot(request, sn_id, phot_id):
     sn=SN.objects.get(id=sn_id)
     Photometry.objects.filter(id=phot_id).delete()
     form=PhotometryForm()
     return render_photometry_page(request, sn, form)
 
+@login_required(login_url="/")
 def queryPhot(request, sn_id):
     sn=SN.objects.get(id=sn_id)
     phot=Photometry.objects.filter(sn=sn)

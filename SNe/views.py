@@ -6,6 +6,7 @@ from django_tables2 import RequestConfig
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 
 User=auth.get_user_model()
@@ -25,6 +26,7 @@ def home(request):
         form=LoginForm()
     return render(request, 'home.html', {'form': form})
 
+@login_required(login_url='/')
 def add_sn(request):
     if request.method=='POST':
         form=NewSNForm(data=request.POST)
@@ -37,6 +39,7 @@ def add_sn(request):
         form=NewSNForm()
         return render(request, 'new_sn.html', {'form':form})
 
+@login_required(login_url='/')
 def view_sn(request, sn_id):
     sn=SN.objects.get(id=sn_id)
     c=SkyCoord(str(sn.ra), str(sn.dec), unit=u.degree)

@@ -30,3 +30,13 @@ class LoginTest(FunctionalTest):
         #After loggin in, he finds himself at his account page
         self.browser.find_element_by_link_text("Hola, Joe")
         time.sleep(5)
+
+    def test_user_has_to_be_logged_in(self):
+        #Joe tries to go to the add SN page
+        self.browser.get(self.server_url)
+        self.browser.find_element_by_link_text('Add a new SN').click()
+
+
+        #But since he's not logged in, he's redirected to to the home
+        body=self.browser.find_element_by_tag_name("body").text
+        self.assertIn("Please log in", body)

@@ -10,9 +10,11 @@ import simplejson as json
 from decimal import Decimal
 import math
 
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
-
+@login_required(login_url='/')
 def spectroscopy(request, sn_id):
     sn=SN.objects.get(id=sn_id)
     if request.method=="POST":
@@ -30,10 +32,12 @@ def spectroscopy(request, sn_id):
     form=UploadSpectrumForm()
     return render(request, 'spectroscopy.html', {'sn': sn, 'uploadform': form, 'table': table})
 
+@login_required(login_url='/')
 def delSpectrum(request, sn_id, sp_id):
     Spectrum.objects.filter(id=sp_id).delete()
     return redirect(reverse('spectroscopy', args=(sn_id,)))
 
+@login_required(login_url='/')
 def query(request, sn_id):
         sn=SN.objects.get(id=sn_id)
         spectra=Spectrum.objects.filter(sn=sn)
