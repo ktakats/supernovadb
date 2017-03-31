@@ -8,22 +8,20 @@ class LoginForm(forms.models.ModelForm):
 
     class Meta:
         model=User
-        fields=['username', 'password']
-        labels={
-            'username': 'Email'
-        }
+        fields=['email', 'password']
+
         widgets={
             'password': forms.PasswordInput()
         }
         error_messages={
-            'username': {'required': 'Please provide your email address'}
+            'email': {'required': 'Please provide your email address'}
         }
 
 
     def clean(self):
-        username=self.cleaned_data.get('username')
+        email=self.cleaned_data.get('email')
         password=self.cleaned_data.get('password')
-        user=authenticate(username=username, password=password)
+        user=authenticate(email=email, password=password)
         if not user or not user.is_active:
             raise forms.ValidationError('Login is invalid. Please try again.')
         return self.cleaned_data

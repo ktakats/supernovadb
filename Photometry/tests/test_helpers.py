@@ -8,7 +8,7 @@ User=auth.get_user_model()
 class uploadPhotometryTest(TestCase):
 
     def test_reading_file(self):
-        user=User.objects.create_user(username='test@test.com', password="bla")
+        user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         self.client.force_login(user)
         sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575, pi=user)
         myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry.txt')

@@ -10,7 +10,7 @@ class ObservationTest(TestCase):
 
     def test_can_create_observation(self):
         today=date.today()
-        user=User.objects.create_user(username='test@test.com', password="bla")
+        user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         sn=SN.objects.create(sn_name='SN 2017A', pi=user)
         obs=Obs(sn=sn, obs_date=today, obs_type='S', telescope='NTT', instrument='EFOSC2', setup='GR13', notes='experimental')
         obs.save()

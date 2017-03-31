@@ -8,14 +8,14 @@ User=auth.get_user_model()
 class SpectroscopyTest(TestCase):
 
     def test_can_add_spectum(self):
-        user=User.objects.create_user(username='test@test.com', password="bla")
+        user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         sn=SN.objects.create(sn_name='SN 2017A', pi=user)
         Sp=Spectrum.objects.create(sn=sn, MJD='55052.2')
         Sp.save()
         self.assertEqual(Sp, Spectrum.objects.first())
 
     def test_can_add_data_points_to_spectrum(self):
-        user=User.objects.create_user(username='test@test.com', password="bla")
+        user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         sn=SN.objects.create(sn_name='SN 2017A', pi=user)
         Sp=Spectrum.objects.create(sn=sn, MJD='55052.2')
         p1=SpectrumDataPoint.objects.create(spectrum=Sp, wavelength=3000.0, flux=-15.0)

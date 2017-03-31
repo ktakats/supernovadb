@@ -10,7 +10,7 @@ User=auth.get_user_model()
 
 
 def user_login(self):
-    user=User.objects.create_user(username='test@test.com', password="bla")
+    user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
     self.client.force_login(user)
     return user
 
@@ -21,8 +21,8 @@ class HomeViewTest(UnitTests):
         self.assertTemplateUsed(response, 'home.html')
 
     def test_user_can_log_in(self):
-        User.objects.create_user(username="test@test.com", password="bla")
-        response=self.client.post('/', data={'username': 'test@test.com', 'password': 'bla'})
+        User.objects.create_user(email="test@test.com", password="bla", first_name="Test")
+        response=self.client.post('/', data={'email': 'test@test.com', 'password': 'bla'})
         user=auth.get_user(self.client)
         self.assertTrue(user.is_authenticated())
 
@@ -30,7 +30,7 @@ class HomeViewTest(UnitTests):
 class SNViewTest(UnitTests):
 
     def test_view_uses_sn_template(self):
-        user=User.objects.create_user(username='test@test.com', password="bla")
+        user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         self.client.force_login(user)
         sn=SN.objects.create(sn_name='SN 2017A', pi=user)
         response=self.client.get('/sn/%d/' % (sn.id))
@@ -59,7 +59,7 @@ class SNViewTest(UnitTests):
         self.assertContains(response, 'Spectroscopy')
 
     def test_view_requires_login(self):
-        user=User.objects.create_user(username='test@test.com', password="bla")
+        user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         sn=SN.objects.create(sn_name='SN 2017A', pi=user)
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertRedirects(response, '/?next=/sn/%d/' % (sn.id))
@@ -93,7 +93,7 @@ class AddNewSNViewTest(UnitTests):
         self.assertRedirects(response, '/sn/%d/' % (sn.id))
 
     def test_view_requires_login(self):
-        user=User.objects.create_user(username='test@test.com', password="bla")
+        user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         response=self.client.post('/add_sn/', data={'sn_name': 'SN 1999A', 'ra': '01:23:45.6', 'dec': '+65:34:27.3', 'pi': user})
         self.assertRedirects(response, '/?next=/add_sn/')
         self.assertEqual(SN.objects.count(), 0)

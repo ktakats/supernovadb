@@ -49,6 +49,47 @@ class NewSNPageTest(FunctionalTest):
         error=self.browser.find_element_by_css_selector('.errorlist')
         self.assertEqual(error.text, 'This SN is already registered')
 
+class SNPageTest(FunctionalTest):
+
+    def test_SN_page_functions(self):
+        #Joe goes to the SN site and adds an SN
+        self.go_to_page_and_log_in()
+        self.add_new_sn()
+
+        #Now he's at the page of this new SN
+        title=self.browser.find_element_by_css_selector('h1').text
+        self.assertIn('SN 1987A', title)
+
+        #There are links to the Observation Logs
+        self.browser.find_element_by_link_text("Observation log").click()
+        self.assertEqual(self.browser.find_element_by_tag_name("h1").text, "SN 1987A - Observation log")
+        self.browser.back()
+
+        #to the photometry page
+        self.browser.find_element_by_link_text("Photometry").click()
+        self.assertEqual(self.browser.find_element_by_tag_name("h1").text, "SN 1987A - Photometry")
+        self.browser.back()
+        #and to the spectroscopy page
+        self.browser.find_element_by_link_text("Spectroscopy").click()
+        self.assertEqual(self.browser.find_element_by_tag_name("h1").text, "SN 1987A - Spectroscopy")
+        self.browser.back()
+
+    def test_SN_page_PI_and_coIs(self):
+        #Joe goes to the SN site and adds an SN
+        self.go_to_page_and_log_in()
+        self.add_new_sn()
+
+        #Now he's at the page of this new SN
+        title=self.browser.find_element_by_css_selector('h1').text
+        self.assertIn('SN 1987A', title)
+
+        #He can see that he is the PI of this object
+        body=self.browser.find_element_by_tag_name("body").text
+        self.assertIn("PI: Joe", body)
+
+
+
+
 class MySneTest(FunctionalTest):
 
     def test_user_can_have_all_their_SNe_in_a_page(self):
@@ -69,3 +110,18 @@ class MySneTest(FunctionalTest):
         self.browser.find_element_by_link_text("SN 1987A").click()
         title=self.browser.find_element_by_tag_name('h1').text
         self.assertEqual(title, "SN 1987A")
+"""
+class NewProjectTest(FunctionalTest):
+
+    def test_user_can_create_projects(self):
+        #Joe goes to the SN page and logs in, add an SN
+        self.go_to_page_and_log_in()
+        self.add_new_sn()
+
+        #He notices that he can now create projects!
+        self.browser.find_element_by_link_text("New project").click()
+        self.browser.find_element_by_id("id_title").send_keys("Joe's type II project")
+        self.browser.find_element_by_id("id_description").send_keys("Our project to study type IIs")
+        self.browser.find_element_by_id("id_sne").send_keys("SN 1987A")
+        self.browser.find_element_by_id("id_submit").click()
+"""

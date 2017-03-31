@@ -16,10 +16,10 @@ User=auth.get_user_model()
 def home(request):
     if request.method=="POST":
         form=LoginForm(request.POST)
-        email=request.POST['username']
+        email=request.POST['email']
         password=request.POST['password']
         if form.is_valid():
-            user=authenticate(username=email, password=password)
+            user=authenticate(email=email, password=password)
             if user:
                 login(request, user)
     else:

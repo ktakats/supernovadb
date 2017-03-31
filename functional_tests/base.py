@@ -35,8 +35,8 @@ class FunctionalTest(StaticLiveServerTestCase):
     #Helper functions
     def go_to_page_and_log_in(self):
         self.browser.get(self.server_url)
-        User.objects.create_user(username="joe@example.com", password="joepassword", first_name="Joe")
-        self.browser.find_element_by_id("id_username").send_keys("joe@example.com")
+        User.objects.create_user(email="joe@example.com", password="joepassword", first_name="Joe")
+        self.browser.find_element_by_id("id_email").send_keys("joe@example.com")
         self.browser.find_element_by_id("id_password").send_keys("joepassword\n")
 
 

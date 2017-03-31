@@ -4,6 +4,7 @@
 {% block content %}
 <div class="coordinates">
 <p>RA={{ra}}, Dec={{dec}}</p>
+<p>PI: {{sn.pi.first_name}}</p>
 </div>
 <p>{% url 'sn_obs' sn.id %}</p>
 <button><a href="{% url 'sn_obs' sn.id %}">Observation log</a></button>
