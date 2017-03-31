@@ -48,3 +48,24 @@ class NewSNPageTest(FunctionalTest):
         self.add_new_sn(name='SN 1987A', ra='05:35:27.99', dec='-69:16:11.50')
         error=self.browser.find_element_by_css_selector('.errorlist')
         self.assertEqual(error.text, 'This SN is already registered')
+
+class MySneTest(FunctionalTest):
+
+    def test_user_can_have_all_their_SNe_in_a_page(self):
+        #Joe goes to the SN page, and adds 2 new SNe
+        self.go_to_page_and_log_in()
+        self.add_new_sn()
+        self.add_new_sn(name='SN 1988A',ra='12:37:43.58', dec='11:48:19.69')
+        time.sleep(5)
+        #He goes to see the list of his SNe
+        self.browser.find_element_by_link_text("My SNe").click()
+        time.sleep(5)
+        #Here both if his SNe are listed
+        body=self.browser.find_element_by_tag_name('body').text
+        self.assertIn("SN 1987A", body)
+        self.assertIn("SN 1988A", body)
+
+        #Clicking on an SN takes him to the SN's page
+        self.browser.find_element_by_link_text("SN 1987A").click()
+        title=self.browser.find_element_by_tag_name('h1').text
+        self.assertEqual(title, "SN 1987A")

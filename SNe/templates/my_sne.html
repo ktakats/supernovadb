@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{%block content %}
+
+{% for sn in sne %}
+<p>
+<a href="{{sn}}">{{sn.sn_name}}</a>
+<p>
+{% endfor %}
+{% endblock %}

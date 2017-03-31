@@ -28,8 +28,8 @@
         {% if user.is_authenticated %}
         <li><a href="#">Hola, {{user.first_name}}</a></li>
         {% endif %}
-        <li><a href="{% url 'add_sn'%}">Add a new SN</a></li>
-        <li><a href="">SNe</a></li>
+        <li><a href="{% url 'add_sn' %}">Add a new SN</a></li>
+        <li><a href="{% url 'my_sne' %}">My SNe</a></li>
       </ul>
     </div>
   </nav>

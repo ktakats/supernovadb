@@ -9,7 +9,7 @@ from django.utils import timezone
 @python_2_unicode_compatible
 class SN(models.Model):
     def __str__(self):
-        return self.sn_name
+        return self.get_absolute_url()
 
     sn_name=models.CharField(max_length=100, unique=True)
     ra=models.FloatField(default=0.0)

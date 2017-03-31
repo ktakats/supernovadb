@@ -97,3 +97,15 @@ class AddNewSNViewTest(UnitTests):
         response=self.client.post('/add_sn/', data={'sn_name': 'SN 1999A', 'ra': '01:23:45.6', 'dec': '+65:34:27.3', 'pi': user})
         self.assertRedirects(response, '/?next=/add_sn/')
         self.assertEqual(SN.objects.count(), 0)
+
+class MySNeViewTest(UnitTests):
+
+    def test_view_uses_mysn_template(self):
+        sn=self.login_and_create_new_SN(self)
+        response=self.client.get('/my_sne/')
+        self.assertTemplateUsed(response, 'my_sne.html')
+
+    def test_view_lists_sne(self):
+        sn=self.login_and_create_new_SN(self)
+        response=self.client.get('/my_sne/')
+        self.assertIn(sn,response.context['sne'])

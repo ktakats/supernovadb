@@ -46,3 +46,8 @@ def view_sn(request, sn_id):
     ra='%02d:%02d:%02.3f' % (c.ra.hms.h, c.ra.hms.m, c.ra.hms.s)
     dec='%02d:%02d:%02.2f' % (c.dec.dms.d, c.dec.dms.m, c.dec.dms.s)
     return render(request, 'sn.html', {'sn': sn, 'ra': ra, 'dec': dec})
+
+@login_required(login_url='/')
+def my_sne(request):
+    sne=SN.objects.filter(pi=request.user)
+    return render(request, 'my_sne.html', {'sne': sne})
