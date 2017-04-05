@@ -1,5 +1,5 @@
 from django.test import TestCase
-from SNe.forms import NewSNForm
+from SNe.forms import NewSNForm, AddCoIForm
 from SNe.models import SN
 from django.contrib import auth
 
@@ -70,3 +70,15 @@ class NewSNFormTest(TestCase):
         form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '02:34:56.78', 'dec': '-59:53:24.6', 'pi': user})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['sn_name'], ['This SN is already registered'])
+
+
+class AddCoIFormTest(TestCase):
+
+    def test_defaul(self):
+        form=AddCoIForm()
+        self.assertIn("Coinvestigators",form.as_p())
+
+    def test_form_is_valid(self):
+        user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        form=AddCoIForm(data={'coinvestigators': user.id})
+        self.assertTrue(form.is_valid())

@@ -64,6 +64,30 @@ class SNViewTest(UnitTests):
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertRedirects(response, '/?next=/sn/%d/' % (sn.id))
 
+    def test_view_shows_pi(self):
+        sn=self.login_and_create_new_SN(self)
+        response=self.client.get('/sn/%d/' % (sn.id))
+        self.assertContains(response, "Test")
+
+    def test_view_shows_cois(self):
+        sn=self.login_and_create_new_SN(self)
+        coi=User.objects.create_user(email="bla@bla.com", password="test", first_name="Co-I1")
+        sn.coinvestigators.add(coi)
+        sn.save
+        response=self.client.get('/sn/%d/' % (sn.id))
+        self.assertContains(response, "Co-I1")
+
+    def test_view_renders_coiform(self):
+        sn=self.login_and_create_new_SN(self)
+        response=self.client.get('/sn/%d/' % (sn.id))
+        self.assertContains(response, 'id_coinvestigators')
+
+    def test_submitting_form_adds_coi(self):
+        sn=self.login_and_create_new_SN(self)
+        coi=User.objects.create_user(email="bla@bla.com", password="test", first_name="Co-I1")
+        response=self.client.post('/sn/%d/' % (sn.id), data={'coinvestigators': coi.id})
+        sn=SN.objects.first()
+        self.assertEqual(sn.coinvestigators.first(), coi)
 
 class AddNewSNViewTest(UnitTests):
 

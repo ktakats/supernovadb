@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-
+from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 # Create your models here.
@@ -35,7 +35,8 @@ class MyUserManager(BaseUserManager):
         user.is_admin = True
         user.save(using=self._db)
         return user
-
+        
+@python_2_unicode_compatible
 class User(AbstractBaseUser):
     email = models.EmailField(
         verbose_name='email address',
@@ -51,7 +52,7 @@ class User(AbstractBaseUser):
     objects = MyUserManager()
 
     def __str__(self):
-        return self.first_name
+        return self.get_full_name()
 
     def get_full_name(self):
         return self.first_name

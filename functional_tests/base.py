@@ -39,6 +39,8 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id("id_email").send_keys("joe@example.com")
         self.browser.find_element_by_id("id_password").send_keys("joepassword\n")
 
+    def second_user(self):
+        User.objects.create_user(email="claudia@example.com", password="claudiapassword", first_name="Claudia")
 
     def add_new_sn(self, name="SN 1987A", ra='05:35:27.99', dec='-69:16:11.50'):
         self.browser.find_element_by_link_text('Add a new SN').click()

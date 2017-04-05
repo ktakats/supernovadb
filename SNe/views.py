@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from models import SN
-from forms import NewSNForm
+from forms import NewSNForm, AddCoIForm
 from accounts.forms import LoginForm
 from django_tables2 import RequestConfig
 from astropy.coordinates import SkyCoord
@@ -42,10 +42,17 @@ def add_sn(request):
 @login_required(login_url='/')
 def view_sn(request, sn_id):
     sn=SN.objects.get(id=sn_id)
+    if request.method=='POST':
+        addcoiform=AddCoIForm(request.POST)
+        if addcoiform.is_valid():
+            sn.coinvestigators.add(request.POST['coinvestigators'])
+            sn.save()
+
     c=SkyCoord(str(sn.ra), str(sn.dec), unit=u.degree)
     ra='%02d:%02d:%02.3f' % (c.ra.hms.h, c.ra.hms.m, c.ra.hms.s)
     dec='%02d:%02d:%02.2f' % (c.dec.dms.d, c.dec.dms.m, c.dec.dms.s)
-    return render(request, 'sn.html', {'sn': sn, 'ra': ra, 'dec': dec})
+    addcoiform=AddCoIForm()
+    return render(request, 'sn.html', {'sn': sn, 'ra': ra, 'dec': dec, 'addcoiform': addcoiform})
 
 @login_required(login_url='/')
 def my_sne(request):

@@ -76,6 +76,7 @@ class SNPageTest(FunctionalTest):
 
     def test_SN_page_PI_and_coIs(self):
         #Joe goes to the SN site and adds an SN
+        self.second_user()
         self.go_to_page_and_log_in()
         self.add_new_sn()
 
@@ -88,12 +89,14 @@ class SNPageTest(FunctionalTest):
         self.assertIn("PI: Joe", body)
 
         #He notices that he can add co-Is, so he adds Claudia
-        self.browser.find_element_by_id("id_coi").send_keys("Claudia")
-        self.browser.find_element_by_id("id_add").click()
+        time.sleep(5)
+        self.browser.find_element_by_id("id_coinvestigators").send_keys("Claudia")
+        self.browser.find_element_by_id("id_addbutton").click()
 
         #Claudia's name appears in a list of co-Is
         body=self.browser.find_element_by_tag_name("body").text
-        self.assertIn("co-Is", body)
+        time.sleep(5)
+        self.assertIn("Co-Is", body)
         self.assertIn("Claudia", body)
 
 

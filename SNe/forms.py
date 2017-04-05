@@ -4,8 +4,10 @@ from astropy import units as u
 from django import forms
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from  django.core.validators import RegexValidator
+from django.contrib import auth
 
 from .models import SN
+Users=auth.get_user_model()
 
 #from django.forms.extras.widgets import SelectDateWidget
 
@@ -57,3 +59,14 @@ class NewSNForm(forms.models.ModelForm):
         except ValidationError as e:
             e.error_dict={'sn_name': ['This SN is already registered']}
             self._update_errors(e)
+
+class AddCoIForm(forms.models.ModelForm):
+    coinvestigators=forms.ModelChoiceField(queryset=Users.objects.all())
+
+    class Meta:
+        model=SN
+        fields=["coinvestigators"]
+
+        labels={
+            'coinvestigators': "Co-Is"
+        }
