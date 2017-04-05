@@ -24,3 +24,14 @@ class SNModelTest(TestCase):
         user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         sn=SN.objects.create(sn_name='SN 2017A', pi=user)
         self.assertIn(sn.get_absolute_url(), '/sn/%d/' % (sn.id))
+
+    def test_sn_can_have_multiple_co_is(self):
+        pi=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        coi1=User.objects.create_user(email='coi@test.com', password="blabla", first_name="CoTest")
+        coi2=User.objects.create_user(email='coi2@test.com', password="blablabla", first_name="Co2Test")
+        sn=SN.objects.create(sn_name='SN 2017A', pi=user)
+        sn.coi.add(coi1)
+        sn.coi.add(coi2)
+        sn.save()
+        print sn.coi
+        self.fail()

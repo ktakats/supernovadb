@@ -87,6 +87,15 @@ class SNPageTest(FunctionalTest):
         body=self.browser.find_element_by_tag_name("body").text
         self.assertIn("PI: Joe", body)
 
+        #He notices that he can add co-Is, so he adds Claudia
+        self.browser.find_element_by_id("id_coi").send_keys("Claudia")
+        self.browser.find_element_by_id("id_add").click()
+
+        #Claudia's name appears in a list of co-Is
+        body=self.browser.find_element_by_tag_name("body").text
+        self.assertIn("co-Is", body)
+        self.assertIn("Claudia", body)
+
 
 
 
