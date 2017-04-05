@@ -14,7 +14,8 @@ class SN(models.Model):
     sn_name=models.CharField(max_length=100, unique=True)
     ra=models.FloatField(default=0.0)
     dec=models.FloatField(default=0.0)
-    pi=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    pi=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="pi")
+    coinvestigators=models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="coinvestigator")
 
     def get_absolute_url(self):
         return reverse('view_sn', args=[self.id])
