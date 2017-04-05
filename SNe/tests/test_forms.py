@@ -74,11 +74,17 @@ class NewSNFormTest(TestCase):
 
 class AddCoIFormTest(TestCase):
 
-    def test_defaul(self):
-        form=AddCoIForm()
-        self.assertIn("Coinvestigators",form.as_p())
-
-    def test_form_is_valid(self):
+    def test_cant_add_coi_if_hes_pi(self):
         user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
-        form=AddCoIForm(data={'coinvestigators': user.id})
-        self.assertTrue(form.is_valid())
+        sn=SN.objects.create(sn_name='SN 2999A', pi=user)
+        form=AddCoIForm(data={'coinvestigators': user.id}, instance=sn)
+        self.assertFalse(form.is_valid())
+
+    def test_cant_add_coi_twice(self):
+        pi=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        sn=SN.objects.create(sn_name='SN 2999A', pi=pi)
+        user=User.objects.create_user(email='coi@test.com', password="blabla", first_name="Coi")
+        sn.coinvestigators.add(user)
+        sn.save()
+        form=AddCoIForm(data={'coinvestigators': user.id}, instance=sn)
+        self.assertFalse(form.is_valid())

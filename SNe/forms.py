@@ -2,7 +2,7 @@ from astropy.coordinates import SkyCoord
 from astropy import units as u
 
 from django import forms
-from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS, ObjectDoesNotExist
 from  django.core.validators import RegexValidator
 from django.contrib import auth
 
@@ -61,7 +61,7 @@ class NewSNForm(forms.models.ModelForm):
             self._update_errors(e)
 
 class AddCoIForm(forms.models.ModelForm):
-    coinvestigators=forms.ModelChoiceField(queryset=Users.objects.all())
+    coinvestigators=forms.ModelChoiceField(queryset=None)
 
     class Meta:
         model=SN
@@ -70,3 +70,13 @@ class AddCoIForm(forms.models.ModelForm):
         labels={
             'coinvestigators': "Co-Is"
         }
+
+    def __init__(self, *args, **kwargs):
+        super(AddCoIForm, self).__init__(*args, **kwargs)
+        cois=[coi.id for coi in self.instance.coinvestigators.all()]
+        try:
+            pi=self.instance.pi.id
+        except ObjectDoesNotExist:
+            pi=None
+        cois.append(pi)
+        self.fields['coinvestigators'].queryset=Users.objects.exclude(id__in=cois)
