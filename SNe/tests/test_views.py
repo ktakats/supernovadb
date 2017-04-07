@@ -44,17 +44,17 @@ class SNViewTest(UnitTests):
         self.assertContains(response, 'Dec=65:34:30.00')
 
     def test_view_has_link_to_obslog(self):
-        sn=self.login_and_create_new_SN(self)
+        sn=self.login_and_create_new_SN()
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'Observation log')
 
     def test_view_has_link_to_photometry(self):
-        sn=self.login_and_create_new_SN(self)
+        sn=self.login_and_create_new_SN()
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'Photometry')
 
     def test_view_has_link_to_spectroscopy(self):
-        sn=self.login_and_create_new_SN(self)
+        sn=self.login_and_create_new_SN()
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'Spectroscopy')
 
@@ -65,12 +65,12 @@ class SNViewTest(UnitTests):
         self.assertRedirects(response, '/?next=/sn/%d/' % (sn.id))
 
     def test_view_shows_pi(self):
-        sn=self.login_and_create_new_SN(self)
+        sn=self.login_and_create_new_SN()
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, "Test")
 
     def test_view_shows_cois(self):
-        sn=self.login_and_create_new_SN(self)
+        sn=self.login_and_create_new_SN()
         coi=User.objects.create_user(email="bla@bla.com", password="test", first_name="Co-I1")
         sn.coinvestigators.add(coi)
         sn.save
@@ -78,12 +78,12 @@ class SNViewTest(UnitTests):
         self.assertContains(response, "Co-I1")
 
     def test_view_renders_coiform(self):
-        sn=self.login_and_create_new_SN(self)
+        sn=self.login_and_create_new_SN()
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'id_coinvestigators')
 
     def test_submitting_form_adds_coi(self):
-        sn=self.login_and_create_new_SN(self)
+        sn=self.login_and_create_new_SN()
         coi=User.objects.create_user(email="bla@bla.com", password="test", first_name="Co-I1")
         response=self.client.post('/sn/%d/' % (sn.id), data={'coinvestigators': coi.id})
         sn=SN.objects.first()
@@ -125,11 +125,21 @@ class AddNewSNViewTest(UnitTests):
 class MySNeViewTest(UnitTests):
 
     def test_view_uses_mysn_template(self):
-        sn=self.login_and_create_new_SN(self)
+        sn=self.login_and_create_new_SN()
         response=self.client.get('/my_sne/')
         self.assertTemplateUsed(response, 'my_sne.html')
 
     def test_view_lists_sne(self):
-        sn=self.login_and_create_new_SN(self)
+        sn=self.login_and_create_new_SN()
         response=self.client.get('/my_sne/')
         self.assertIn(sn,response.context['sne'])
+
+    def test_can_see_sne_as_coI(self):
+        sn=self.login_and_create_new_SN()
+        self.client.logout()
+        user=User.objects.create_user(email='test2@test.com', password="bla", first_name="Test2")
+        sn.coinvestigators.add(user)
+        sn.save()
+        self.client.force_login(user)
+        response=self.client.get('/my_sne/')
+        self.assertIn(sn, response.context['sne'])

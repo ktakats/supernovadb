@@ -6,11 +6,10 @@ class NewSNPageTest(FunctionalTest):
     def test_user_can_add_SN_and_access_its_page(self):
         #There's a new app for SNe! Joe goes and checks it out
         self.go_to_page_and_log_in()
-
         #Sees that it's really about SNe!
         title=self.browser.find_element_by_css_selector('h1').text
         self.assertIn('Supernova', title)
-
+        print self.browser.get_cookies()
         #Finds a button where he can add a new SN. He clicks it
         self.browser.find_element_by_link_text('Add a new SN').click()
 
@@ -89,7 +88,6 @@ class SNPageTest(FunctionalTest):
         self.assertIn("PI: Joe", body)
 
         #He notices that he can add co-Is, so he adds Claudia
-        time.sleep(5)
         self.browser.find_element_by_id("id_coinvestigators").send_keys("Claudia")
         self.browser.find_element_by_id("id_addbutton").click()
 

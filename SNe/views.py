@@ -8,6 +8,7 @@ from astropy import units as u
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
+from django.db.models import Q
 
 User=auth.get_user_model()
 
@@ -56,5 +57,5 @@ def view_sn(request, sn_id):
 
 @login_required(login_url='/')
 def my_sne(request):
-    sne=SN.objects.filter(pi=request.user)
+    sne=SN.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user))
     return render(request, 'my_sne.html', {'sne': sne})

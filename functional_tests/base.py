@@ -1,5 +1,7 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.conf import settings
+from django.contrib.sessions.backends.db import SessionStore
+from django.contrib.auth import BACKEND_SESSION_KEY, SESSION_KEY
 from selenium import webdriver
 import sys
 from django.contrib import auth
@@ -33,6 +35,26 @@ class FunctionalTest(StaticLiveServerTestCase):
         super(FunctionalTest, self).tearDown()
 
     #Helper functions
+    def create_pre_authenticated_session(self, email, password, first_name):
+        user=User.objects.create_user(email=email, password=password, first_name=first_name)
+        print user.pk
+        session=SessionStore()
+        session[SESSION_KEY]=user.pk
+        session[BACKEND_SESSION_KEY]=settings.AUTHENTICATION_BACKENDS[0]
+        session.save()
+        ## to set a cookie we need to first visit the domain.
+        ## 404 pages load the quickest!
+        self.browser.get(self.server_url)
+        self.browser.find_element_by_id("id_email").send_keys(email)
+        self.browser.find_element_by_id("id_password").send_keys(password + "\n")
+        self.browser.add_cookie(dict(
+            name=settings.SESSION_COOKIE_NAME,
+            value=session.session_key,
+            path='/',
+        ))
+
+
+
     def go_to_page_and_log_in(self):
         self.browser.get(self.server_url)
         User.objects.create_user(email="joe@example.com", password="joepassword", first_name="Joe")
