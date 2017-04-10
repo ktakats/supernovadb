@@ -143,3 +143,15 @@ class MySNeViewTest(UnitTests):
         self.client.force_login(user)
         response=self.client.get('/my_sne/')
         self.assertIn(sn, response.context['sne'])
+
+class AddNewProjectViewTest(UnitTests):
+
+    def test_view_uses_new_project_template(self):
+        user=user_login(self)
+        response=self.client.get('/add_project/')
+        self.assertTemplateUsed(response, 'new_project.html')
+
+    def test_view_renders_form(self):
+        user=user_login(self)
+        response=self.client.get('/add_project/')
+        self.assertContains(response, 'id_project_title')

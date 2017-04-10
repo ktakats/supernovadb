@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 
 from django.test import TestCase
-from SNe.models import SN
+from SNe.models import SN, Project
 from django.contrib import auth
 
 User=auth.get_user_model()
@@ -35,3 +35,31 @@ class SNModelTest(TestCase):
         sn.save()
         self.assertEqual(sn.coinvestigators.count(), 2)
         self.assertEqual(sn.coinvestigators.all()[0], coi1)
+
+class ProjectModelTest(TestCase):
+
+    def test_can_create_object(self):
+        project=Project.objects.create(title="Bla", description="Bla bla bla")
+        self.assertEqual(project, Project.objects.first())
+
+    def test_project_can_have_multiple_co_is(self):
+        pi=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        coi1=User.objects.create_user(email='coi@test.com', password="blabla", first_name="CoTest")
+        coi2=User.objects.create_user(email='coi2@test.com', password="blablabla", first_name="Co2Test")
+        project=Project.objects.create(title="Bla", pi=pi)
+        project.coinvestigators.add(coi1)
+        project.coinvestigators.add(coi2)
+        project.save()
+        self.assertEqual(project.coinvestigators.count(), 2)
+        self.assertEqual(project.coinvestigators.all()[0], coi1)
+
+    def test_project_can_have_multiple_SNe(self):
+        pi=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        sn1=SN.objects.create(sn_name='SN 2017A', pi=pi)
+        sn2=SN.objects.create(sn_name="SN 2018B", pi=pi)
+        project=Project.objects.create(title="Bla", pi=pi)
+        project.sne.add(sn1)
+        project.sne.add(sn2)
+        project.save()
+        self.assertEqual(project.sne.count(), 2)
+        self.assertEqual(project.sne.all()[0], sn1)

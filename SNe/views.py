@@ -59,3 +59,6 @@ def view_sn(request, sn_id):
 def my_sne(request):
     sne=SN.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user))
     return render(request, 'my_sne.html', {'sne': sne})
+
+def add_project(request):
+    return render(request, 'new_project.html')

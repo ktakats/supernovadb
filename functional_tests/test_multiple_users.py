@@ -27,7 +27,6 @@ class SNSharingTest(FunctionalTest):
         self.browser=joe_browser
         self.browser.get(self.server_url)
         self.add_new_sn()
-        time.sleep(10)
 
 
         #He adds Claudia as Co-I
@@ -37,5 +36,4 @@ class SNSharingTest(FunctionalTest):
         #Now Claudia can see and edit the SN and its data
         self.browser=claudia_browser
         self.browser.get(self.server_url+ "/my_sne/")
-        time.sleep(10)
         self.assertIn("SN 1987A", self.browser.find_element_by_tag_name('body').text)

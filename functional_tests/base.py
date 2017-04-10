@@ -37,7 +37,6 @@ class FunctionalTest(StaticLiveServerTestCase):
     #Helper functions
     def create_pre_authenticated_session(self, email, password, first_name):
         user=User.objects.create_user(email=email, password=password, first_name=first_name)
-        print user.pk
         session=SessionStore()
         session[SESSION_KEY]=user.pk
         session[BACKEND_SESSION_KEY]=settings.AUTHENTICATION_BACKENDS[0]

@@ -120,7 +120,7 @@ class MySneTest(FunctionalTest):
         self.browser.find_element_by_link_text("SN 1987A").click()
         title=self.browser.find_element_by_tag_name('h1').text
         self.assertEqual(title, "SN 1987A")
-"""
+
 class NewProjectTest(FunctionalTest):
 
     def test_user_can_create_projects(self):
@@ -134,4 +134,3 @@ class NewProjectTest(FunctionalTest):
         self.browser.find_element_by_id("id_description").send_keys("Our project to study type IIs")
         self.browser.find_element_by_id("id_sne").send_keys("SN 1987A")
         self.browser.find_element_by_id("id_submit").click()
-"""

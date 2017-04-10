@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils import timezone
 
+
 @python_2_unicode_compatible
 class SN(models.Model):
     def __str__(self):
@@ -21,3 +22,11 @@ class SN(models.Model):
         return reverse('view_sn', args=[self.id])
 
 #@python_2_unicode_compatible
+
+class Project(models.Model):
+
+    title=models.CharField(max_length=100)
+    description=models.CharField(max_length=500)
+    pi=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="project_pi", null=True)
+    coinvestigators=models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="project_coi")
+    sne=models.ManyToManyField(SN, related_name="project_sne")
