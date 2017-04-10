@@ -1,6 +1,6 @@
 from django.test import TestCase
 from SNe.forms import NewSNForm, AddCoIForm, NewProjectForm
-from SNe.models import SN
+from SNe.models import SN, Project
 from django.contrib import auth
 
 User=auth.get_user_model()
@@ -102,6 +102,7 @@ class NewProjectFormTest(TestCase):
 
     def test_cois_exclude_pi(self):
         user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+
         form=NewProjectForm(data={'title': 'Bla'}, instance=user)
         self.assertNotIn(user.first_name, form.as_p())
 
@@ -118,3 +119,26 @@ class NewProjectFormTest(TestCase):
         self.assertIn(sn1.get_absolute_url(), form.as_p())
         self.assertIn(sn2.get_absolute_url(), form.as_p())
         self.assertNotIn(sn3.get_absolute_url(), form.as_p())
+
+    def test_save_form(self):
+        user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        user2=User.objects.create_user(email='test2@test.com', password="bla", first_name="Test2")
+        sn1=SN.objects.create(sn_name='SN 2999A', pi=user)
+        sn2=SN.objects.create(sn_name='SN 1999A', pi=user)
+        form=NewProjectForm(data={'title': "Bla", 'description': "bla bla", 'sne': [sn1.id, sn2.id], 'coinvestigators': [user2.id]}, instance=user)
+        self.assertTrue(form.is_valid())
+        form.save()
+        p=Project.objects.first()
+        self.assertEqual(p.title, "Bla")
+        self.assertEqual(p.pi, user)
+        self.assertIn(sn2, p.sne.all())
+        self.assertIn(user2, p.coinvestigators.all())
+
+    def test_cois_become_cois_of_SNe(self):
+        pi=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        sn1=SN.objects.create(sn_name='SN 2999A', pi=pi)
+        user2=User.objects.create_user(email='test2@test.com', password="bla", first_name="Test2")
+        form=NewProjectForm(data={'title': "Bla", 'description': "bla bla", 'sne': [sn1.id], 'coinvestigators': [user2.id]}, instance=pi)
+        self.assertTrue(form.is_valid())
+        form.save()
+        self.assertIn(user2, sn1.coinvestigators.all())

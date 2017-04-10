@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from models import SN
-from forms import NewSNForm, AddCoIForm
+from models import SN, Project
+from forms import NewSNForm, AddCoIForm, NewProjectForm
 from accounts.forms import LoginForm
 from django_tables2 import RequestConfig
 from astropy.coordinates import SkyCoord
@@ -60,5 +60,16 @@ def my_sne(request):
     sne=SN.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user))
     return render(request, 'my_sne.html', {'sne': sne})
 
+@login_required(login_url="/")
 def add_project(request):
-    return render(request, 'new_project.html')
+    if request.method=="POST":
+        form=NewProjectForm(request.POST, instance=request.user)
+        if form.is_valid():
+            project=form.save()
+            return redirect(project.get_absolute_url())
+    form=NewProjectForm(instance=request.user)
+    return render(request, 'new_project.html', {'form': form})
+
+def view_project(request, project_id):
+    project=Project.objects.get(id=project_id)
+    return render(request, 'project.html', {'project': project})

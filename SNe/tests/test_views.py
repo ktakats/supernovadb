@@ -1,7 +1,7 @@
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from .base import UnitTests
-from SNe.models import SN
+from SNe.models import SN, Project
 
 from django.contrib import auth
 
@@ -154,4 +154,28 @@ class AddNewProjectViewTest(UnitTests):
     def test_view_renders_form(self):
         user=user_login(self)
         response=self.client.get('/add_project/')
-        self.assertContains(response, 'id_project_title')
+        self.assertContains(response, 'id_title')
+
+    def test_view_requires_login(self):
+        response=self.client.get('/add_project/')
+        self.assertRedirects(response, '/?next=/add_project/')
+
+    def test_submitting_form_saves_project(self):
+        sn=self.login_and_create_new_SN()
+        response=self.client.post('/add_project/', data={'title': "Bla", 'description': "bla bla", 'sne': sn.id})
+        project=Project.objects.first()
+        self.assertEqual(project.title, "Bla")
+
+    def test_form_submission_redirects_to_project_page(self):
+        sn=self.login_and_create_new_SN()
+        response=self.client.post('/add_project/', data={'title': "Bla", 'description': "bla bla", 'sne': sn.id})
+        project=Project.objects.first()
+        self.assertRedirects(response, '/projects/%d/' % (project.id))
+
+class ProjectViewTest(UnitTests):
+
+    def test_view_renders_template_and_shows_correct_project(self):
+        sn=self.login_and_create_new_SN()
+        project=Project.objects.create(title="Bla")
+        response=self.client.get('/projects/%d/' % (project.id))
+        self.assertTemplateUsed(response, 'project.html')

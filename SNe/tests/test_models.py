@@ -63,3 +63,7 @@ class ProjectModelTest(TestCase):
         project.save()
         self.assertEqual(project.sne.count(), 2)
         self.assertEqual(project.sne.all()[0], sn1)
+
+    def test_project_has_absolute_url(self):
+        project=Project.objects.create(title="Bla")
+        self.assertEqual(project.get_absolute_url(), '/projects/%d/' % (project.id))

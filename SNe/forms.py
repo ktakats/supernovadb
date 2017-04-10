@@ -82,8 +82,8 @@ class AddCoIForm(forms.models.ModelForm):
         self.fields['coinvestigators'].queryset=Users.objects.exclude(id__in=cois)
 
 class NewProjectForm(forms.models.ModelForm):
-    coinvestigators=forms.ModelMultipleChoiceField(queryset=None)
-    sne=forms.ModelMultipleChoiceField(queryset=None)
+    coinvestigators=forms.ModelMultipleChoiceField(queryset=None, required=False)
+    sne=forms.ModelMultipleChoiceField(queryset=None, required=False)
 
     class Meta:
         model=Project
@@ -100,3 +100,24 @@ class NewProjectForm(forms.models.ModelForm):
             pi=None
         self.fields['coinvestigators'].queryset=Users.objects.exclude(id=pi)
         self.fields['sne'].queryset=SN.objects.filter(Q(pi=pi) | Q(coinvestigators=pi))
+
+    def save(self):
+        data=self.cleaned_data
+        project=Project.objects.create(title=data['title'], description=data['description'], pi=self.instance)
+        for sn in data['sne']:
+            #add sne to project
+            project.sne.add(sn)
+            #add project co-is (and if necessary project pi) as cois of the SN
+            snpi=sn.pi
+            sncois=sn.coinvestigators.all()
+            if not self.instance==snpi or self.instance not in sncois:
+                sn.coinvestigators.add(self.instance)
+            for coi in data['coinvestigators']:
+                if not coi==snpi or coi not in sncois:
+                    sn.coinvestigators.add(coi)
+            sn.save()
+        #add Cois to the project
+        for coi in data['coinvestigators']:
+            project.coinvestigators.add(coi)
+        project.save()
+        return project
