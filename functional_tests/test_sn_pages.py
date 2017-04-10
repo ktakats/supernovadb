@@ -119,12 +119,14 @@ class MySneTest(FunctionalTest):
         #Clicking on an SN takes him to the SN's page
         self.browser.find_element_by_link_text("SN 1987A").click()
         title=self.browser.find_element_by_tag_name('h1').text
+        time.sleep(10)
         self.assertEqual(title, "SN 1987A")
 
 class NewProjectTest(FunctionalTest):
 
     def test_user_can_create_projects(self):
         #Joe goes to the SN page and logs in, add an SN
+        self.second_user()
         self.go_to_page_and_log_in()
         self.add_new_sn()
 
@@ -133,10 +135,10 @@ class NewProjectTest(FunctionalTest):
         self.browser.find_element_by_id("id_title").send_keys("Joe's type II project")
         self.browser.find_element_by_id("id_description").send_keys("Our project to study type IIs")
         self.browser.find_element_by_id("id_sne").send_keys("SN 1987A")
+        self.browser.find_element_by_id("id_coinvestigators").send_keys("claudia")
         self.browser.find_element_by_id("id_submit").click()
 
 
         #It brings him back to the my projects page, where he can see the title of the project
         title=self.browser.find_element_by_tag_name("h1").text
         self.assertEqual(title, "Joe's type II project")
-        self.fail()

@@ -1,14 +1,18 @@
-from django.shortcuts import redirect, render, get_object_or_404
-from models import SN, Project
-from forms import NewSNForm, AddCoIForm, NewProjectForm
-from accounts.forms import LoginForm
-from django_tables2 import RequestConfig
-from astropy.coordinates import SkyCoord
-from astropy import units as u
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from django.db.models import Q
+from django.shortcuts import redirect, render, get_object_or_404
+
+from models import SN, Project
+from forms import NewSNForm, AddCoIForm, NewProjectForm
+from accounts.forms import LoginForm
+
+from astropy import units as u
+from astropy.coordinates import SkyCoord
+
+from django_tables2 import RequestConfig
+
 
 User=auth.get_user_model()
 
@@ -33,7 +37,7 @@ def add_sn(request):
         form=NewSNForm(data=request.POST)
         if form.is_valid():
             sn=form.save(request.user)
-            return redirect(sn)
+            return redirect(sn.get_absolute_url())
         else:
             return render(request, 'new_sn.html', {'form': form})
     else:

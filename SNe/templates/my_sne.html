@@ -4,7 +4,7 @@
 
 {% for sn in sne %}
 <p>
-<a href="{{sn}}">{{sn.sn_name}}</a>
+<a href="{{sn.get_absolute_url}}">{{sn.sn_name}}</a>
 <p>
 {% endfor %}
 {% endblock %}

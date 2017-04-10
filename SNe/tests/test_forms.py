@@ -116,9 +116,9 @@ class NewProjectFormTest(TestCase):
         sn2.save()
         sn3=SN.objects.create(sn_name='SN 3999A', pi=user3)
         form=NewProjectForm(data={'title': 'Bla'}, instance=user1)
-        self.assertIn(sn1.get_absolute_url(), form.as_p())
-        self.assertIn(sn2.get_absolute_url(), form.as_p())
-        self.assertNotIn(sn3.get_absolute_url(), form.as_p())
+        self.assertIn(sn1.sn_name, form.as_p())
+        self.assertIn(sn2.sn_name, form.as_p())
+        self.assertNotIn(sn3.sn_name, form.as_p())
 
     def test_save_form(self):
         user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")

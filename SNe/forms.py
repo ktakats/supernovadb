@@ -1,12 +1,14 @@
+from django import forms
+from django.contrib import auth
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS, ObjectDoesNotExist
+from  django.core.validators import RegexValidator
+from django.db.models import Q
+
+from .models import SN, Project
+
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 
-from django import forms
-from django.core.exceptions import ValidationError, NON_FIELD_ERRORS, ObjectDoesNotExist
-from  django.core.validators import RegexValidator
-from django.contrib import auth
-from django.db.models import Q
-from .models import SN, Project
 Users=auth.get_user_model()
 
 #from django.forms.extras.widgets import SelectDateWidget
