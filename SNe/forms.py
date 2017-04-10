@@ -5,7 +5,7 @@ from django import forms
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS, ObjectDoesNotExist
 from  django.core.validators import RegexValidator
 from django.contrib import auth
-
+from django.db.models import Q
 from .models import SN, Project
 Users=auth.get_user_model()
 
@@ -83,7 +83,7 @@ class AddCoIForm(forms.models.ModelForm):
 
 class NewProjectForm(forms.models.ModelForm):
     coinvestigators=forms.ModelMultipleChoiceField(queryset=None)
-    sne=forms.ModelMultipleChoiceField(queryset=SN.objects.all())
+    sne=forms.ModelMultipleChoiceField(queryset=None)
 
     class Meta:
         model=Project
@@ -99,3 +99,4 @@ class NewProjectForm(forms.models.ModelForm):
         except ObjectDoesNotExist:
             pi=None
         self.fields['coinvestigators'].queryset=Users.objects.exclude(id=pi)
+        self.fields['sne'].queryset=SN.objects.filter(Q(pi=pi) | Q(coinvestigators=pi))

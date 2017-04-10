@@ -104,3 +104,17 @@ class NewProjectFormTest(TestCase):
         user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         form=NewProjectForm(data={'title': 'Bla'}, instance=user)
         self.assertNotIn(user.first_name, form.as_p())
+
+    def test_sne_only_include_pi_sne(self):
+        user1=User.objects.create_user(email='test1@test.com', password="bla", first_name="Test1")
+        user2=User.objects.create_user(email='test2@test.com', password="bla", first_name="Test2")
+        user3=User.objects.create_user(email='test3@test.com', password="bla", first_name="Test3")
+        sn1=SN.objects.create(sn_name='SN 2999A', pi=user1)
+        sn2=SN.objects.create(sn_name='SN 1999A', pi=user2)
+        sn2.coinvestigators.add(user1)
+        sn2.save()
+        sn3=SN.objects.create(sn_name='SN 3999A', pi=user3)
+        form=NewProjectForm(data={'title': 'Bla'}, instance=user1)
+        self.assertIn(sn1.get_absolute_url(), form.as_p())
+        self.assertIn(sn2.get_absolute_url(), form.as_p())
+        self.assertNotIn(sn3.get_absolute_url(), form.as_p())
