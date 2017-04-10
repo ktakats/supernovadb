@@ -1,5 +1,5 @@
 from django.test import TestCase
-from SNe.forms import NewSNForm, AddCoIForm
+from SNe.forms import NewSNForm, AddCoIForm, NewProjectForm
 from SNe.models import SN
 from django.contrib import auth
 
@@ -88,3 +88,19 @@ class AddCoIFormTest(TestCase):
         sn.save()
         form=AddCoIForm(data={'coinvestigators': user.id}, instance=sn)
         self.assertFalse(form.is_valid())
+
+class NewProjectFormTest(TestCase):
+
+    def test_default(self):
+        form=NewProjectForm()
+        self.assertIn("id_title", form.as_p())
+
+    def test_title_is_required(self):
+        form=NewProjectForm(data={})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['title'], ["Give a title to your project"])
+
+    def test_cois_exclude_pi(self):
+        user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        form=NewProjectForm(data={'title': 'Bla'}, instance=user)
+        self.assertNotIn(user.first_name, form.as_p())

@@ -25,7 +25,7 @@ class SN(models.Model):
 
 class Project(models.Model):
 
-    title=models.CharField(max_length=100)
+    title=models.CharField(max_length=100, blank=False)
     description=models.CharField(max_length=500)
     pi=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="project_pi", null=True)
     coinvestigators=models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="project_coi")

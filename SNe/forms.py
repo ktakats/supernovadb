@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError, NON_FIELD_ERRORS, ObjectDoes
 from  django.core.validators import RegexValidator
 from django.contrib import auth
 
-from .models import SN
+from .models import SN, Project
 Users=auth.get_user_model()
 
 #from django.forms.extras.widgets import SelectDateWidget
@@ -80,3 +80,22 @@ class AddCoIForm(forms.models.ModelForm):
             pi=None
         cois.append(pi)
         self.fields['coinvestigators'].queryset=Users.objects.exclude(id__in=cois)
+
+class NewProjectForm(forms.models.ModelForm):
+    coinvestigators=forms.ModelMultipleChoiceField(queryset=None)
+    sne=forms.ModelMultipleChoiceField(queryset=SN.objects.all())
+
+    class Meta:
+        model=Project
+        fields=["title", "description", "coinvestigators", "sne"]
+        error_messages={
+            'title': {'required': "Give a title to your project"}
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(NewProjectForm, self).__init__(*args, **kwargs)
+        try:
+            pi=self.instance.id
+        except ObjectDoesNotExist:
+            pi=None
+        self.fields['coinvestigators'].queryset=Users.objects.exclude(id=pi)
