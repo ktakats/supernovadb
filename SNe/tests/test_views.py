@@ -40,13 +40,13 @@ class SNViewTest(UnitTests):
         sn=self.login_and_create_new_SN()
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, 'SN 2017A')
-        self.assertContains(response, 'RA=01:30:30.000')
-        self.assertContains(response, 'Dec=65:34:30.00')
+        self.assertContains(response, '01:30:30.000')
+        self.assertContains(response, '65:34:30.00')
 
     def test_view_has_link_to_obslog(self):
         sn=self.login_and_create_new_SN()
         response=self.client.get('/sn/%d/' % (sn.id))
-        self.assertContains(response, 'Observation log')
+        self.assertContains(response, 'Observations')
 
     def test_view_has_link_to_photometry(self):
         sn=self.login_and_create_new_SN()

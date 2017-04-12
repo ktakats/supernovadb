@@ -9,7 +9,7 @@ class ObsLogTest(FunctionalTest):
         self.add_new_sn()
 
         #Redirected to the SN's page, Joe notices that here he can keep track of the observations
-        self.browser.find_element_by_link_text('Observation log').click()
+        self.browser.find_element_by_link_text('Observations').click()
 
         #Here he sees a form to submit his observations
         self.browser.find_element_by_id('id_obs_date').send_keys("2017-01-01")
@@ -30,7 +30,7 @@ class ObsLogTest(FunctionalTest):
         self.add_new_sn()
 
         #Redirected to the SN's page, Joe notices that here he can keep track of the observations
-        self.browser.find_element_by_link_text('Observation log').click()
+        self.browser.find_element_by_link_text('Observations').click()
 
         #Here he sees a form to submit his observations
         self.browser.find_element_by_id('id_obs_date').send_keys("2017-01-01")
@@ -66,7 +66,7 @@ class ObsLogTest(FunctionalTest):
         self.add_new_sn()
 
         #Redirected to the SN's page, Joe notices that here he can keep track of the observations
-        self.browser.find_element_by_link_text('Observation log').click()
+        self.browser.find_element_by_link_text('Observations').click()
 
         #Here he sees a form to submit his observations
         self.browser.find_element_by_id('id_obs_date').send_keys("2017-01-01")

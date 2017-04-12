@@ -9,7 +9,6 @@ class NewSNPageTest(FunctionalTest):
         #Sees that it's really about SNe!
         title=self.browser.find_element_by_css_selector('h1').text
         self.assertIn('Supernova', title)
-        print self.browser.get_cookies()
         #Finds a button where he can add a new SN. He clicks it
         self.browser.find_element_by_link_text('Add a new SN').click()
 
@@ -21,9 +20,9 @@ class NewSNPageTest(FunctionalTest):
 
         #It brings him to the newly created page of the SN, that shows the coordinates too
         title=self.browser.find_element_by_css_selector('h1').text
-        coords=self.browser.find_element_by_css_selector('.coordinates').text
+        body=self.browser.find_element_by_tag_name('body').text
         self.assertIn('SN 1987A', title)
-        self.assertIn('05:35:27.99', coords)
+        self.assertIn('05:35:27.99', body)
 
     def test_user_cannot_submit_blank_form(self):
         #Joe goes to the New SN form and tries to submit a blank form
@@ -60,17 +59,17 @@ class SNPageTest(FunctionalTest):
         self.assertIn('SN 1987A', title)
 
         #There are links to the Observation Logs
-        self.browser.find_element_by_link_text("Observation log").click()
-        self.assertEqual(self.browser.find_element_by_tag_name("h1").text, "SN 1987A - Observation log")
+        self.browser.find_element_by_link_text("Observations").click()
+        self.assertEqual(self.browser.find_element_by_tag_name("h1").text, "SN 1987A")
         self.browser.back()
 
         #to the photometry page
         self.browser.find_element_by_link_text("Photometry").click()
-        self.assertEqual(self.browser.find_element_by_tag_name("h1").text, "SN 1987A - Photometry")
+        self.assertEqual(self.browser.find_element_by_tag_name("h1").text, "SN 1987A")
         self.browser.back()
         #and to the spectroscopy page
         self.browser.find_element_by_link_text("Spectroscopy").click()
-        self.assertEqual(self.browser.find_element_by_tag_name("h1").text, "SN 1987A - Spectroscopy")
+        self.assertEqual(self.browser.find_element_by_tag_name("h1").text, "SN 1987A")
         self.browser.back()
 
     def test_SN_page_PI_and_coIs(self):
@@ -85,7 +84,7 @@ class SNPageTest(FunctionalTest):
 
         #He can see that he is the PI of this object
         body=self.browser.find_element_by_tag_name("body").text
-        self.assertIn("PI: Joe", body)
+        self.assertIn("PI\nJoe", body)
 
         #He notices that he can add co-Is, so he adds Claudia
         self.browser.find_element_by_id("id_coinvestigators").send_keys("Claudia")

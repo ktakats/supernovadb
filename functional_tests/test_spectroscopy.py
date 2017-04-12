@@ -13,7 +13,7 @@ class SpectroscopyTest(FunctionalTest):
 
         #It leads him to the Spectroscopy page
         body=self.browser.find_element_by_tag_name("body").text
-        self.assertIn('SN 1987A - Spectroscopy', body)
+        self.assertIn('SN 1987A', body)
 
         #Here he sees a form to submit a spectra as a file
         self.browser.find_element_by_id("id_MJD").send_keys("55043.2")
