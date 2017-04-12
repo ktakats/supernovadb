@@ -1,3 +1,22 @@
 {% extends 'layout.html' %}
 
 {% block title %}{{project.title}}{% endblock %}
+
+{% block content %}
+
+<p>Description: {{project.description}}</p>
+
+<p>PI: {{project.pi.first_name}} </p>
+
+<p>Co-Is:
+{% for coi in project.coinvestigators.all %}
+{{coi.first_name}} </br>
+{%endfor%}
+</p>
+
+<p>SNe:
+{% for sn in project.sne.all %}
+<a href="{{sn.get_absolute_url}}">{{sn}}</a></br>
+{% endfor%}
+</p>
+{% endblock %}

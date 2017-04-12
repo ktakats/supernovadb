@@ -138,7 +138,18 @@ class NewProjectTest(FunctionalTest):
         self.browser.find_element_by_id("id_coinvestigators").send_keys("claudia")
         self.browser.find_element_by_id("id_submit").click()
 
-
+        time.sleep(10)
         #It brings him back to the my projects page, where he can see the title of the project
         title=self.browser.find_element_by_tag_name("h1").text
         self.assertEqual(title, "Joe's type II project")
+
+        #Here he can see the SNe that belong to the project and the co-is of the project
+        body=self.browser.find_element_by_tag_name('body').text
+        self.assertIn('SN 1987A', body)
+        self.assertIn('Claudia', body)
+        self.assertIn("Our project to study type IIs", body)
+
+        #Clicking on the SN name takes him to the SN's page
+        self.browser.find_element_by_link_text('SN 1987A').click()
+        title=self.browser.find_element_by_css_selector('h1').text
+        self.assertIn('SN 1987A', title)
