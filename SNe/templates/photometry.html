@@ -1,6 +1,12 @@
 {% extends 'layout.html'%}
 
-{% block title %}{{sn.sn_name}} - Photometry{%endblock%}
+{% block title %}<a href="{% url 'view_sn' sn.id %}">{{sn.sn_name}}</a>{%endblock%}
+
+{%block log %}
+
+{% include "logs.html" with sn_id=sn.id %}
+
+{% endblock %}
 
 {% block content %}
 

@@ -1,0 +1,61 @@
+
+<div class="container-fluid logs">
+  <div class="row">
+    <div class="col-md-2 col-md-offset-3">
+      <a href="{% url 'sn_obs' sn_id %}" id="id_obs">Observations</a>
+    </div>
+    <div class="col-md-2">
+      <a href="{% url 'photometry' sn_id %}" id="id_phot">Photometry</a>
+    </div>
+    <div class="col-md-2">
+      <a href="{% url 'spectroscopy' sn_id%}" id="id_spec">Spectroscopy</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function changeColorObs() {
+    document.getElementById("id_obs").className = "changecolor";
+    document.getElementById("id_phot").className = "";
+    document.getElementById("id_spec").className = "";
+}
+
+function changeColorPhot() {
+    document.getElementById("id_obs").className = "";
+    document.getElementById("id_phot").className = "changecolor";
+    document.getElementById("id_spec").className = "";
+}
+function changeColorSpec() {
+    document.getElementById("id_obs").className = "";
+    document.getElementById("id_phot").className = "";
+    document.getElementById("id_spec").className = "changecolor";
+}
+
+function changeColorDefault() {
+    document.getElementById("id_obs").className = "";
+    document.getElementById("id_phot").className = "";
+    document.getElementById("id_spec").className = "";
+}
+
+
+function init(){
+  var current=window.location.pathname.slice(0,-1);
+  var index = current.lastIndexOf("/");
+  var logName = current.substr(index+1);
+  if(logName=="obslog"){
+    changeColorObs();
+  }
+  else if (logName=="photometry"){
+    changeColorPhot();
+  }
+  else if (logName=="spectroscopy"){
+    changeColorSpec();
+  }
+  else{
+    changeColorDefault();
+  }
+
+}
+
+window.onload=init();
+</script>

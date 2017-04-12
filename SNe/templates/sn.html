@@ -1,24 +1,35 @@
 {% extends 'layout.html' %}
 
 {% block title %}{{sn.sn_name}}{% endblock %}
+
+{%block log %}
+
+{% include "logs.html" with sn_id=sn.id %}
+
+{% endblock %}
+
 {% block content %}
-<div class="coordinates">
-<p>RA={{ra}}, Dec={{dec}}</p>
-<p>PI: {{sn.pi.first_name}}</p>
-<p>Co-Is:
-  {% for coi in sn.coinvestigators.all %}
-  {{coi.first_name}}</br>
-  {% endfor %}
-</p>
+
+
+
+<div class="sndata">
+  <dl class="dl-horizontal data_table">
+    <dt>RA</dt> <dd>{{ra}}</dd>
+    <dt>Dec</dt><dd>{{dec}}</dd>
+    <dt>PI</dt><dd>{{sn.pi.first_name}}</dd>
+    <dt>Co-Is</dt><dd>
+      {% for coi in sn.coinvestigators.all%}
+      {{coi.first_name}}</br>
+      {%endfor%}
+    </dd>
+  </dl>
+</div>
 <form method="post" action="">
   {% csrf_token%}
   <p><label for="id_coinvestigators">Add Co-I:</label></p>
   {{addcoiform.coinvestigators}}
     <button type="submit" id="id_addbutton">Add</button>
 </form>
-</div>
-<p>{% url 'sn_obs' sn.id %}</p>
-<button><a href="{% url 'sn_obs' sn.id %}">Observation log</a></button>
-<button><a href="{% url 'photometry' sn.id %}">Photometry</a></button>
-<button><a href="{% url 'spectroscopy' sn.id %}">Spectroscopy</a></button>
+
+
 {% endblock %}

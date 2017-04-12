@@ -73,6 +73,7 @@ class AddCoIForm(forms.models.ModelForm):
             'coinvestigators': "Co-Is"
         }
 
+
     def __init__(self, *args, **kwargs):
         super(AddCoIForm, self).__init__(*args, **kwargs)
         cois=[coi.id for coi in self.instance.coinvestigators.all()]
@@ -92,6 +93,16 @@ class NewProjectForm(forms.models.ModelForm):
         fields=["title", "description", "coinvestigators", "sne"]
         error_messages={
             'title': {'required': "Give a title to your project"}
+        }
+        labels={
+            'coinvestigators': 'Co-Is',
+            'sne': 'SNe',
+        }
+        widgets={
+            'description': forms.Textarea(attrs={
+                "rows": "4",
+                "cols": "25"
+            })
         }
 
     def __init__(self, *args, **kwargs):
