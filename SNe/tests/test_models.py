@@ -36,6 +36,11 @@ class SNModelTest(TestCase):
         self.assertEqual(sn.coinvestigators.count(), 2)
         self.assertEqual(sn.coinvestigators.all()[0], coi1)
 
+    def test_sn_can_have_type_z_and_host(self):
+        pi=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        sn=SN.objects.create(sn_name='SN 2017A', pi=pi, sntype="II-P", host="NGC 1234", z=0.01)
+        self.assertEqual(sn.sntype, "II-P")
+
 class ProjectModelTest(TestCase):
 
     def test_can_create_object(self):

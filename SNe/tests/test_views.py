@@ -109,12 +109,13 @@ class AddNewSNViewTest(UnitTests):
 
     def test_form_creates_new_database_entry(self):
         user=user_login(self)
-        self.client.post('/add_sn/', data={'sn_name': 'SN 1999A', 'ra': '01:23:45.6', 'dec': '+65:34:27.3', 'pi': user})
+        self.client.post('/add_sn/', data={'sn_name': 'SN 1999A', 'ra': '01:23:45.6', 'dec': '+65:34:27.3', 'pi': user, 'host': 'NGC 1234', 'z': 0.02})
         sn=SN.objects.first()
         c=SkyCoord('01:23:45.6', '+65:34:27.3', unit=(u.hourangle, u.deg))
         self.assertEqual(sn.sn_name, 'SN 1999A')
         self.assertEqual('%.2f' % (sn.ra), '%.2f' %  (c.ra.deg))
         self.assertEqual('%.2f' % (sn.dec), '%.2f' % (c.dec.deg))
+        self.assertEqual(sn.z, 0.02)
 
     def test_form_submission_redirects_to_sn_page(self):
         user=user_login(self)

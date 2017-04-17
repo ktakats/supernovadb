@@ -16,7 +16,10 @@ class NewSNPageTest(FunctionalTest):
         #He adds SN 1987A with  05:35:27.99 -69:16:11.50
         self.browser.find_element_by_id("id_sn_name").send_keys('SN 1987A')
         self.browser.find_element_by_id("id_ra").send_keys('05:35:27.99')
-        self.browser.find_element_by_id("id_dec").send_keys('-69:16:11.50\n')
+        self.browser.find_element_by_id("id_dec").send_keys('-69:16:11.50')
+        self.browser.find_element_by_id("id_sntype").send_keys('II-P')
+        self.browser.find_element_by_id("id_host").send_keys('NGC 1234')
+        self.browser.find_element_by_id("id_z").send_keys("0.01\n")
 
         #It brings him to the newly created page of the SN, that shows the coordinates too
         title=self.browser.find_element_by_css_selector('h1').text

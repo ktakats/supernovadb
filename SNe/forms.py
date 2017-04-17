@@ -8,6 +8,7 @@ from .models import SN, Project
 
 from astropy.coordinates import SkyCoord
 from astropy import units as u
+from collections import OrderedDict
 
 Users=auth.get_user_model()
 
@@ -38,20 +39,37 @@ class NewSNForm(forms.models.ModelForm):
 
     class Meta:
         model=SN
-        fields=['sn_name']
+        fields=['sn_name', 'sntype', 'host', 'z']
 
         labels={
-            'sn_name': 'SN'
+            'sn_name': 'SN',
+            'sntype': 'Type',
+            'z': 'z'
+        }
+
+        widgets={
+            'z': forms.TextInput()
         }
 
         error_messages={
         'sn_name': {'required': 'You need to provide the name of the SN'},
         }
 
+
+    def __init__(self, *args, **kwargs):
+        super(NewSNForm, self).__init__(*args, **kwargs)
+        #Rearranges the order of the
+        dec = self.fields.pop('dec')
+        ra =self.fields.pop('ra')
+        items=self.fields.items()
+        items.insert(1, ('ra',ra))
+        items.insert(2, ('dec',dec))
+        self.fields=OrderedDict(items)
+
     def save(self, pi):
         data=self.cleaned_data
         coords=SkyCoord(data['ra'], data['dec'], unit=(u.hourangle, u.deg))
-        sn=SN(sn_name=data['sn_name'], ra=coords.ra.deg, dec=coords.dec.deg, pi=pi)
+        sn=SN(sn_name=data['sn_name'], ra=coords.ra.deg, dec=coords.dec.deg, pi=pi, sntype=data['sntype'], host=data['host'], z=data['z'])
         sn.save()
         return sn
 
