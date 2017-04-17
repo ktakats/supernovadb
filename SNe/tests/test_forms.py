@@ -35,9 +35,10 @@ class NewSNFormTest(TestCase):
         self.assertEqual(form.errors['dec'], ['Incorrect coordinate format'])
 
     def test_invalid_ra_gives_error(self):
-        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '25:45:56.78', 'dec': '-69:53:24.0'})
+        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '25:45:56.78', 'dec': '-69:53:-24.0'})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['ra'], ['Invalid coordinate value'])
+        self.assertEqual(form.errors['dec'], ['Incorrect coordinate format'])
 
         form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '23:65:56.78', 'dec': '-69:53:24.0'})
         self.assertFalse(form.is_valid())

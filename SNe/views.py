@@ -55,8 +55,8 @@ def view_sn(request, sn_id):
             sn.save()
 
     c=SkyCoord(str(sn.ra), str(sn.dec), unit=u.degree)
-    ra='%02d:%02d:%02.3f' % (c.ra.hms.h, c.ra.hms.m, c.ra.hms.s)
-    dec='%02d:%02d:%02.2f' % (c.dec.dms.d, c.dec.dms.m, c.dec.dms.s)
+    ra='%02d:%02d:%02.3f' % (c.ra.hms.h, abs(c.ra.hms.m), abs(c.ra.hms.s))
+    dec='%02d:%02d:%02.2f' % (c.dec.dms.d, abs(c.dec.dms.m), abs(c.dec.dms.s))
     addcoiform=AddCoIForm(instance=sn)
     return render(request, 'sn.html', {'sn': sn, 'ra': ra, 'dec': dec, 'addcoiform': addcoiform})
 
