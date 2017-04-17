@@ -62,8 +62,8 @@ def view_sn(request, sn_id):
 
 @login_required(login_url='/')
 def my_stuff(request):
-    sne=SN.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user))
-    projects=Project.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user))
+    sne=SN.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user)).distinct()
+    projects=Project.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user)).distinct()
     return render(request, 'my_stuff.html', {'sne': sne, 'projects': projects})
 
 @login_required(login_url="/")

@@ -160,3 +160,21 @@ table thead th.desc {
   background-color: #79ACA9;
   font-size: 80%;
 }
+
+.sndata_column {
+  text-align: center;
+  margin-top: 5%;
+  line-height: 200%;
+}
+.sndatalist{
+  text-align: left;
+  display: inline-block;
+}
+.coili, .coicolumn{
+  float: left;
+  margin-right: 2px;
+}
+.coilist{
+    text-align: left;
+    display: inline;
+}

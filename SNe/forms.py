@@ -130,7 +130,8 @@ class NewProjectForm(forms.models.ModelForm):
         except ObjectDoesNotExist:
             pi=None
         self.fields['coinvestigators'].queryset=Users.objects.exclude(id=pi)
-        self.fields['sne'].queryset=SN.objects.filter(Q(pi=pi) | Q(coinvestigators=pi))
+        #Without distinct returns the same object twice
+        self.fields['sne'].queryset=SN.objects.filter(Q(pi=pi) | Q(coinvestigators=pi)).distinct()
 
     def save(self):
         data=self.cleaned_data

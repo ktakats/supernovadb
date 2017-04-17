@@ -10,26 +10,41 @@
 
 {% block content %}
 
+<div class=container-fluid>
+  <div class="row sndatarow">
+    <div class="col-md-6 sndata_column">
+      <ul class="list-unstyled sndatalist">
+        <li><b>Type:</b> {{sn.sntype}}</li>
+        <li><b>RA:</b> {{ra}}</li>
+        <li><b>Dec:</b> {{dec}}</li>
+        <li><b>Host:</b> {{sn.host}}</li>
+        <li><b>z:</b> {{sn.z}}</li>
+      </ul>
+    </div>
 
-
-<div class="sndata">
-  <dl class="dl-horizontal data_table">
-    <dt>RA</dt> <dd>{{ra}}</dd>
-    <dt>Dec</dt><dd>{{dec}}</dd>
-    <dt>PI</dt><dd>{{sn.pi.first_name}}</dd>
-    <dt>Co-Is</dt><dd>
-      {% for coi in sn.coinvestigators.all%}
-      {{coi.first_name}}</br>
-      {%endfor%}
-    </dd>
-  </dl>
+    <div class="col-md-6 sndata_column">
+      <ul class="list-unstyled sndatalist">
+        <li><b>PI:</b> {{sn.pi.first_name}}</li>
+        <li class="coili"><b>Co-Is: </b></li> <div class="coicolumn"><ul class="list-unstyled coilist">
+          {% for coi in sn.coinvestigators.all %}
+          <li> {{coi.first_name}}</li>
+          {% endfor %}
+        </ul></div>
+        <li>
+          <form method="post" action="">
+            {% csrf_token%}
+            <p><label for="id_coinvestigators">Add Co-I:</label></p>
+            {{addcoiform.coinvestigators}}
+              <button type="submit" id="id_addbutton">Add</button>
+          </form>
+        </li>
+      </ul>
+  </div>
 </div>
-<form method="post" action="">
-  {% csrf_token%}
-  <p><label for="id_coinvestigators">Add Co-I:</label></p>
-  {{addcoiform.coinvestigators}}
-    <button type="submit" id="id_addbutton">Add</button>
-</form>
+
+
+
+
 
 
 {% endblock %}
