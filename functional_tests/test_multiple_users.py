@@ -35,5 +35,5 @@ class SNSharingTest(FunctionalTest):
 
         #Now Claudia can see and edit the SN and its data
         self.browser=claudia_browser
-        self.browser.get(self.server_url+ "/my_sne/")
+        self.browser.get(self.server_url+ "/my_stuff/")
         self.assertIn("SN 1987A", self.browser.find_element_by_tag_name('body').text)

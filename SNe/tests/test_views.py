@@ -26,6 +26,12 @@ class HomeViewTest(UnitTests):
         user=auth.get_user(self.client)
         self.assertTrue(user.is_authenticated())
 
+    def test_login_redirects_to_my_stuff(self):
+        User.objects.create_user(email="test@test.com", password="bla", first_name="Test")
+        response=self.client.post('/', data={'email': 'test@test.com', 'password': 'bla'})
+        user=auth.get_user(self.client)
+        self.assertRedirects(response, '/my_stuff/')
+
 
 class SNViewTest(UnitTests):
 
@@ -122,17 +128,33 @@ class AddNewSNViewTest(UnitTests):
         self.assertRedirects(response, '/?next=/add_sn/')
         self.assertEqual(SN.objects.count(), 0)
 
-class MySNeViewTest(UnitTests):
+class MyStuffViewTest(UnitTests):
 
     def test_view_uses_mysn_template(self):
         sn=self.login_and_create_new_SN()
-        response=self.client.get('/my_sne/')
-        self.assertTemplateUsed(response, 'my_sne.html')
+        response=self.client.get('/my_stuff/')
+        self.assertTemplateUsed(response, 'my_stuff.html')
 
     def test_view_lists_sne(self):
         sn=self.login_and_create_new_SN()
-        response=self.client.get('/my_sne/')
+        response=self.client.get('/my_stuff/')
         self.assertIn(sn,response.context['sne'])
+
+    def test_view_lists_projects(self):
+        sn=self.login_and_create_new_SN()
+        project=Project.objects.create(title="Bla", pi=User.objects.first())
+        project.sne.add(sn)
+        response=self.client.get('/my_stuff/')
+        self.assertIn(project, response.context['projects'])
+
+    def test_view_only_shows_related_projects(self):
+        sn=self.login_and_create_new_SN()
+        project1=Project.objects.create(title="Bla")
+        project2=Project.objects.create(title="Bla", pi=User.objects.first())
+        project1.sne.add(sn)
+        response=self.client.get('/my_stuff/')
+        self.assertNotIn(project1, response.context['projects'])
+        self.assertIn(project2, response.context['projects'])
 
     def test_can_see_sne_as_coI(self):
         sn=self.login_and_create_new_SN()
@@ -141,7 +163,7 @@ class MySNeViewTest(UnitTests):
         sn.coinvestigators.add(user)
         sn.save()
         self.client.force_login(user)
-        response=self.client.get('/my_sne/')
+        response=self.client.get('/my_stuff/')
         self.assertIn(sn, response.context['sne'])
 
 class AddNewProjectViewTest(UnitTests):

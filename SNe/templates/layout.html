@@ -25,12 +25,10 @@
     <div class="container-fluid">
       <a class="navbar-brand" href="/">MAS Supernovae</a>
       <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url 'my_stuff' %}">My stuff</a></li>
         {% if user.is_authenticated %}
-        <li><a href="#">Hola, {{user.first_name}}</a></li>
+        <li><a href="#">Logout</a></li>
         {% endif %}
-        <li><a href="{% url 'add_sn' %}">Add a new SN</a></li>
-        <li><a href="{% url 'add_project' %}">New project</a></li>
-        <li><a href="{% url 'my_sne' %}">My SNe</a></li>
       </ul>
     </div>
   </nav>

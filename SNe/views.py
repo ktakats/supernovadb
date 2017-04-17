@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from django.db.models import Q
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404, reverse
 
 from models import SN, Project
 from forms import NewSNForm, AddCoIForm, NewProjectForm
@@ -27,6 +27,7 @@ def home(request):
             user=authenticate(email=email, password=password)
             if user:
                 login(request, user)
+                return redirect(reverse('my_stuff'))
     else:
         form=LoginForm()
     return render(request, 'home.html', {'form': form})
@@ -60,9 +61,10 @@ def view_sn(request, sn_id):
     return render(request, 'sn.html', {'sn': sn, 'ra': ra, 'dec': dec, 'addcoiform': addcoiform})
 
 @login_required(login_url='/')
-def my_sne(request):
+def my_stuff(request):
     sne=SN.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user))
-    return render(request, 'my_sne.html', {'sne': sne})
+    projects=Project.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user))
+    return render(request, 'my_stuff.html', {'sne': sne, 'projects': projects})
 
 @login_required(login_url="/")
 def add_project(request):

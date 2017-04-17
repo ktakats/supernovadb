@@ -28,13 +28,13 @@ class LoginTest(FunctionalTest):
         self.browser.find_element_by_id("id_password").send_keys("joepassword\n")
 
         #After loggin in, he finds himself at his account page
-        self.browser.find_element_by_link_text("Hola, Joe")
-        time.sleep(5)
+        self.browser.find_element_by_link_text("Logout")
+        self.assertEqual("Joe's stuff", self.browser.find_element_by_tag_name("h1").text)
 
     def test_user_has_to_be_logged_in(self):
         #Joe tries to go to the add SN page
         self.browser.get(self.server_url)
-        self.browser.find_element_by_link_text('Add a new SN').click()
+        self.browser.find_element_by_link_text("My stuff").click()
 
 
         #But since he's not logged in, he's redirected to to the home

@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{user.first_name}}'s stuff{% endblock %}
+
+{%block content %}
+
+<div class=container-fluid>
+  <div class="row">
+    <div class="col-md-6">
+      <h3> My projects</h3>
+      <ul class="list-unstyled">
+        {% for project in projects %}
+        <li><a href="{{project.get_absolute_url}}">{{project.title}}</a></li>
+        {% endfor %}
+      </ul>
+      <a role="button" href="{% url 'add_project'%}" class="btn btn-success" id="btn_new_project" title="Add a new project"><i class="fa fa-plus"></i></a>
+    </div>
+
+    <div class="col-md-6">
+      <h3>My SNe</h3>
+      <ul class="list-unstyled">
+        {% for sn in sne %}
+        <li><a href="{{sn.get_absolute_url}}">{{sn}}</a></li>
+        {% endfor %}
+      </ul>
+        <a role="button" href="{%url 'add_sn'%}" class="btn btn-success" id="btn_new_sn" title="Add a new SN"><i class="fa fa-plus"></i></a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

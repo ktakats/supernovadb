@@ -64,7 +64,16 @@ class FunctionalTest(StaticLiveServerTestCase):
         User.objects.create_user(email="claudia@example.com", password="claudiapassword", first_name="Claudia")
 
     def add_new_sn(self, name="SN 1987A", ra='05:35:27.99', dec='-69:16:11.50'):
-        self.browser.find_element_by_link_text('Add a new SN').click()
+        self.browser.find_element_by_link_text('My stuff').click()
+        self.browser.find_element_by_id('btn_new_sn').click()
         self.browser.find_element_by_id("id_sn_name").send_keys(name)
         self.browser.find_element_by_id("id_ra").send_keys(ra)
         self.browser.find_element_by_id("id_dec").send_keys(dec + '\n')
+
+    def add_new_project(self, title="Joe's type II project", description="Our project to study type IIs", sn="SN 1987A"):
+        self.browser.find_element_by_link_text('My stuff').click()
+        self.browser.find_element_by_id('btn_new_project').click()
+        self.browser.find_element_by_id("id_title").send_keys(title)
+        self.browser.find_element_by_id("id_description").send_keys(description)
+        self.browser.find_element_by_id("id_sne").send_keys(sn)
+        self.browser.find_element_by_id("id_submit").click()

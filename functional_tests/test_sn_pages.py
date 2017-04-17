@@ -8,9 +8,9 @@ class NewSNPageTest(FunctionalTest):
         self.go_to_page_and_log_in()
         #Sees that it's really about SNe!
         title=self.browser.find_element_by_css_selector('h1').text
-        self.assertIn('Supernova', title)
+        #self.assertIn('Supernova', title)
         #Finds a button where he can add a new SN. He clicks it
-        self.browser.find_element_by_link_text('Add a new SN').click()
+        self.browser.find_element_by_id('btn_new_sn').click()
 
         #There's a form here to add the name and the coordinates of the new SN.
         #He adds SN 1987A with  05:35:27.99 -69:16:11.50
@@ -27,7 +27,7 @@ class NewSNPageTest(FunctionalTest):
     def test_user_cannot_submit_blank_form(self):
         #Joe goes to the New SN form and tries to submit a blank form
         self.go_to_page_and_log_in()
-        self.browser.find_element_by_link_text('Add a new SN').click()
+        self.browser.find_element_by_id('btn_new_sn').click()
 
         self.browser.find_element_by_id("id_sn_name").send_keys('\n')
         self.assertIn('Add a new SN', self.browser.find_element_by_tag_name('body').text)
@@ -99,27 +99,6 @@ class SNPageTest(FunctionalTest):
 
 
 
-class MySneTest(FunctionalTest):
-
-    def test_user_can_have_all_their_SNe_in_a_page(self):
-        #Joe goes to the SN page, and adds 2 new SNe
-        self.go_to_page_and_log_in()
-        self.add_new_sn()
-        self.add_new_sn(name='SN 1988A',ra='12:37:43.58', dec='11:48:19.69')
-        time.sleep(5)
-        #He goes to see the list of his SNe
-        self.browser.find_element_by_link_text("My SNe").click()
-        time.sleep(5)
-        #Here both if his SNe are listed
-        body=self.browser.find_element_by_tag_name('body').text
-        self.assertIn("SN 1987A", body)
-        self.assertIn("SN 1988A", body)
-
-        #Clicking on an SN takes him to the SN's page
-        self.browser.find_element_by_link_text("SN 1987A").click()
-        title=self.browser.find_element_by_tag_name('h1').text
-        time.sleep(10)
-        self.assertEqual(title, "SN 1987A")
 
 class NewProjectTest(FunctionalTest):
 
@@ -130,7 +109,8 @@ class NewProjectTest(FunctionalTest):
         self.add_new_sn()
 
         #He notices that he can now create projects!
-        self.browser.find_element_by_link_text("New project").click()
+        self.browser.find_element_by_link_text("My stuff").click()
+        self.browser.find_element_by_id("btn_new_project").click()
         self.browser.find_element_by_id("id_title").send_keys("Joe's type II project")
         self.browser.find_element_by_id("id_description").send_keys("Our project to study type IIs")
         self.browser.find_element_by_id("id_sne").send_keys("SN 1987A")

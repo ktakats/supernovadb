@@ -154,3 +154,9 @@ table thead th.desc {
 .logs .changecolor{
   color: #e98167;
 }
+
+
+#btn_new_project, #btn_new_sn {
+  background-color: #79ACA9;
+  font-size: 80%;
+}
