@@ -5,6 +5,7 @@ class NewSNPageTest(FunctionalTest):
 
     def test_user_can_add_SN_and_access_its_page(self):
         #There's a new app for SNe! Joe goes and checks it out
+        self.second_user()
         self.go_to_page_and_log_in()
         #Sees that it's really about SNe!
         title=self.browser.find_element_by_css_selector('h1').text
@@ -19,6 +20,7 @@ class NewSNPageTest(FunctionalTest):
         self.browser.find_element_by_id("id_dec").send_keys('-69:16:11.50')
         self.browser.find_element_by_id("id_sntype").send_keys('II-P')
         self.browser.find_element_by_id("id_host").send_keys('NGC 1234')
+        self.browser.find_element_by_id("id_coinvestigators").send_keys("Claudia")
         self.browser.find_element_by_id("id_z").send_keys("0.01\n")
 
         #It brings him to the newly created page of the SN, that shows the coordinates too

@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block title %}{{sn.sn_name}}{% endblock %}
-{%block options%}<a href="{% url 'edit_sn' sn.id%}" title="Edit the data of this SN"><i class="fa fa-pencil"></i></a>{%endblock%}
+{%block options%}<a href="{% url 'edit_sn' sn.id%}" title="Edit the details of this SN"><i class="fa fa-pencil"></i></a>{%endblock%}
 {%block log %}
 
 {% include "logs.html" with sn_id=sn.id %}

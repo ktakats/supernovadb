@@ -22,7 +22,7 @@ class NewSNFormTest(TestCase):
 
     def test_coords_are_saved_to_database(self):
         user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
-        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '01:34:56.78', 'dec': '-69:53:24.6'})
+        form=NewSNForm(user=user,data={'sn_name': 'SN 2999A', 'ra': '01:34:56.78', 'dec': '-69:53:24.6'})
         self.assertTrue(form.is_valid())
         form.save(user)
         sn=SN.objects.get(sn_name='SN 2999A')
@@ -71,6 +71,15 @@ class NewSNFormTest(TestCase):
         form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '02:34:56.78', 'dec': '-59:53:24.6', 'pi': user})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['sn_name'], ['This SN is already registered'])
+
+    def test_can_add_cois(self):
+        user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        coi=User.objects.create_user(email='test2@test.com', password="bla", first_name="Test2")
+        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '02:34:56.78', 'dec': '-59:53:24.6', 'coinvestigators': [coi.id]})
+        self.assertTrue(form.is_valid())
+        form.save(user)
+        sn=SN.objects.first()
+        self.assertEqual(sn.coinvestigators.first(), coi)
 
 
 class AddCoIFormTest(TestCase):

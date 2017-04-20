@@ -36,15 +36,18 @@ class NewSNForm(forms.models.ModelForm):
         validators=[RegexValidator(regex='^(\+|-?)\d\d:\d\d:\d\d.\d(\d*?)$', message='Incorrect coordinate format'),
         validate_dec])
 
+    coinvestigators=forms.ModelMultipleChoiceField(queryset=None, required=False)
+
 
     class Meta:
         model=SN
-        fields=['sn_name', 'sntype', 'host', 'z']
+        fields=['sn_name', 'sntype', 'host', 'z', 'coinvestigators']
 
         labels={
             'sn_name': 'SN',
             'sntype': 'Type',
-            'z': 'z'
+            'z': 'z',
+            'coinvestigators': 'Co-Is'
         }
 
         widgets={
@@ -57,6 +60,7 @@ class NewSNForm(forms.models.ModelForm):
 
 
     def __init__(self, *args, **kwargs):
+        pi=kwargs.pop('user', None)
         super(NewSNForm, self).__init__(*args, **kwargs)
         #Rearranges the order of the
         dec = self.fields.pop('dec')
@@ -65,11 +69,19 @@ class NewSNForm(forms.models.ModelForm):
         items.insert(1, ('ra',ra))
         items.insert(2, ('dec',dec))
         self.fields=OrderedDict(items)
+        cois=[]
+        if pi:
+            cois=[pi.id]
+        self.fields['coinvestigators'].queryset=Users.objects.exclude(id__in=cois)
+
 
     def save(self, pi):
         data=self.cleaned_data
         coords=SkyCoord(data['ra'], data['dec'], unit=(u.hourangle, u.deg))
         sn=SN(sn_name=data['sn_name'], ra=coords.ra.deg, dec=coords.dec.deg, pi=pi, sntype=data['sntype'], host=data['host'], z=data['z'])
+        sn.save()
+        for coi in data['coinvestigators']:
+            sn.coinvestigators.add(coi)
         sn.save()
         return sn
 
