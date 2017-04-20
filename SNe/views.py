@@ -60,6 +60,17 @@ def view_sn(request, sn_id):
     addcoiform=AddCoIForm(instance=sn)
     return render(request, 'sn.html', {'sn': sn, 'ra': ra, 'dec': dec, 'addcoiform': addcoiform})
 
+def edit_sn(request, sn_id):
+    try:
+        instance=SN.objects.get(id=sn_id)
+    except SN.DoesNotExist:
+        instance=None
+    c=SkyCoord(str(instance.ra), str(instance.dec), unit=u.degree)
+    ra='%02d:%02d:%02.3f' % (c.ra.hms.h, abs(c.ra.hms.m), abs(c.ra.hms.s))
+    dec='%02d:%02d:%02.2f' % (c.dec.dms.d, abs(c.dec.dms.m), abs(c.dec.dms.s))
+    form=NewSNForm(instance=instance, initial={'ra': ra, 'dec': dec})
+    return render(request, 'edit_sn.html', {'form': form})
+
 @login_required(login_url='/')
 def my_stuff(request):
     sne=SN.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user)).distinct()

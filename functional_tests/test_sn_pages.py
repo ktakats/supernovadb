@@ -87,7 +87,7 @@ class SNPageTest(FunctionalTest):
 
         #He can see that he is the PI of this object
         body=self.browser.find_element_by_tag_name("body").text
-        self.assertIn("PI\nJoe", body)
+        self.assertIn("PI: Joe", body)
 
         #He notices that he can add co-Is, so he adds Claudia
         self.browser.find_element_by_id("id_coinvestigators").send_keys("Claudia")
@@ -98,6 +98,43 @@ class SNPageTest(FunctionalTest):
         time.sleep(5)
         self.assertIn("Co-Is", body)
         self.assertIn("Claudia", body)
+
+
+class EditSNDataTest(FunctionalTest):
+
+    def test_user_can_edit_sn_data(self):
+        #Joe goes to the SN site and adds an SN
+        self.second_user()
+        self.go_to_page_and_log_in()
+        self.add_new_sn()
+
+        #Now he's at the page of this new SN
+        title=self.browser.find_element_by_css_selector('h1').text
+        self.assertIn('SN 1987A', title)
+
+        #He needs to add the host galaxy data
+        #He finds the edit button
+        self.browser.find_element_by_css_selector(".fa-pencil").click()
+        #It leads him to the edit page of the SN
+        title=self.browser.find_element_by_css_selector('h1').text
+        self.assertEqual(title, "Edit SN")
+
+        #He adds the new data
+        self.browser.find_element_by_id("id_z").send_keys("0.01")
+        self.browser.find_element_by_id("id_host").send_keys("LMC")
+        self.browser.find_element_by_id("id_coinvestigators").send_keys("Claudia")
+        self.browser.find_element_by_id("id_ra").send_keys("05:35:28.99\n")
+
+        ##Submittin the form takes him back to the SN page
+        title=self.browser.find_element_by_css_selector('h1').text
+        self.assertIn('SN 1987A', title)
+        #Here he can see the new data he just entered
+        body=self.browser.find_element_by_css_selector('body').text
+        self.assertIn("RA: 05:35:28.99", body)
+        self.assertIn("Claudia", body)
+        self.assertIn("Host: LMC", body)
+        self.assertIn("z: 0.01", body)
+
 
 
 

@@ -129,6 +129,18 @@ class AddNewSNViewTest(UnitTests):
         self.assertRedirects(response, '/?next=/add_sn/')
         self.assertEqual(SN.objects.count(), 0)
 
+class EditSNViewTest(UnitTests):
+
+    def test_view_uses_editsn_template(self):
+        sn=self.login_and_create_new_SN()
+        response=self.client.get('/sn/%d/edit/' % (sn.id))
+        self.assertTemplateUsed(response, 'edit_sn.html')
+
+    def test_view_renders_form(self):
+        sn=self.login_and_create_new_SN()
+        response=self.client.get('/sn/%d/edit/' % (sn.id))
+        self.assertContains(response, "id_host")
+
 class MyStuffViewTest(UnitTests):
 
     def test_view_uses_mysn_template(self):

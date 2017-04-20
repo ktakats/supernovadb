@@ -28,6 +28,19 @@ h1 a {
   color: #e98167;
 }
 
+/* Pencil to edit SN and project*/
+.titlediv{
+  position: relative;
+}
+
+.titlediv i{
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  color: #d8d6d6;
+}
+
+
 /*New sn form*/
 
 #id_new_sn_form, #id_obslogform, #id_photometryform, #id_uploadphotometryform, #id_uploadspectroscopyform, #id_add_project_form {
@@ -160,6 +173,8 @@ table thead th.desc {
   background-color: #79ACA9;
   font-size: 80%;
 }
+
+
 
 .sndata_column {
   text-align: center;
