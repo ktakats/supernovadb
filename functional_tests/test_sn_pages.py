@@ -77,29 +77,7 @@ class SNPageTest(FunctionalTest):
         self.assertEqual(self.browser.find_element_by_tag_name("h1").text, "SN 1987A")
         self.browser.back()
 
-    def test_SN_page_PI_and_coIs(self):
-        #Joe goes to the SN site and adds an SN
-        self.second_user()
-        self.go_to_page_and_log_in()
-        self.add_new_sn()
 
-        #Now he's at the page of this new SN
-        title=self.browser.find_element_by_css_selector('h1').text
-        self.assertIn('SN 1987A', title)
-
-        #He can see that he is the PI of this object
-        body=self.browser.find_element_by_tag_name("body").text
-        self.assertIn("PI: Joe", body)
-
-        #He notices that he can add co-Is, so he adds Claudia
-        self.browser.find_element_by_id("id_coinvestigators").send_keys("Claudia")
-        self.browser.find_element_by_id("id_addbutton").click()
-
-        #Claudia's name appears in a list of co-Is
-        body=self.browser.find_element_by_tag_name("body").text
-        time.sleep(5)
-        self.assertIn("Co-Is", body)
-        self.assertIn("Claudia", body)
 
 
 class EditSNDataTest(FunctionalTest):

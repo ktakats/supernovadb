@@ -30,8 +30,8 @@ class SNSharingTest(FunctionalTest):
 
 
         #He adds Claudia as Co-I
-        self.browser.find_element_by_id("id_coinvestigators").send_keys("Claudia")
-        self.browser.find_element_by_id("id_addbutton").click()
+        self.browser.find_element_by_css_selector(".fa-pencil").click()
+        self.browser.find_element_by_id("id_coinvestigators").send_keys("Claudia\n")
 
         #Now Claudia can see and edit the SN and its data
         self.browser=claudia_browser

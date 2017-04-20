@@ -102,27 +102,6 @@ class NewSNForm(forms.models.ModelForm):
             e.error_dict={'sn_name': ['This SN is already registered']}
             self._update_errors(e)
 
-class AddCoIForm(forms.models.ModelForm):
-    coinvestigators=forms.ModelChoiceField(queryset=None)
-
-    class Meta:
-        model=SN
-        fields=["coinvestigators"]
-
-        labels={
-            'coinvestigators': "Co-Is"
-        }
-
-
-    def __init__(self, *args, **kwargs):
-        super(AddCoIForm, self).__init__(*args, **kwargs)
-        cois=[coi.id for coi in self.instance.coinvestigators.all()]
-        try:
-            pi=self.instance.pi.id
-        except ObjectDoesNotExist:
-            pi=None
-        cois.append(pi)
-        self.fields['coinvestigators'].queryset=Users.objects.exclude(id__in=cois)
 
 class NewProjectForm(forms.models.ModelForm):
     coinvestigators=forms.ModelMultipleChoiceField(queryset=None, required=False)

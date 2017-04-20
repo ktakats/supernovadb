@@ -83,17 +83,6 @@ class SNViewTest(UnitTests):
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, "Co-I1")
 
-    def test_view_renders_coiform(self):
-        sn=self.login_and_create_new_SN()
-        response=self.client.get('/sn/%d/' % (sn.id))
-        self.assertContains(response, 'id_coinvestigators')
-
-    def test_submitting_form_adds_coi(self):
-        sn=self.login_and_create_new_SN()
-        coi=User.objects.create_user(email="bla@bla.com", password="test", first_name="Co-I1")
-        response=self.client.post('/sn/%d/' % (sn.id), data={'coinvestigators': coi.id})
-        sn=SN.objects.first()
-        self.assertEqual(sn.coinvestigators.first(), coi)
 
 class AddNewSNViewTest(UnitTests):
 
@@ -145,6 +134,12 @@ class EditSNViewTest(UnitTests):
         sn=self.login_and_create_new_SN()
         response=self.client.post('/sn/%d/edit/' % (sn.id), data={'sn_name': sn.sn_name,'ra': '01:23:45.6', 'dec': '+65:34:27.3',  'host': 'NGC 123'})
         self.assertRedirects(response, '/sn/%d/' % (sn.id))
+
+    def test_view_requires_login(self):
+        user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        sn=SN.objects.create(sn_name='SN 2017A', pi=user)
+        response=self.client.get('/sn/%d/edit/' % (sn.id))
+        self.assertRedirects(response, '/?next=/sn/%d/edit/' % (sn.id))
 
 class MyStuffViewTest(UnitTests):
 

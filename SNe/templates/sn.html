@@ -30,14 +30,6 @@
           <li> {{coi.first_name}}</li>
           {% endfor %}
         </ul></div>
-        <li>
-          <form method="post" action="">
-            {% csrf_token%}
-            <p><label for="id_coinvestigators">Add Co-I:</label></p>
-            {{addcoiform.coinvestigators}}
-              <button type="submit" id="id_addbutton">Add</button>
-          </form>
-        </li>
       </ul>
   </div>
 </div>

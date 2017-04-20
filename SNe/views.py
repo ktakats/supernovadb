@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404, reverse
 
 from models import SN, Project
-from forms import NewSNForm, AddCoIForm, NewProjectForm
+from forms import NewSNForm, NewProjectForm
 from accounts.forms import LoginForm
 
 from astropy import units as u
@@ -55,22 +55,14 @@ def add_sn(request):
 @login_required(login_url='/')
 def view_sn(request, sn_id):
     sn=SN.objects.get(id=sn_id)
-    if request.method=='POST':
-        addcoiform=AddCoIForm(request.POST, instance=sn)
-        if addcoiform.is_valid():
-            sn.coinvestigators.add(request.POST['coinvestigators'])
-            sn.save()
-
     ra, dec=convert_coords_to_string(sn.ra, sn.dec)
-    addcoiform=AddCoIForm(instance=sn)
-    return render(request, 'sn.html', {'sn': sn, 'ra': ra, 'dec': dec, 'addcoiform': addcoiform})
+    return render(request, 'sn.html', {'sn': sn, 'ra': ra, 'dec': dec})
 
+@login_required(login_url='/')
 def edit_sn(request, sn_id):
     sn=SN.objects.get(id=sn_id)
     if request.method=="POST":
         form=NewSNForm(data=request.POST, instance=sn)
-        print form.is_valid()
-        print form.errors
         if form.is_valid():
             sn=form.save(request.user, sn_id)
             return redirect(sn.get_absolute_url())
