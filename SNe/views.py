@@ -17,6 +17,13 @@ from django_tables2 import RequestConfig
 User=auth.get_user_model()
 
 
+def convert_coords_to_string(ra, dec):
+    c=SkyCoord(str(ra), str(dec), unit=u.degree)
+    ra='%02d:%02d:%02.3f' % (c.ra.hms.h, abs(c.ra.hms.m), abs(c.ra.hms.s))
+    dec='{1:0{0}d}'.format(2 if c.dec.dms.d>=0 else 3, int(c.dec.dms.d))
+    dec+=':%02d:%02.2f' % (abs(c.dec.dms.m), abs(c.dec.dms.s))
+    return ra, dec
+
 # Create your views here.
 def home(request):
     if request.method=="POST":
@@ -35,14 +42,14 @@ def home(request):
 @login_required(login_url='/')
 def add_sn(request):
     if request.method=='POST':
-        form=NewSNForm(data=request.POST)
+        form=NewSNForm(data=request.POST, user=request.user)
         if form.is_valid():
             sn=form.save(request.user)
             return redirect(sn.get_absolute_url())
         else:
             return render(request, 'new_sn.html', {'form': form})
     else:
-        form=NewSNForm()
+        form=NewSNForm(user=request.user)
         return render(request, 'new_sn.html', {'form':form})
 
 @login_required(login_url='/')
@@ -54,21 +61,22 @@ def view_sn(request, sn_id):
             sn.coinvestigators.add(request.POST['coinvestigators'])
             sn.save()
 
-    c=SkyCoord(str(sn.ra), str(sn.dec), unit=u.degree)
-    ra='%02d:%02d:%02.3f' % (c.ra.hms.h, abs(c.ra.hms.m), abs(c.ra.hms.s))
-    dec='%02d:%02d:%02.2f' % (c.dec.dms.d, abs(c.dec.dms.m), abs(c.dec.dms.s))
+    ra, dec=convert_coords_to_string(sn.ra, sn.dec)
     addcoiform=AddCoIForm(instance=sn)
     return render(request, 'sn.html', {'sn': sn, 'ra': ra, 'dec': dec, 'addcoiform': addcoiform})
 
 def edit_sn(request, sn_id):
-    try:
-        instance=SN.objects.get(id=sn_id)
-    except SN.DoesNotExist:
-        instance=None
-    c=SkyCoord(str(instance.ra), str(instance.dec), unit=u.degree)
-    ra='%02d:%02d:%02.3f' % (c.ra.hms.h, abs(c.ra.hms.m), abs(c.ra.hms.s))
-    dec='%02d:%02d:%02.2f' % (c.dec.dms.d, abs(c.dec.dms.m), abs(c.dec.dms.s))
-    form=NewSNForm(instance=instance, initial={'ra': ra, 'dec': dec})
+    sn=SN.objects.get(id=sn_id)
+    if request.method=="POST":
+        form=NewSNForm(data=request.POST, instance=sn)
+        print form.is_valid()
+        print form.errors
+        if form.is_valid():
+            sn=form.save(request.user, sn_id)
+            return redirect(sn.get_absolute_url())
+
+    ra, dec=convert_coords_to_string(sn.ra, sn.dec)
+    form=NewSNForm(instance=sn, initial={'ra': ra, 'dec': dec})
     return render(request, 'edit_sn.html', {'form': form})
 
 @login_required(login_url='/')

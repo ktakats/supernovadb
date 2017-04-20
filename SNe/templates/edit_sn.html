@@ -3,7 +3,7 @@
 {% block title %}Edit SN{% endblock %}
 
 {% block content %}
-<form method="POST" action="/add_sn/" id="id_edit_sn_form">
+<form method="POST" action="" id="id_edit_sn_form">
 {% csrf_token%}
 {{form.as_p}}
 <button type="submit">Submit</button>

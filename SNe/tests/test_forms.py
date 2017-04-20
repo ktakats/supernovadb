@@ -81,6 +81,12 @@ class NewSNFormTest(TestCase):
         sn=SN.objects.first()
         self.assertEqual(sn.coinvestigators.first(), coi)
 
+    def test_edit_sn_details(self):
+        user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        sn=SN.objects.create(sn_name='SN 2999A', pi=user, ra=22.625, dec=65.575)
+        form=NewSNForm(instance=sn, initial={'ra': sn.ra, 'dec': sn.dec})
+        self.assertIn('value="22.625"',form.as_p())
+
 
 class AddCoIFormTest(TestCase):
 

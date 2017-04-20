@@ -141,6 +141,11 @@ class EditSNViewTest(UnitTests):
         response=self.client.get('/sn/%d/edit/' % (sn.id))
         self.assertContains(response, "id_host")
 
+    def test_redirects_after_submission(self):
+        sn=self.login_and_create_new_SN()
+        response=self.client.post('/sn/%d/edit/' % (sn.id), data={'sn_name': sn.sn_name,'ra': '01:23:45.6', 'dec': '+65:34:27.3',  'host': 'NGC 123'})
+        self.assertRedirects(response, '/sn/%d/' % (sn.id))
+
 class MyStuffViewTest(UnitTests):
 
     def test_view_uses_mysn_template(self):

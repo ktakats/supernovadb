@@ -70,15 +70,25 @@ class NewSNForm(forms.models.ModelForm):
         items.insert(2, ('dec',dec))
         self.fields=OrderedDict(items)
         cois=[]
-        if pi:
-            cois=[pi.id]
+        if self.instance.pk!=None:
+            cois=[coi.id for coi in self.instance.coinvestigators.all()]
+            try:
+                pi=self.instance.pi.id
+            except ObjectDoesNotExist:
+                pi=None
+            cois.append(pi)
+        else:
+            if pi:
+                cois=[pi.id]
         self.fields['coinvestigators'].queryset=Users.objects.exclude(id__in=cois)
 
 
-    def save(self, pi):
+    def save(self, pi, id=None):
         data=self.cleaned_data
         coords=SkyCoord(data['ra'], data['dec'], unit=(u.hourangle, u.deg))
         sn=SN(sn_name=data['sn_name'], ra=coords.ra.deg, dec=coords.dec.deg, pi=pi, sntype=data['sntype'], host=data['host'], z=data['z'])
+        if not id==None:
+            sn.id=id
         sn.save()
         for coi in data['coinvestigators']:
             sn.coinvestigators.add(coi)

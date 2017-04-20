@@ -120,13 +120,14 @@ class EditSNDataTest(FunctionalTest):
         #It leads him to the edit page of the SN
         title=self.browser.find_element_by_css_selector('h1').text
         self.assertEqual(title, "Edit SN")
-
+        time.sleep(10)
         #He adds the new data
         self.browser.find_element_by_id("id_z").send_keys("0.01")
         self.browser.find_element_by_id("id_host").send_keys("LMC")
         self.browser.find_element_by_id("id_coinvestigators").send_keys("Claudia")
+        self.browser.find_element_by_id("id_ra").clear()
         self.browser.find_element_by_id("id_ra").send_keys("05:35:28.99\n")
-
+        time.sleep(10)
         ##Submittin the form takes him back to the SN page
         title=self.browser.find_element_by_css_selector('h1').text
         self.assertIn('SN 1987A', title)
