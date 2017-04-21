@@ -18,7 +18,7 @@ class HomeViewTest(UnitTests):
 
     def test_uses_home_template(self):
         response=self.client.get('/')
-        self.assertTemplateUsed(response, 'home.html')
+        self.assertTemplateUsed(response, 'SNe/home.html')
 
     def test_user_can_log_in(self):
         User.objects.create_user(email="test@test.com", password="bla", first_name="Test")
@@ -40,7 +40,7 @@ class SNViewTest(UnitTests):
         self.client.force_login(user)
         sn=SN.objects.create(sn_name='SN 2017A', pi=user)
         response=self.client.get('/sn/%d/' % (sn.id))
-        self.assertTemplateUsed(response, 'sn.html')
+        self.assertTemplateUsed(response, 'SNe/sn.html')
 
     def test_view_shows_the_name_and_coordinates_of_sn(self):
         sn=self.login_and_create_new_SN()
@@ -89,7 +89,7 @@ class AddNewSNViewTest(UnitTests):
     def test_uses_new_sn_template(self):
         user=user_login(self)
         response=self.client.get('/add_sn/')
-        self.assertTemplateUsed(response, 'new_sn.html')
+        self.assertTemplateUsed(response, 'SNe/new_sn.html')
 
     def test_new_sn_page_renders_form(self):
         user=user_login(self)
@@ -123,7 +123,7 @@ class EditSNViewTest(UnitTests):
     def test_view_uses_editsn_template(self):
         sn=self.login_and_create_new_SN()
         response=self.client.get('/sn/%d/edit/' % (sn.id))
-        self.assertTemplateUsed(response, 'edit_sn.html')
+        self.assertTemplateUsed(response, 'SNe/edit_sn.html')
 
     def test_view_renders_form(self):
         sn=self.login_and_create_new_SN()
@@ -146,7 +146,7 @@ class MyStuffViewTest(UnitTests):
     def test_view_uses_mysn_template(self):
         sn=self.login_and_create_new_SN()
         response=self.client.get('/my_stuff/')
-        self.assertTemplateUsed(response, 'my_stuff.html')
+        self.assertTemplateUsed(response, 'SNe/my_stuff.html')
 
     def test_view_lists_sne(self):
         sn=self.login_and_create_new_SN()
@@ -184,7 +184,7 @@ class AddNewProjectViewTest(UnitTests):
     def test_view_uses_new_project_template(self):
         user=user_login(self)
         response=self.client.get('/add_project/')
-        self.assertTemplateUsed(response, 'new_project.html')
+        self.assertTemplateUsed(response, 'SNe/new_project.html')
 
     def test_view_renders_form(self):
         user=user_login(self)
@@ -213,7 +213,7 @@ class ProjectViewTest(UnitTests):
         sn=self.login_and_create_new_SN()
         project=Project.objects.create(title="Bla")
         response=self.client.get('/projects/%d/' % (project.id))
-        self.assertTemplateUsed(response, 'project.html')
+        self.assertTemplateUsed(response, 'SNe/project.html')
 
     def test_view_requires_login(self):
         project=Project.objects.create(title="Bla")
@@ -226,7 +226,7 @@ class EditProjectViewTest(UnitTests):
         sn=self.login_and_create_new_SN()
         project=Project.objects.create(title="Bla", pi=User.objects.first())
         response=self.client.get('/projects/%d/edit/' % (project.id))
-        self.assertTemplateUsed(response, 'edit_project.html')
+        self.assertTemplateUsed(response, 'SNe/edit_project.html')
 
     def test_view_renders_form(self):
         sn=self.login_and_create_new_SN()

@@ -24,7 +24,7 @@ def render_photometry_page(request, sn, form, out=1):
     if request.method=="POST" and not uploadform.errors:
         return redirect(reverse('photometry', args=(sn.id,)))
 
-    return render(request, 'photometry.html', {'sn': sn, 'form': form, 'uploadform': uploadform, 'table': table})
+    return render(request, 'Photometry/photometry.html', {'sn': sn, 'form': form, 'uploadform': uploadform, 'table': table})
 
 # Create your views here.
 @login_required(login_url="/")

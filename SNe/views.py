@@ -37,7 +37,7 @@ def home(request):
                 return redirect(reverse('my_stuff'))
     else:
         form=LoginForm()
-    return render(request, 'home.html', {'form': form})
+    return render(request, 'SNe/home.html', {'form': form})
 
 @login_required(login_url='/')
 def add_sn(request):
@@ -47,16 +47,16 @@ def add_sn(request):
             sn=form.save(request.user)
             return redirect(sn.get_absolute_url())
         else:
-            return render(request, 'new_sn.html', {'form': form})
+            return render(request, 'SNe/new_sn.html', {'form': form})
     else:
         form=NewSNForm(user=request.user)
-        return render(request, 'new_sn.html', {'form':form})
+        return render(request, 'SNe/new_sn.html', {'form':form})
 
 @login_required(login_url='/')
 def view_sn(request, sn_id):
     sn=SN.objects.get(id=sn_id)
     ra, dec=convert_coords_to_string(sn.ra, sn.dec)
-    return render(request, 'sn.html', {'sn': sn, 'ra': ra, 'dec': dec})
+    return render(request, 'SNe/sn.html', {'sn': sn, 'ra': ra, 'dec': dec})
 
 @login_required(login_url='/')
 def edit_sn(request, sn_id):
@@ -69,13 +69,13 @@ def edit_sn(request, sn_id):
 
     ra, dec=convert_coords_to_string(sn.ra, sn.dec)
     form=NewSNForm(instance=sn, initial={'ra': ra, 'dec': dec})
-    return render(request, 'edit_sn.html', {'form': form})
+    return render(request, 'SNe/edit_sn.html', {'form': form})
 
 @login_required(login_url='/')
 def my_stuff(request):
     sne=SN.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user)).distinct()
     projects=Project.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user)).distinct()
-    return render(request, 'my_stuff.html', {'sne': sne, 'projects': projects})
+    return render(request, 'SNe/my_stuff.html', {'sne': sne, 'projects': projects})
 
 @login_required(login_url="/")
 def add_project(request):
@@ -85,12 +85,12 @@ def add_project(request):
             project=form.save(request.user)
             return redirect(project.get_absolute_url())
     form=NewProjectForm(user=request.user)
-    return render(request, 'new_project.html', {'form': form})
+    return render(request, 'SNe/new_project.html', {'form': form})
 
 @login_required(login_url="/")
 def view_project(request, project_id):
     project=Project.objects.get(id=project_id)
-    return render(request, 'project.html', {'project': project})
+    return render(request, 'SNe/project.html', {'project': project})
 
 @login_required(login_url="/")
 def edit_project(request, project_id):
@@ -101,4 +101,4 @@ def edit_project(request, project_id):
             project=form.save(request.user, project_id)
             return redirect(project.get_absolute_url())
     form=NewProjectForm(instance=project)
-    return render(request, 'edit_project.html', {'form': form})
+    return render(request, 'SNe/edit_project.html', {'form': form})

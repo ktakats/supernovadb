@@ -1,10 +1,10 @@
-{% extends 'layout.html'%}
+{% extends 'SNe/layout.html'%}
 
 {% block title %}<a href="{% url 'view_sn' sn.id %}">{{sn.sn_name}}</a>{%endblock%}
 
 {%block log %}
 
-{% include "logs.html" with sn_id=sn.id %}
+{% include "SNe/logs.html" with sn_id=sn.id %}
 
 {% endblock %}
 
@@ -40,7 +40,7 @@
 {% render_table table %}
 
 
-{%include "modal.html" with sn_id=sn.id mode="photometry"%}
+{%include "SNe/modal.html" with sn_id=sn.id mode="photometry"%}
 
 {%load static%}
 <script type="text/javascript" src="{% static 'javascripts/plotLC.js'%}"></script>

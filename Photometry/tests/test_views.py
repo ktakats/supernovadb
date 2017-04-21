@@ -11,7 +11,7 @@ class PhotometryViewTest(UnitTests):
     def test_view_uses_photometry_template_renders_form(self):
         sn=self.login_and_create_new_SN()
         response=self.client.get('/sn/%d/photometry/' % (sn.id))
-        self.assertTemplateUsed(response, 'photometry.html')
+        self.assertTemplateUsed(response, 'Photometry/photometry.html')
         self.assertContains(response, "id_MJD")
 
     def test_view_renders_table(self):

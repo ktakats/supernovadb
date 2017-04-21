@@ -30,7 +30,7 @@ def spectroscopy(request, sn_id):
     Sp=Spectrum.objects.filter(sn=sn)
     table=SpectroscopyTable(Sp, order_by="id")
     form=UploadSpectrumForm()
-    return render(request, 'spectroscopy.html', {'sn': sn, 'uploadform': form, 'table': table})
+    return render(request, 'Spectroscopy/spectroscopy.html', {'sn': sn, 'uploadform': form, 'table': table})
 
 @login_required(login_url='/')
 def delSpectrum(request, sn_id, sp_id):

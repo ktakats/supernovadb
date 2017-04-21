@@ -12,7 +12,7 @@ class SpectroscopyViewTest(UnitTests):
     def test_view_uses_spectroscopy_template_and_renders_form(self):
         sn=self.login_and_create_new_SN()
         response=self.client.get('/sn/%d/spectroscopy/' % (sn.id))
-        self.assertTemplateUsed(response, 'spectroscopy.html')
+        self.assertTemplateUsed(response, 'Spectroscopy/spectroscopy.html')
         self.assertContains(response, 'SN 2017A')
         self.assertContains(response, "id_file")
 

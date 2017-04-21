@@ -49,6 +49,7 @@ class NewSNPageTest(FunctionalTest):
         #Then he goes away. Next day he forgets that he added this SN and tries again, but gets an error telling him this SN is already in the database
         self.browser.get(self.server_url)
         self.add_new_sn(name='SN 1987A', ra='05:35:27.99', dec='-69:16:11.50')
+        time.sleep(10)
         error=self.browser.find_element_by_css_selector('.errorlist')
         self.assertEqual(error.text, 'This SN is already registered')
 

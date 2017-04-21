@@ -15,7 +15,7 @@ def render_obslog_page(sn, request, form):
     RequestConfig(request).configure(table)
     if request.method=='POST':
         return redirect(reverse('sn_obs', args=(sn.id,)), {'sn': sn, 'form': form, 'table': table})
-    return render(request, 'obslog.html', {'sn': sn, 'form': form, 'table': table})
+    return render(request, 'ObservationLogs/obslog.html', {'sn': sn, 'form': form, 'table': table})
 
     #    return redirect(reverse('sn_obs', args=(sn.id,)), {'sn': sn, 'form': form, 'table': table})
 

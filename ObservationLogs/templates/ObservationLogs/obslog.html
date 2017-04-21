@@ -1,11 +1,11 @@
-{% extends 'layout.html' %}
+{% extends 'SNe/layout.html' %}
 
 
 {% block title %}<a href="{% url 'view_sn' sn.id %}">{{sn.sn_name}}</a>{% endblock %}
 
 {%block log %}
 
-{% include "logs.html" with sn_id=sn.id %}
+{% include "SNe/logs.html" with sn_id=sn.id %}
 
 {% endblock %}
 
@@ -20,7 +20,7 @@
 {% load django_tables2 %}
 {% render_table table %}
 
-{%include "modal.html" with sn_id=sn.id mode="obslog"%}
+{%include "SNe/modal.html" with sn_id=sn.id mode="obslog"%}
 
 
 {% endblock %}

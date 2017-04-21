@@ -15,7 +15,7 @@ class ObsLogViewTest(UnitTests):
     def test_view_uses_obslog_template(self):
         sn=self.login_and_create_new_SN()
         response=self.client.get('/sn/%d/obslog/' % (sn.id))
-        self.assertTemplateUsed(response, 'obslog.html')
+        self.assertTemplateUsed(response, 'ObservationLogs/obslog.html')
 
     def test_view_renders_form(self):
         sn=self.login_and_create_new_SN()
