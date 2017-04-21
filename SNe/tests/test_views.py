@@ -273,3 +273,28 @@ class SNCommentsViewTest(UnitTests):
         response=self.client.post('/sn/%d/' % (sn.id), data={'text': "Testtest test"})
         self.assertEqual(sn.comments.count(), 1)
         self.assertRedirects(response, '/sn/%d/' % (sn.id))
+
+class ProjectCommentsViewTest(UnitTests):
+
+    def test_view_shows_comment_form(self):
+        sn=self.login_and_create_new_SN()
+        project=Project.objects.create(title="Title" )
+        response=self.client.get('/projects/%d/' % (project.id))
+        self.assertContains(response, 'id_text')
+
+    def test_view_shows_comments(self):
+        sn=self.login_and_create_new_SN()
+        user=User.objects.first()
+        project=Project.objects.create(title="Title" )
+        comment=Comment.objects.create(text="Bla", author=user)
+        project.comments.add(comment)
+        project.save()
+        response=self.client.get('/projects/%d/' % (project.id))
+        self.assertContains(response, "Bla")
+
+    def test_can_submit_form_then_redirect(self):
+        sn=self.login_and_create_new_SN()
+        project=Project.objects.create(title="Title" )
+        response=self.client.post('/projects/%d/' % (project.id), data={'text': "Testtest test"})
+        self.assertEqual(project.comments.count(), 1)
+        self.assertRedirects(response, '/projects/%d/' % (project.id))

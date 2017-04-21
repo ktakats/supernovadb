@@ -82,3 +82,12 @@ class ProjectModelTest(TestCase):
     def test_project_has_absolute_url(self):
         project=Project.objects.create(title="Bla")
         self.assertEqual(project.get_absolute_url(), '/projects/%d/' % (project.id))
+
+    def test_project_can_have_comments(self):
+        pi=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        project=Project.objects.create(title="Bla", pi=pi)
+        comment=Comment.objects.create(text="Bla", author=pi)
+        project.comments.add(comment)
+        project.save()
+        self.assertEqual(project.comments.count(),1)
+        self.assertEqual(project.comments.first(), comment)

@@ -99,7 +99,15 @@ def add_project(request):
 @login_required(login_url="/")
 def view_project(request, project_id):
     project=Project.objects.get(id=project_id)
-    return render(request, 'SNe/project.html', {'project': project})
+    if request.method=="POST":
+        commentform=CommentForm(request.POST)
+        if commentform.is_valid():
+            comment=commentform.save(request.user)
+            project.comments.add(comment)
+            project.save()
+            return redirect(reverse('view_project', args=(project_id,)))
+    commentform=CommentForm()
+    return render(request, 'SNe/project.html', {'project': project, 'commentform': commentform})
 
 @login_required(login_url="/")
 def edit_project(request, project_id):

@@ -30,5 +30,7 @@
   </div>
 </div>
 
+{%include "Comments/comments.html" with comments=project.comments.all form=commentform%}
+
 
 {% endblock %}

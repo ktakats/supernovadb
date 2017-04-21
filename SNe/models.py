@@ -36,6 +36,7 @@ class Project(models.Model):
     pi=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="project_pi", null=True)
     coinvestigators=models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="project_coi")
     sne=models.ManyToManyField(SN, related_name="project_sne")
+    comments=models.ManyToManyField(Comment, related_name="project_comment")
 
     def get_absolute_url(self):
         return reverse('view_project', args=[self.id])
