@@ -1,0 +1,7 @@
+{% for comment in comments %}
+  <ul>
+    <li>{{comment.text}}</li>
+    <li>{{comment.author}}</li>
+    <li>{{comment.pub_date}}</li>
+  </ul>
+{% endfor %}

@@ -83,6 +83,11 @@ class SNViewTest(UnitTests):
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, "Co-I1")
 
+    def test_view_has_comment_section(self):
+        sn=self.login_and_create_new_SN()
+        response=self.client.get('/sn/%d/' % (sn.id))
+        self.assertContains(response, "id_comment")
+
 
 class AddNewSNViewTest(UnitTests):
 
