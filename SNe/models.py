@@ -6,6 +6,8 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils import timezone
 
+from Comments.models import Comment
+
 
 @python_2_unicode_compatible
 class SN(models.Model):
@@ -20,6 +22,7 @@ class SN(models.Model):
     sntype=models.CharField(max_length=5, blank=True, null=True)
     host=models.CharField(max_length=20, blank=True, null=True)
     z=models.FloatField(blank=True, null=True)
+    comments=models.ManyToManyField(Comment, related_name="sn_comment")
 
     def get_absolute_url(self):
         return reverse('view_sn', args=[self.id])

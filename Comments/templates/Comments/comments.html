@@ -1,7 +1,18 @@
+<form method="POST" action="" id="id_comment_form">
+{% csrf_token%}
+{{form.as_p}}
+<button type="submit" id="id_submitcomment">Submit</button>
+</form>
+
+<div class="comments">
 {% for comment in comments %}
   <ul>
     <li>{{comment.text}}</li>
     <li>{{comment.author}}</li>
     <li>{{comment.pub_date}}</li>
   </ul>
+{% empty %}
+<p>No comments yet</p>
 {% endfor %}
+
+</div>

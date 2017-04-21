@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.test import TestCase
 from SNe.models import SN, Project
+from Comments.models import Comment
 from django.contrib import auth
 
 User=auth.get_user_model()
@@ -40,6 +41,15 @@ class SNModelTest(TestCase):
         pi=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         sn=SN.objects.create(sn_name='SN 2017A', pi=pi, sntype="II-P", host="NGC 1234", z=0.01)
         self.assertEqual(sn.sntype, "II-P")
+
+    def test_sn_can_have_comments(self):
+        pi=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        sn=SN.objects.create(sn_name='SN 2017A', pi=pi, sntype="II-P", host="NGC 1234", z=0.01)
+        comment=Comment.objects.create(text="Bla", author=pi)
+        sn.comments.add(comment)
+        sn.save()
+        self.assertEqual(sn.comments.count(),1)
+        self.assertEqual(sn.comments.first(), comment)
 
 class ProjectModelTest(TestCase):
 

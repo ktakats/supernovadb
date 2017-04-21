@@ -1,5 +1,6 @@
 from django.test import TestCase
 from Comments.models import Comment
+from SNe.models import SN
 from datetime import datetime
 from django.contrib import auth
 

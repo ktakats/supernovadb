@@ -7,6 +7,7 @@ from django.shortcuts import redirect, render, get_object_or_404, reverse
 from models import SN, Project
 from forms import NewSNForm, NewProjectForm
 from accounts.forms import LoginForm
+from Comments.forms import CommentForm
 
 from astropy import units as u
 from astropy.coordinates import SkyCoord
@@ -55,8 +56,16 @@ def add_sn(request):
 @login_required(login_url='/')
 def view_sn(request, sn_id):
     sn=SN.objects.get(id=sn_id)
+    if request.method=="POST":
+        commentform=CommentForm(request.POST)
+        if commentform.is_valid():
+            comment=commentform.save(request.user)
+            sn.comments.add(comment)
+            sn.save()
+            return redirect(reverse('view_sn', args=(sn_id,)))
     ra, dec=convert_coords_to_string(sn.ra, sn.dec)
-    return render(request, 'SNe/sn.html', {'sn': sn, 'ra': ra, 'dec': dec})
+    commentform=CommentForm()
+    return render(request, 'SNe/sn.html', {'sn': sn, 'ra': ra, 'dec': dec, 'commentform': commentform})
 
 @login_required(login_url='/')
 def edit_sn(request, sn_id):

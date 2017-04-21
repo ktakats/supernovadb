@@ -2,6 +2,7 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 from .base import UnitTests
 from SNe.models import SN, Project
+from Comments.models import Comment
 
 from django.contrib import auth
 
@@ -250,3 +251,25 @@ class EditProjectViewTest(UnitTests):
         project=Project.objects.create(title="Bla", description="blabla", pi=User.objects.first())
         response=self.client.post('/projects/%d/edit/' % (project.id), data={'title': "Blabla", 'description': "blabla"})
         self.assertRedirects(response, '/projects/%d/' % (project.id))
+
+class SNCommentsViewTest(UnitTests):
+
+    def test_view_shows_comment_form(self):
+        sn=self.login_and_create_new_SN()
+        response=self.client.get('/sn/%d/' % (sn.id))
+        self.assertContains(response, 'id_text')
+
+    def test_view_shows_comments(self):
+        sn=self.login_and_create_new_SN()
+        user=User.objects.first()
+        comment=Comment.objects.create(text="Bla", author=user)
+        sn.comments.add(comment)
+        sn.save()
+        response=self.client.get('/sn/%d/' % (sn.id))
+        self.assertContains(response, "Bla")
+
+    def test_can_submit_form_then_redirect(self):
+        sn=self.login_and_create_new_SN()
+        response=self.client.post('/sn/%d/' % (sn.id), data={'text': "Testtest test"})
+        self.assertEqual(sn.comments.count(), 1)
+        self.assertRedirects(response, '/sn/%d/' % (sn.id))
