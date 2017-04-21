@@ -1,0 +1,13 @@
+{%extends 'layout.html' %}
+
+{% block title %}Edit project{% endblock %}
+
+{% block content %}
+
+<form method="POST" id="id_edit_project_form">
+{% csrf_token %}
+{{form.as_p}}
+<button type="submit", id="id_submit">Submit</button>
+</form>
+
+{% endblock %}

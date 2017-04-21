@@ -197,13 +197,13 @@ class AddNewProjectViewTest(UnitTests):
 
     def test_submitting_form_saves_project(self):
         sn=self.login_and_create_new_SN()
-        response=self.client.post('/add_project/', data={'title': "Bla", 'description': "bla bla", 'sne': sn.id})
+        response=self.client.post('/add_project/', data={'title': "Bla", 'description': "bla bla", 'sne': sn.id}, user=User.objects.first())
         project=Project.objects.first()
         self.assertEqual(project.title, "Bla")
 
     def test_form_submission_redirects_to_project_page(self):
         sn=self.login_and_create_new_SN()
-        response=self.client.post('/add_project/', data={'title': "Bla", 'description': "bla bla", 'sne': sn.id})
+        response=self.client.post('/add_project/', data={'title': "Bla", 'description': "bla bla", 'sne': sn.id}, user=User.objects.first())
         project=Project.objects.first()
         self.assertRedirects(response, '/projects/%d/' % (project.id))
 
@@ -214,3 +214,34 @@ class ProjectViewTest(UnitTests):
         project=Project.objects.create(title="Bla")
         response=self.client.get('/projects/%d/' % (project.id))
         self.assertTemplateUsed(response, 'project.html')
+
+    def test_view_requires_login(self):
+        project=Project.objects.create(title="Bla")
+        response=self.client.get('/projects/%d/' % (project.id))
+        self.assertRedirects(response, '/?next=/projects/%d/' % (project.id))
+
+class EditProjectViewTest(UnitTests):
+
+    def test_view_renders_template(self):
+        sn=self.login_and_create_new_SN()
+        project=Project.objects.create(title="Bla", pi=User.objects.first())
+        response=self.client.get('/projects/%d/edit/' % (project.id))
+        self.assertTemplateUsed(response, 'edit_project.html')
+
+    def test_view_renders_form(self):
+        sn=self.login_and_create_new_SN()
+        project=Project.objects.create(title="Bla", description="blabla", pi=User.objects.first())
+        response=self.client.get('/projects/%d/edit/' % (project.id))
+        self.assertContains(response, 'id_description')
+
+    def test_form_contains_project_details(self):
+        sn=self.login_and_create_new_SN()
+        project=Project.objects.create(title="Bla", description="blabla", pi=User.objects.first())
+        response=self.client.get('/projects/%d/edit/' % (project.id))
+        self.assertContains(response, 'value="Bla"')
+
+    def test_form_redirects_after_submission(self):
+        sn=self.login_and_create_new_SN()
+        project=Project.objects.create(title="Bla", description="blabla", pi=User.objects.first())
+        response=self.client.post('/projects/%d/edit/' % (project.id), data={'title': "Blabla", 'description': "blabla"})
+        self.assertRedirects(response, '/projects/%d/' % (project.id))

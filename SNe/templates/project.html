@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block title %}{{project.title}}{% endblock %}
-
+{%block options%}<a href="{%url 'edit_project' project.id%}" title="Edit the details of this project"><i class="fa fa-pencil"></i></a>{%endblock%}
 {% block content %}
 
 <p><b>Description:</b> {{project.description}}</p>

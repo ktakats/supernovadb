@@ -98,14 +98,12 @@ class EditSNDataTest(FunctionalTest):
         #It leads him to the edit page of the SN
         title=self.browser.find_element_by_css_selector('h1').text
         self.assertEqual(title, "Edit SN")
-        time.sleep(10)
         #He adds the new data
         self.browser.find_element_by_id("id_z").send_keys("0.01")
         self.browser.find_element_by_id("id_host").send_keys("LMC")
         self.browser.find_element_by_id("id_coinvestigators").send_keys("Claudia")
         self.browser.find_element_by_id("id_ra").clear()
         self.browser.find_element_by_id("id_ra").send_keys("05:35:28.99\n")
-        time.sleep(10)
         ##Submittin the form takes him back to the SN page
         title=self.browser.find_element_by_css_selector('h1').text
         self.assertIn('SN 1987A', title)
@@ -116,7 +114,39 @@ class EditSNDataTest(FunctionalTest):
         self.assertIn("Host: LMC", body)
         self.assertIn("z: 0.01", body)
 
+class EditProjectDataTest(FunctionalTest):
 
+    def test_user_can_edit_sn_data(self):
+        #Joe goes to the SN site and adds an SN
+        self.second_user()
+        self.go_to_page_and_log_in()
+        self.add_new_sn()
+        self.add_new_sn(name="SN 1988A", ra='06:35:27.99', dec='-59:16:11.50')
+
+        #He creates a project and adds the sn
+        self.add_new_project()
+
+        #He needs to edit the project details
+        #He finds the edit button
+        self.browser.find_element_by_css_selector(".fa-pencil").click()
+        #It leads him to the edit page of the SN
+        title=self.browser.find_element_by_css_selector('h1').text
+        self.assertEqual(title, "Edit project")
+        time.sleep(10)
+        #He adds the new data
+        self.browser.find_element_by_id("id_description").clear()
+        self.browser.find_element_by_id("id_description").send_keys("Our project to study type II-Ps")
+        self.browser.find_element_by_id("id_sne").send_keys("SN 1988A")
+        self.browser.find_element_by_id("id_coinvestigators").send_keys("Claudia\n")
+        time.sleep(10)
+        ##Submittin the form takes him back to the SN page
+        title=self.browser.find_element_by_css_selector('h1').text
+        self.assertIn("Joe's type II project", title)
+        #Here he can see the new data he just entered
+        body=self.browser.find_element_by_css_selector('body').text
+        self.assertIn("Claudia", body)
+        self.assertIn("Our project to study type II-Ps", body)
+        self.assertIn("SN 1988A", body)
 
 
 
@@ -136,6 +166,7 @@ class NewProjectTest(FunctionalTest):
         self.browser.find_element_by_id("id_description").send_keys("Our project to study type IIs")
         self.browser.find_element_by_id("id_sne").send_keys("SN 1987A")
         self.browser.find_element_by_id("id_coinvestigators").send_keys("claudia")
+        time.sleep(10)
         self.browser.find_element_by_id("id_submit").click()
 
         time.sleep(10)

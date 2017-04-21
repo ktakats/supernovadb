@@ -8,5 +8,6 @@ urlpatterns=[
     url(r'^sn/(\d+)/edit/$', views.edit_sn, name='edit_sn'),
     url(r'^my_stuff/$', views.my_stuff, name='my_stuff'),
     url(r'^add_project/$', views.add_project, name='add_project'),
-    url(r'^projects/(\d+)/$', views.view_project, name="view_project")
+    url(r'^projects/(\d+)/$', views.view_project, name="view_project"),
+    url(r'^projects/(\d+)/edit/$', views.edit_project, name="edit_project"),
 ]

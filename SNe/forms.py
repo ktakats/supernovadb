@@ -125,26 +125,42 @@ class NewProjectForm(forms.models.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        pi=kwargs.pop("user", None)
         super(NewProjectForm, self).__init__(*args, **kwargs)
-        try:
-            pi=self.instance.id
-        except ObjectDoesNotExist:
-            pi=None
-        self.fields['coinvestigators'].queryset=Users.objects.exclude(id=pi)
+        cois=[]
+        sn=[]
+        if self.instance.pk!=None:
+            cois=[coi.id for coi in self.instance.coinvestigators.all()]
+            sn=[sn.id for sn in self.instance.sne.all()]
+            try:
+                pi=self.instance.pi.id
+            except ObjectDoesNotExist:
+                pi=None
+            cois.append(pi)
+        else:
+            if pi:
+                cois=[pi.id]
+        self.fields['coinvestigators'].queryset=Users.objects.exclude(id__in=cois)
         #Without distinct returns the same object twice
-        self.fields['sne'].queryset=SN.objects.filter(Q(pi=pi) | Q(coinvestigators=pi)).distinct()
+        self.fields['sne'].queryset=SN.objects.filter(Q(pi__in=cois) | Q(coinvestigators__in=cois)).exclude(id__in=sn).distinct()
+        #else:
+        #    self.fields['coinvestigators'].queryset=Users.objects.all()
+        #    self.fields['sne'].queryset=SN.objects.all()
 
-    def save(self):
+    def save(self, pi, id=None):
         data=self.cleaned_data
-        project=Project.objects.create(title=data['title'], description=data['description'], pi=self.instance)
+        project=Project(title=data['title'], description=data['description'], pi=pi)
+        if not id==None:
+            project.id=id
+        project.save()
         for sn in data['sne']:
             #add sne to project
             project.sne.add(sn)
             #add project co-is (and if necessary project pi) as cois of the SN
             snpi=sn.pi
             sncois=sn.coinvestigators.all()
-            if not self.instance==snpi or self.instance not in sncois:
-                sn.coinvestigators.add(self.instance)
+            if not pi==snpi or pi not in sncois:
+                sn.coinvestigators.add(pi)
             for coi in data['coinvestigators']:
                 if not coi==snpi or coi not in sncois:
                     sn.coinvestigators.add(coi)

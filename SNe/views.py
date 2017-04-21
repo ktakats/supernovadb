@@ -80,13 +80,25 @@ def my_stuff(request):
 @login_required(login_url="/")
 def add_project(request):
     if request.method=="POST":
-        form=NewProjectForm(request.POST, instance=request.user)
+        form=NewProjectForm(request.POST, user=request.user)
         if form.is_valid():
-            project=form.save()
+            project=form.save(request.user)
             return redirect(project.get_absolute_url())
-    form=NewProjectForm(instance=request.user)
+    form=NewProjectForm(user=request.user)
     return render(request, 'new_project.html', {'form': form})
 
+@login_required(login_url="/")
 def view_project(request, project_id):
     project=Project.objects.get(id=project_id)
     return render(request, 'project.html', {'project': project})
+
+@login_required(login_url="/")
+def edit_project(request, project_id):
+    project=Project.objects.get(id=project_id)
+    if request.method=="POST":
+        form=NewProjectForm(request.POST, instance=project)
+        if form.is_valid():
+            project=form.save(request.user, project_id)
+            return redirect(project.get_absolute_url())
+    form=NewProjectForm(instance=project)
+    return render(request, 'edit_project.html', {'form': form})
