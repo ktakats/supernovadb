@@ -33,12 +33,24 @@ class LoginTest(FunctionalTest):
 
     def test_user_has_to_be_logged_in(self):
         #Joe tries to go to the add SN page
-        self.browser.get(self.server_url)
-        self.browser.find_element_by_link_text("My stuff").click()
+        self.browser.get(self.server_url+"/my_stuff/")
 
 
         #But since he's not logged in, he's redirected to to the home
         body=self.browser.find_element_by_tag_name("body").text
         self.assertIn("Please log in", body)
 
-    
+class LogoutTest(FunctionalTest):
+
+    def test_user_can_log_out(self):
+        #Joe goes to the SN site and adds an SN
+        self.go_to_page_and_log_in()
+        self.add_new_sn()
+
+        #Then he logs out
+        self.browser.find_element_by_link_text("Logout").click()
+        #Now he's at the home page and there's no link to my stuff
+        body=self.browser.find_element_by_tag_name("body").text
+        self.assertIn("Please log in", body)
+
+        self.assertNotIn("My stuff", body)
