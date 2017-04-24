@@ -8,9 +8,12 @@ class CommentForm(forms.models.ModelForm):
         fields=['text']
         widgets={
             'text': forms.Textarea(attrs={
-                "rows": "4",
+                "rows": "2",
                 "cols": "25"
             })
+        }
+        labels={
+            'text': "New comment"
         }
 
     def save(self, author):

@@ -43,22 +43,22 @@ h1 a {
 
 /*New sn form*/
 
-#id_new_sn_form, #id_obslogform, #id_photometryform, #id_uploadphotometryform, #id_uploadspectroscopyform, #id_add_project_form {
+#id_new_sn_form, #id_obslogform, #id_photometryform, #id_uploadphotometryform, #id_uploadspectroscopyform, #id_add_project_form, #id_comment_form {
   width: 80%;
   margin: 5% auto;
 }
 
-#id_new_sn_form label, input, #id_obslogform label, input, select, #id_photometryform label, input, #id_uploadphotometryform input, textarea, #id_uploadspectroscopyform label, input, textarea,i,input[type="file"], #id_add_project_form label, input, select {
+#id_new_sn_form label, input, #id_obslogform label, input, select, #id_photometryform label, input, #id_uploadphotometryform input, textarea, #id_uploadspectroscopyform label, input, textarea,i,input[type="file"], #id_add_project_form label, input, select, #id_comment_form textarea {
   display: inline-block;
 }
 
-#id_new_sn_form label, #id_obslogform label,  #id_photometryform label, #id_uploadphotometryform label, #id_uploadspectroscopyform label, #id_add_project_form label {
+#id_new_sn_form label, #id_obslogform label,  #id_photometryform label, #id_uploadphotometryform label, #id_uploadspectroscopyform label, #id_add_project_form label, #id_comment_form label {
   width: 20%;
   float: left;
   text-align: right;
 }
 
-#id_new_sn_form label +input, #id_obslogform label + input, label+select, #id_photometryform label+input, #id_uploadphotometryform label+input, label+textarea, #id_uploadspectroscopyform label+input, label+textarea, label+input[type="file"], #id_add_project_form label+input, label+select {
+#id_new_sn_form label +input, #id_obslogform label + input, label+select, #id_photometryform label+input, #id_uploadphotometryform label+input, label+textarea, #id_uploadspectroscopyform label+input, label+textarea, label+input[type="file"], #id_add_project_form label+input, label+select, #id_comment_form label+textarea {
     width: 61%;
     margin: 0 15% 0 2%;
 }
@@ -192,4 +192,38 @@ table thead th.desc {
 .coilist{
     text-align: left;
     display: inline;
+}
+
+/*comments*/
+h2{
+  color: #e98167;
+}
+
+.commentbox{
+  border: 2px solid #79ACA9;;
+  border-radius: 5px;
+  position: relative;
+  padding: 1%;
+  width: 80%;
+  display: inline-block;
+}
+
+.comment-author{
+  position: absolute;
+  bottom: 3px;
+  left: 3px;
+  color: #e98167;
+}
+
+.comment-date{
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  color: #e98167;
+}
+
+.comment-text{
+  text-align: left;
+  padding-bottom: 5%;
+  font-size: 1.1em;
 }

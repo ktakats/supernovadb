@@ -1,16 +1,18 @@
+<h2>Comments</h2>
+
 <form method="POST" action="" id="id_comment_form">
 {% csrf_token%}
 {{form.as_p}}
-<button type="submit" id="id_submitcomment">Submit</button>
+<button type="submit" id="id_submitcomment">Add</button>
 </form>
 
 <div class="comments">
 {% for comment in comments %}
-  <ul>
-    <li>{{comment.text}}</li>
-    <li>{{comment.author}}</li>
-    <li>{{comment.pub_date}}</li>
-  </ul>
+  <div class="commentbox">
+    <div class="comment-author">{{comment.author}}</div>
+    <div class="comment-date">{{comment.pub_date}}</div>
+    <div class="comment-text">{{comment.text}}</div>
+  </div>
 {% empty %}
 <p>No comments yet</p>
 {% endfor %}

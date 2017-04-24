@@ -3,6 +3,9 @@
 {% block title %}Welcome to the MAS Supernova Database{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated%}
+<h3>Hola {{user.first_name}}</h3>
+{%else%}
 <h3>Please log in</h3>
 
 
@@ -17,4 +20,7 @@
   <p>{{form.password.label}} {{form.password}}</p>
   <button type="submit" id="id_formsubmitbutton">Submit</button>
 </form>
+
+{%endif%}
+
 {% endblock %}

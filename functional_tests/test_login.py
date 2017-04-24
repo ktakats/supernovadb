@@ -40,3 +40,5 @@ class LoginTest(FunctionalTest):
         #But since he's not logged in, he's redirected to to the home
         body=self.browser.find_element_by_tag_name("body").text
         self.assertIn("Please log in", body)
+
+    
