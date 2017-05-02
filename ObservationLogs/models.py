@@ -13,3 +13,6 @@ class Obs(models.Model):
     instrument=models.CharField(max_length=100, blank=True)
     setup=models.CharField(max_length=100, blank=True)
     notes=models.CharField(max_length=200, blank=True)
+
+    class Meta:
+        verbose_name_plural="Observations"

@@ -17,6 +17,9 @@ class Spectrum(models.Model):
             "MJD": self.MJD,
         }
 
+    class Meta:
+        verbose_name_plural="Spectra"
+
 
 class SpectrumDataPoint(models.Model):
 

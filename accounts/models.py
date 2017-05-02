@@ -24,8 +24,7 @@ class MyUserManager(BaseUserManager):
 
     def create_superuser(self, email, password, first_name):
         """
-        Creates and saves a superuser with the given email, date of
-        birth and password.
+        Creates and saves a superuser with the given email, and password.
         """
         user = self.create_user(
             email,
@@ -35,7 +34,7 @@ class MyUserManager(BaseUserManager):
         user.is_admin = True
         user.save(using=self._db)
         return user
-        
+
 @python_2_unicode_compatible
 class User(AbstractBaseUser):
     email = models.EmailField(
@@ -45,7 +44,8 @@ class User(AbstractBaseUser):
     )
 
     first_name=models.CharField(max_length=100, unique=True)
-
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name']
 
@@ -68,6 +68,10 @@ class User(AbstractBaseUser):
         "Does the user have permissions to view the app `app_label`?"
         # Simplest possible answer: Yes, always
         return True
+
+    @property
+    def is_superuser(self):
+        return self.is_admin
 
     @property
     def is_staff(self):

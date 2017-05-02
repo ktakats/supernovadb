@@ -24,11 +24,13 @@ class SN(models.Model):
     z=models.FloatField(blank=True, null=True)
     comments=models.ManyToManyField(Comment, related_name="sn_comment")
 
+    class Meta:
+        verbose_name_plural="SNe"
+
     def get_absolute_url(self):
         return reverse('view_sn', args=[self.id])
 
-#@python_2_unicode_compatible
-
+@python_2_unicode_compatible
 class Project(models.Model):
 
     title=models.CharField(max_length=100, blank=False)
@@ -40,3 +42,6 @@ class Project(models.Model):
 
     def get_absolute_url(self):
         return reverse('view_project', args=[self.id])
+
+    def __str__(self):
+        return self.title

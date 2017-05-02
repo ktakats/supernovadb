@@ -33,6 +33,10 @@ class HomeViewTest(UnitTests):
         user=auth.get_user(self.client)
         self.assertRedirects(response, '/my_stuff/')
 
+    def test_view_has_link_to_password_reset(self):
+        response=self.client.get('/')
+        self.assertContains(response, 'I forgot my password')
+
 
 class SNViewTest(UnitTests):
 

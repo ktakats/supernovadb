@@ -54,3 +54,19 @@ class LogoutTest(FunctionalTest):
         self.assertIn("Please log in", body)
 
         self.assertNotIn("My stuff", body)
+
+class ForgottenPasswordTest(FunctionalTest):
+
+    def test_user_can_ask_to_change_password(self):
+        #Joe goes to the SN site and adds an SN
+        self.go_to_page_and_log_in()
+        self.add_new_sn()
+
+        #Then he logs out
+        self.browser.find_element_by_link_text("Logout").click()
+
+        #Next time he goes, he forgets his password. But there's a link to reset it
+        self.browser.get(self.server_url)
+        self.browser.find_element_by_link_text('I forgot my password').click()
+
+        self.browser.find_element_by_id('id_email').send_keys('joe@example.com')
