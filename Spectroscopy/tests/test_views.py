@@ -4,7 +4,8 @@ from Spectroscopy.models import Spectrum
 from django.contrib import auth
 
 User=auth.get_user_model()
-
+TEST_SPECTRUM='/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.txt'
+SECOND_TEST_SPECTRUM='/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum2.txt'
 
 
 class SpectroscopyViewTest(UnitTests):
@@ -18,13 +19,13 @@ class SpectroscopyViewTest(UnitTests):
 
     def test_uploading_file_redirects_back(self):
         sn=self.login_and_create_new_SN()
-        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.dat')
+        myfile=open(TEST_SPECTRUM)
         response=self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': ""})
         self.assertRedirects(response, '/sn/%d/spectroscopy/' % (sn.id))
 
     def test_view_renders_table(self):
         sn=self.login_and_create_new_SN()
-        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.dat')
+        myfile=open(TEST_SPECTRUM)
         self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': ""})
         response=self.client.get('/sn/%d/spectroscopy/' % (sn.id))
         self.assertContains(response, 'table-container')
@@ -40,7 +41,7 @@ class deleteSpectrumViewTest(UnitTests):
 
     def test_can_delete_spectrum_then_redirects_to_spectroscopy_page(self):
         sn=self.login_and_create_new_SN()
-        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.dat')
+        myfile=open(TEST_SPECTRUM)
         self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': ""})
         sp=Spectrum.objects.first()
         response=self.client.get('/sn/%d/spectroscopy/delete/%d/' % (sn.id, sp.id))
@@ -49,7 +50,7 @@ class deleteSpectrumViewTest(UnitTests):
 
     def test_view_requires_login(self):
         sn=self.login_and_create_new_SN()
-        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.dat')
+        myfile=open(TEST_SPECTRUM)
         self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': ""})
         sp=Spectrum.objects.first()
         self.client.logout()
@@ -60,9 +61,9 @@ class queryViewTest(UnitTests):
 
     def test_query_returns_spectroscopy_data(self):
         sn=self.login_and_create_new_SN()
-        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.dat')
+        myfile=open(TEST_SPECTRUM)
         self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': ""})
-        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum2.dat')
+        myfile=open(SECOND_TEST_SPECTRUM)
         self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55045.0, 'notes': ""})
         response=self.client.get('/sn/%d/spectroscopy/query/' % (sn.id))
         self.assertContains(response, "55055.0")
@@ -70,9 +71,9 @@ class queryViewTest(UnitTests):
 
     def test_view_requires_login(self):
         sn=self.login_and_create_new_SN()
-        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.dat')
+        myfile=open(TEST_SPECTRUM)
         self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': ""})
-        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum2.dat')
+        myfile=open(SECOND_TEST_SPECTRUM)
         self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55045.0, 'notes': ""})
         self.client.logout()
         response=self.client.get('/sn/%d/spectroscopy/query/' % (sn.id))

@@ -11,7 +11,7 @@ class uploadSpectrumTest(TestCase):
         user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         self.client.force_login(user)
         sn=SN.objects.create(sn_name='SN 2017A', ra=22.625, dec=65.575, pi=user)
-        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.dat')
+        myfile=open('/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.txt')
         response=self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': 'test'})
         sp=Spectrum.objects.first()
         self.assertEqual(sp.MJD, 55055.0)

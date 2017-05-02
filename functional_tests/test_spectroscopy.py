@@ -17,7 +17,7 @@ class SpectroscopyTest(FunctionalTest):
 
         #Here he sees a form to submit a spectra as a file
         self.browser.find_element_by_id("id_MJD").send_keys("55043.2")
-        self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.dat")
+        self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.txt")
         self.browser.find_element_by_id("id_notes").send_keys("test spectrum")
         self.browser.find_element_by_id('id_uploadbutton').click()
 
@@ -30,9 +30,17 @@ class SpectroscopyTest(FunctionalTest):
 
         #He uploads another spectrum
         self.browser.find_element_by_id("id_MJD").send_keys("55053.3")
-        self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum2.dat")
+        self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum2.txt")
         self.browser.find_element_by_id("id_notes").send_keys("Second test spectrum")
         self.browser.find_element_by_id('id_uploadbutton').click()
+
+        #He tries to upload a pdf
+        self.browser.find_element_by_id("id_MJD").send_keys("55053.3")
+        self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/test_tools/test.pdf")
+        self.browser.find_element_by_id("id_notes").send_keys("Thirs test spectrum")
+        self.browser.find_element_by_id('id_uploadbutton').click()
+        body=self.browser.find_element_by_tag_name("body").text
+        self.assertIn("Incorrect file type", body)
 
         #Now both spectra are in the table
         body=self.browser.find_element_by_tag_name("body").text

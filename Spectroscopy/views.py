@@ -17,6 +17,8 @@ from django.contrib.auth.decorators import login_required
 @login_required(login_url='/')
 def spectroscopy(request, sn_id):
     sn=SN.objects.get(id=sn_id)
+    Sp=Spectrum.objects.filter(sn=sn)
+    table=SpectroscopyTable(Sp, order_by="id")
     if request.method=="POST":
         if request.FILES:
             form=UploadSpectrumForm(request.POST, request.FILES)
@@ -26,9 +28,10 @@ def spectroscopy(request, sn_id):
                 #Sp=Spectrum.objects.filter(sn=sn)
                 #table=SpectroscopyTable(Sp)
                 return redirect(reverse('spectroscopy', args=(sn.id,)))
+            else:
+                return render(request, 'Spectroscopy/spectroscopy.html', {'sn': sn, 'uploadform': form, 'table': table})
 
-    Sp=Spectrum.objects.filter(sn=sn)
-    table=SpectroscopyTable(Sp, order_by="id")
+
     form=UploadSpectrumForm()
     return render(request, 'Spectroscopy/spectroscopy.html', {'sn': sn, 'uploadform': form, 'table': table})
 
