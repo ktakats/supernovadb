@@ -25,7 +25,20 @@
   {{uploadform.errors.file.as_text}}
 </div>
   {%endif%}
-  <p><i class="fa fa-question-circle-o" title="{{uploadform.file.help_text | safe}}"></i>  {{uploadform.file}} </p>
+  <p><div class="popup" onclick="PopupFunction()"><i class="fa fa-question-circle-o"></i>
+    <span class="popuptext" id="photometryhelp">
+      <ul>
+        <li>Only upload text files</li>
+        <li>First line is the header, do not comment it out</li>
+        <li>First column is MJD, then filter, error, filter, error ... Notes</li>
+        <li>Possible filters currently: U, B, V, R, I, J, H, K, u, g, r, i, z</li>
+        <li>Separator must be one space</li>
+        <li>Mark missing data with NA</li>
+        <li>Put notes in quotes</li>
+        <li>Ask Kati for a sample file if you need!</li>
+      </ul>
+    </span> </div>
+    {{uploadform.file}} </p>
 <button type="submit" id="id_uploadbutton">Submit</button>
 </form>
 {%endblock%}
@@ -60,6 +73,12 @@ $("#id_plotbutton").on("click", function(){
     $(".LC").show();
     $(this).text("Hide light curve");
   }
-})
+});
+
+// When the user clicks on <div>, open the popup
+function PopupFunction() {
+    var popup = document.getElementById("photometryhelp");
+    popup.classList.toggle("show");
+}
 </script>
 {% endblock %}

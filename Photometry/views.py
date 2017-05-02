@@ -11,8 +11,9 @@ import simplejson as json
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
-def render_photometry_page(request, sn, form, out=1):
-    uploadform=UploadPhotometryFileForm()
+def render_photometry_page(request, sn, form, uploadform=None, out=1,):
+    if uploadform==None:
+        uploadform=UploadPhotometryFileForm()
     #if the file upload was unsuccessful, i.e. out==-1, attach an error to the form
 
     if out==-1:
@@ -34,10 +35,15 @@ def photometry(request, sn_id, phot_id=None):
     if request.method=="POST":
         #if the user uploaded a file
         if request.FILES:
-            form=UploadPhotometryFileForm(request.POST, request.FILES)
-            if form.is_valid():
+            uploadform=UploadPhotometryFileForm(request.POST, request.FILES)
+
+            if uploadform.is_valid():
                 #out returns -1 if the file is not correct
                 out=uploadPhotometry(request.FILES['file'], sn)
+
+            else:
+                form=PhotometryForm()
+                return render_photometry_page(request, sn, form, uploadform=uploadform, out=out)
 
 
         #if the user submited the form
@@ -52,7 +58,7 @@ def photometry(request, sn_id, phot_id=None):
         instance=None
     form=PhotometryForm(instance=instance)
 
-    return render_photometry_page(request, sn, form, out)
+    return render_photometry_page(request, sn, form, out=out)
 
 @login_required(login_url="/")
 def deletePhot(request, sn_id, phot_id):

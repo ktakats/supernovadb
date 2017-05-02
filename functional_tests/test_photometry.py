@@ -44,6 +44,15 @@ class PhotometryTest(FunctionalTest):
         body=self.browser.find_element_by_tag_name("body").text
         self.assertIn("The file format is incorrect. Please check the requirements", body)
 
+        #He tries to upload a wrong file type
+        self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/test_tools/test.pdf")
+        self.browser.find_element_by_id('id_uploadbutton').click()
+        body=self.browser.find_element_by_tag_name("body").text
+        self.assertIn("Incorrect file type", body)
+
+
+
+
     def test_user_can_edit_and_delete_photometric_point(self):
         #Joe goes to the SN page, adds a new SN
         self.go_to_page_and_log_in()

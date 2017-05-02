@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from SNe.models import SN
 
-FILTERCHOICES=(('U', 'U'), ('B', 'B'), ('V', 'V'), ('R', 'R'), ('I', 'I'), ('J', 'J'), ('H', 'H'), ('K', 'K'), ('g', 'g'), ('r', 'r'), ('i', 'i'), ('z', 'z'))
+FILTERCHOICES=(('U', 'U'), ('B', 'B'), ('V', 'V'), ('R', 'R'), ('I', 'I'), ('J', 'J'), ('H', 'H'), ('K', 'K'), ('u', 'u'), ('g', 'g'), ('r', 'r'), ('i', 'i'), ('z', 'z'))
 
 # Create your models here.
 class Photometry(models.Model):

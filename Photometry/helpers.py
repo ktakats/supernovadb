@@ -12,6 +12,7 @@ def uploadPhotometry(f, sn):
     f=open(UPLOAD_PATH, 'r')
     header=f.readline().split(' ')
     if not header[0]=='MJD':
+        f.close()
         return -1
     filters=[]
     notes=-1
@@ -22,6 +23,10 @@ def uploadPhotometry(f, sn):
             noteindex=i
             break
 
+    if noteindex!=len(header)-1:
+        f.close()
+        return -1
+
     for line in f:
         line=line.split(' ')
         for i,filt in enumerate(filters):
@@ -30,7 +35,7 @@ def uploadPhotometry(f, sn):
             if len(line)<=noteindex:
                 note=''
             else:
-                note=line[noteindex]
+                note=' '.join(line[noteindex:])
             Photometry.objects.create(MJD=float(line[0]), Filter=filt, magnitude=float(line[i*2+1]), mag_error=float(line[i*2+2]), notes=note, sn=sn)
 
     f.close()
