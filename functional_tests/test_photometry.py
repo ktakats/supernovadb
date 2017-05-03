@@ -89,6 +89,31 @@ class PhotometryTest(FunctionalTest):
         body=self.browser.find_element_by_tag_name("body").text
         self.assertNotIn("15.4", body)
 
+
+    def test_user_can_delete_multiple_or_all_photometry_points(self):
+        #Joe goes to the SN page, adds a new SN
+        self.go_to_page_and_log_in()
+        self.add_new_sn()
+
+        #Redirected to the SN's page, Joe notices that here he can keep track of the photometry of the SN
+        self.browser.find_element_by_link_text('Photometry').click()
+
+        #He sees that he can add photometry by uploading a file
+        self.browser.find_element_by_id("id_file").send_keys("/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry.txt")
+        self.browser.find_element_by_id('id_uploadbutton').click()
+
+        #He decides to delete some of it
+        self.browser.find_element_by_css_selector("input[value='212']").click()
+        self.browser.find_element_by_css_selector("input[value='211']").click()
+        self.browser.find_element_by_id("id_deleteselection").click()
+        time.sleep(2)
+        self.browser.find_element_by_id("id_deletebutton").click()
+        body=self.browser.find_element_by_tag_name("body").text
+        self.assertNotIn("212", body)
+
+        
+
+
     def test_user_can_plot_light_curve(self):
         #Joe goes to the SN page, adds a new SN
         self.go_to_page_and_log_in()
