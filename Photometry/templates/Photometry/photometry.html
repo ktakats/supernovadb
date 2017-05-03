@@ -79,6 +79,12 @@ $("#id_plotbutton").on("click", function(){
 function PopupFunction() {
     var popup = document.getElementById("photometryhelp");
     popup.classList.toggle("show");
-}
+  };
+
+function toggle(source) {
+        checkboxes = document.getElementsByName('selection');
+        for(var i in checkboxes)
+            checkboxes[i].checked = source.checked;
+};
 </script>
 {% endblock %}

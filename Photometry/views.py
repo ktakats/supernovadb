@@ -61,9 +61,15 @@ def photometry(request, sn_id, phot_id=None):
     return render_photometry_page(request, sn, form, out=out)
 
 @login_required(login_url="/")
-def deletePhot(request, sn_id, phot_id):
+def deletePhot(request, sn_id):
+    print request.POST
+    photlist=request.POST.getlist('photlist')
+    print photlist
+
     sn=SN.objects.get(id=sn_id)
-    Photometry.objects.filter(id=phot_id).delete()
+    for id in photlist:
+        print id
+        Photometry.objects.filter(id=id).delete()
     form=PhotometryForm()
     return render_photometry_page(request, sn, form)
 
