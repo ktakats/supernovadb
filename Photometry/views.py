@@ -62,7 +62,7 @@ def photometry(request, sn_id, phot_id=None):
 
 @login_required(login_url="/")
 def deletePhot(request, sn_id):
-    photlist=request.POST.getlist('photlist')[0].split(',')
+    photlist=request.POST.getlist('idlist')[0].split(',')
     sn=SN.objects.get(id=sn_id)
     for id in photlist:
         Photometry.objects.filter(id=id).delete()

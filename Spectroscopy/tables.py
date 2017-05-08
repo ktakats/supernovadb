@@ -5,6 +5,9 @@ TEMPLATE_EDITPHOT='<a href="#confirmmodal"  data-toggle="modal" data-id="{{recor
 
 class SpectroscopyTable(tables.Table):
     options=tables.TemplateColumn(TEMPLATE_EDITPHOT, orderable=False)
+    selection = tables.CheckBoxColumn(accessor="pk", attrs = { "th__input":
+                                        {"onclick": "toggle(this)"}},
+                                        orderable=False)
 
     class Meta:
         model=Spectrum

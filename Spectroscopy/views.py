@@ -36,8 +36,11 @@ def spectroscopy(request, sn_id):
     return render(request, 'Spectroscopy/spectroscopy.html', {'sn': sn, 'uploadform': form, 'table': table})
 
 @login_required(login_url='/')
-def delSpectrum(request, sn_id, sp_id):
-    Spectrum.objects.filter(id=sp_id).delete()
+def delSpectrum(request, sn_id):
+    print request.POST
+    idlist=request.POST.getlist('idlist')[0].split(',')
+    for id in idlist:
+        Spectrum.objects.filter(id=id).delete()
     return redirect(reverse('spectroscopy', args=(sn_id,)))
 
 @login_required(login_url='/')

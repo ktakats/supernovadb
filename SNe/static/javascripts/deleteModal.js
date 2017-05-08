@@ -12,7 +12,7 @@ function delModal(sn_id, loc){
     var modal=$(this);
     var link=document.getElementById('id_deleteform');
     link.setAttribute('action', '/sn/'+sn_id+'/'+loc+'/delete/');
-    document.getElementById('id_photlist').setAttribute('value', data)
+    document.getElementById('id_idlist').setAttribute('value', data)
   });
 }
 
