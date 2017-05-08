@@ -23,10 +23,10 @@ def spectroscopy(request, sn_id):
         if request.FILES:
             form=UploadSpectrumForm(request.POST, request.FILES)
             if form.is_valid():
-                #out returns -1 if the file is not correct
+                # out returns -1 if the file is not correct
                 out=uploadSpectrum(request.FILES['file'], sn, request.POST['MJD'], request.POST['notes'])
-                #Sp=Spectrum.objects.filter(sn=sn)
-                #table=SpectroscopyTable(Sp)
+                # Sp=Spectrum.objects.filter(sn=sn)
+                # table=SpectroscopyTable(Sp)
                 return redirect(reverse('spectroscopy', args=(sn.id,)))
             else:
                 return render(request, 'Spectroscopy/spectroscopy.html', {'sn': sn, 'uploadform': form, 'table': table})
@@ -37,7 +37,6 @@ def spectroscopy(request, sn_id):
 
 @login_required(login_url='/')
 def delSpectrum(request, sn_id):
-    print request.POST
     idlist=request.POST.getlist('idlist')[0].split(',')
     for id in idlist:
         Spectrum.objects.filter(id=id).delete()

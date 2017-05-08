@@ -56,27 +56,27 @@ class deletePhotViewTest(UnitTests):
     def test_can_delete_photometry_entry(self):
         sn=self.login_and_create_new_SN()
         phot=Photometry.objects.create(sn=sn, MJD=53003.5, Filter='V', magnitude=16.7, mag_error=0.02, notes="this sn")
-        response=self.client.post('/sn/%d/photometry/delete/' % (sn.id), data={'photlist': [phot.id]})
+        response=self.client.post('/sn/%d/photometry/delete/' % (sn.id), data={'idlist': [phot.id]})
         self.assertEqual(Photometry.objects.count(), 0)
 
     def test_can_delete_multiple_entry(self):
         sn=self.login_and_create_new_SN()
         phot1=Photometry.objects.create(sn=sn, MJD=53003.5, Filter='V', magnitude=16.7, mag_error=0.02, notes="this sn")
         phot2=Photometry.objects.create(sn=sn, MJD=53004.5, Filter='R', magnitude=16.7, mag_error=0.02, notes="this sn")
-        response=self.client.post('/sn/%d/photometry/delete/' % (sn.id), data={'photlist': [str(phot1.id)+','+str(phot2.id)]})
+        response=self.client.post('/sn/%d/photometry/delete/' % (sn.id), data={'idlist': [str(phot1.id)+','+str(phot2.id)]})
         self.assertEqual(Photometry.objects.count(), 0)
 
     def test_after_deletion_redirects_to_photometry_page(self):
         sn=self.login_and_create_new_SN()
         phot=Photometry.objects.create(sn=sn, MJD=53003.5, Filter='V', magnitude=16.7, mag_error=0.02, notes="this sn")
-        response=self.client.post('/sn/%d/photometry/delete/' % (sn.id), data={'photlist': [phot.id]})
+        response=self.client.post('/sn/%d/photometry/delete/' % (sn.id), data={'idlist': [phot.id]})
         self.assertRedirects(response, '/sn/%d/photometry/' % (sn.id))
 
     def test_view_requires_login(self):
         sn=self.login_and_create_new_SN()
         self.client.logout()
         phot=Photometry.objects.create(sn=sn, MJD=53003.5, Filter='V', magnitude=16.7, mag_error=0.02, notes="this sn")
-        response=self.client.post('/sn/%d/photometry/delete/' % (sn.id), data={'photlist': [phot.id]})
+        response=self.client.post('/sn/%d/photometry/delete/' % (sn.id), data={'idlist': [phot.id]})
         self.assertRedirects(response, '/?next=/sn/%d/photometry/delete/' % (sn.id))
         self.assertEqual(Photometry.objects.count(),1)
 

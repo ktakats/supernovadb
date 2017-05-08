@@ -44,7 +44,7 @@ class deleteSpectrumViewTest(UnitTests):
         myfile=open(TEST_SPECTRUM)
         self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': ""})
         sp=Spectrum.objects.first()
-        response=self.client.get('/sn/%d/spectroscopy/delete/' % (sn.id))
+        response=self.client.post('/sn/%d/spectroscopy/delete/' % (sn.id), data={'idlist': [str(sp.id)]})
         self.assertEqual(Spectrum.objects.count(), 0)
         self.assertRedirects(response, '/sn/%d/spectroscopy/' % (sn.id))
 
@@ -54,8 +54,8 @@ class deleteSpectrumViewTest(UnitTests):
         self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': ""})
         sp=Spectrum.objects.first()
         self.client.logout()
-        response=self.client.get('/sn/%d/spectroscopy/delete/%d/' % (sn.id, sp.id))
-        self.assertRedirects(response, '/?next=/sn/%d/spectroscopy/delete/%d/' % (sn.id, sp.id))
+        response=self.client.post('/sn/%d/spectroscopy/delete/' % (sn.id), data={'idlist': [str(sp.id)]})
+        self.assertRedirects(response, '/?next=/sn/%d/spectroscopy/delete/' % (sn.id))
 
 class queryViewTest(UnitTests):
 
