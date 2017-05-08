@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 from SNe.models import SN
 
@@ -11,6 +12,7 @@ class Spectrum(models.Model):
     sn=models.ForeignKey(SN, on_delete=models.CASCADE, related_name='spectroscopy')
     MJD=models.FloatField()
     notes=models.CharField(max_length=200, blank=True)
+    spectrum=ArrayField(ArrayField(models.FloatField()))
 
     def as_dict(self):
         return {
@@ -20,7 +22,7 @@ class Spectrum(models.Model):
     class Meta:
         verbose_name_plural="Spectra"
 
-
+"""
 class SpectrumDataPoint(models.Model):
 
     spectrum=models.ForeignKey(Spectrum, on_delete=models.CASCADE, related_name="datapoint")
@@ -32,3 +34,4 @@ class SpectrumDataPoint(models.Model):
             "wavelength": self.wavelength,
             "flux": self.flux
         }
+"""

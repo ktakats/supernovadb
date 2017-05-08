@@ -44,7 +44,7 @@ class deleteSpectrumViewTest(UnitTests):
         myfile=open(TEST_SPECTRUM)
         self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': ""})
         sp=Spectrum.objects.first()
-        response=self.client.get('/sn/%d/spectroscopy/delete/%d/' % (sn.id, sp.id))
+        response=self.client.get('/sn/%d/spectroscopy/delete/' % (sn.id))
         self.assertEqual(Spectrum.objects.count(), 0)
         self.assertRedirects(response, '/sn/%d/spectroscopy/' % (sn.id))
 

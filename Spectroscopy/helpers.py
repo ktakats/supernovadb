@@ -1,4 +1,5 @@
-from Spectroscopy.models import Spectrum, SpectrumDataPoint
+from Spectroscopy.models import Spectrum
+
 
 UPLOAD_PATH='/home/kati/Dropbox/munka/learning/sn_app/test_tools/uploads/tmp.txt'
 
@@ -10,12 +11,12 @@ def uploadSpectrum(f, sn, mjd, notes):
             destination.write(chunk)
     f=open(UPLOAD_PATH, 'r')
 
-    Sp=Spectrum.objects.create(sn=sn, MJD=mjd, notes=notes)
 
-
+    w=[]
     for line in f:
-        line=line.split(' ')
-        p=SpectrumDataPoint(spectrum=Sp, wavelength=line[0], flux=line[1])
-        p.save()
+        l=line.strip().split(' ')
+        w.append([float(l[0]), float(l[1])])
+
+    Sp=Spectrum.objects.create(sn=sn, MJD=mjd, notes=notes, spectrum=w)
     f.close()
     return 1

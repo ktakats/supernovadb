@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, reverse
 from SNe.models import SN
 from .forms import UploadSpectrumForm
 from .helpers import uploadSpectrum
-from .models import Spectrum, SpectrumDataPoint
+from .models import Spectrum
 from .tables import SpectroscopyTable
 
 import simplejson as json
@@ -49,6 +49,6 @@ def query(request, sn_id):
         spectra=Spectrum.objects.filter(sn=sn)
         spdata=[]
         for obj in spectra:
-            points=SpectrumDataPoint.objects.filter(spectrum=obj)
-            spdata.append({"MJD": obj.MJD, "spectrum": [p.as_dict() for p in points if not math.isnan(p.flux)]})
+            points=obj.spectrum
+            spdata.append({"MJD": obj.MJD, "spectrum": [{"wavelength": p[0], "flux": p[1]} for p in points if not math.isnan(p[1])]})
         return HttpResponse(json.dumps({"data": spdata}))

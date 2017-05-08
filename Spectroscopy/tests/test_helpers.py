@@ -1,6 +1,6 @@
 from django.test import TestCase
 from SNe.models import SN
-from Spectroscopy.models import Spectrum, SpectrumDataPoint
+from Spectroscopy.models import Spectrum
 from django.contrib import auth
 
 User=auth.get_user_model()
@@ -15,6 +15,5 @@ class uploadSpectrumTest(TestCase):
         response=self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': 'test'})
         sp=Spectrum.objects.first()
         self.assertEqual(sp.MJD, 55055.0)
-        p1=SpectrumDataPoint.objects.first()
-        self.assertEqual(p1.wavelength, 3331.2495117188)
+        self.assertEqual(sp.spectrum[0][0], 3331.2495117188)
         self.assertEqual(sp.notes, 'test')
