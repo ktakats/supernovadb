@@ -45,8 +45,9 @@
 <script type="text/javascript" src="{% static 'javascripts/plotSP.js'%}"></script>
 <script type="text/javascript">
 $("#id_plotbutton").on("click", function(){
+  var idlist=getSelectValues('selection');
   var url=window.location.pathname + "query/";
-  $.get(url, function(data){
+  $.get(url, {'ids': idlist}, function(data){
     data=JSON.parse(data);
     plotSpectrum(data);
   });
@@ -66,6 +67,15 @@ function toggle(source) {
         for(var i in checkboxes)
             checkboxes[i].checked = source.checked;
 };
+
+function getSelectValues(checkboxName) {
+  var checkboxes = document.querySelectorAll('input[name="' + checkboxName + '"]:checked'), values = [];
+    Array.prototype.forEach.call(checkboxes, function(el) {
+        values.push(el.value);
+    });
+    return values;
+};
+
 </script>
 
 {% endblock %}

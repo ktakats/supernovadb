@@ -7,7 +7,6 @@ from .models import Spectrum
 from .tables import SpectroscopyTable
 
 import simplejson as json
-from decimal import Decimal
 import math
 
 from django.contrib.auth.decorators import login_required
@@ -44,8 +43,12 @@ def delSpectrum(request, sn_id):
 
 @login_required(login_url='/')
 def query(request, sn_id):
+        idlist=request.GET.getlist('ids[]')
         sn=SN.objects.get(id=sn_id)
-        spectra=Spectrum.objects.filter(sn=sn)
+        if len(idlist)>0:
+            spectra=Spectrum.objects.filter(sn=sn, id__in=idlist)
+        else:
+            spectra=Spectrum.objects.filter(sn=sn)
         spdata=[]
         for obj in spectra:
             points=obj.spectrum
