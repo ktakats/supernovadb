@@ -12,4 +12,4 @@ class PhotometryTable(tables.Table):
 
     class Meta:
         model=Photometry
-        exclude=('sn')
+        exclude=('sn', 'id')

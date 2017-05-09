@@ -5,14 +5,14 @@ from django.contrib.postgres.fields import ArrayField
 
 from SNe.models import SN
 
+
 # Create your models here.
 
 class Spectrum(models.Model):
-
-    sn=models.ForeignKey(SN, on_delete=models.CASCADE, related_name='spectroscopy')
-    MJD=models.FloatField()
-    notes=models.CharField(max_length=200, blank=True)
-    spectrum=ArrayField(ArrayField(models.FloatField()))
+    sn = models.ForeignKey(SN, on_delete=models.CASCADE, related_name='spectroscopy')
+    MJD = models.FloatField()
+    notes = models.CharField(max_length=200, blank=True)
+    spectrum = ArrayField(ArrayField(models.FloatField()))
 
     def as_dict(self):
         return {
@@ -20,7 +20,8 @@ class Spectrum(models.Model):
         }
 
     class Meta:
-        verbose_name_plural="Spectra"
+        verbose_name_plural = "Spectra"
+
 
 """
 class SpectrumDataPoint(models.Model):

@@ -11,4 +11,4 @@ class SpectroscopyTable(tables.Table):
 
     class Meta:
         model=Spectrum
-        exclude=('sn', 'spectrum')
+        exclude=('sn', 'spectrum', 'id')

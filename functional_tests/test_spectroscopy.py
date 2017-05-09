@@ -56,8 +56,8 @@ class SpectroscopyTest(FunctionalTest):
         time.sleep(2)
         self.browser.find_element_by_id("id_deletebutton").click()
         body = self.browser.find_element_by_tag_name("body").text
-        self.assertNotIn('55043.2', body)
-        self.assertIn('55053.3', body)
+        self.assertNotIn('55053.2', body)
+        self.assertIn('55043.2', body)
 
     def test_user_can_delete_multiple_spectra(self):
         # Joe goes to the SN page, adds a new SN

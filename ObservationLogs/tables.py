@@ -13,4 +13,4 @@ class ObsLogTable(tables.Table):
 
     class Meta:
         model=Obs
-        exclude=('sn')
+        exclude=('sn', 'id')

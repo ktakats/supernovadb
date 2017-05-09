@@ -13,13 +13,12 @@
 <form enctype="multipart/form-data" method="post" action="" id="id_uploadspectroscopyform">
   {% csrf_token%}
   {% if uploadform.errors %}
-  <div class="alert alert-danger">
-  {{uploadform.errors.file.as_text}}
-</div>
-  {%endif%}
+    <div class="alert alert-danger">
+        {{uploadform.errors.file.as_text}}
+    </div>
+  {% endif %}
   <p><label for="id_MJD">MJD:</label>{{uploadform.MJD}}</p>
-  <p><label for="id_file">File:</label> <div> <i class="fa fa-question-circle-o" title="{{uploadform.file.help_text | safe}}"></i> {{uploadform.file}}</div>
-  </p>
+  <p><label for="id_file">File:</label> <div> <i class="fa fa-question-circle-o" title="{{uploadform.file.help_text | safe}}"></i> {{uploadform.file}}</div></p>
   <p><label for="id_notes">Notes:</label> {{uploadform.notes}}</p>
 <button type="submit" id="id_uploadbutton">Submit</button>
 </form>
