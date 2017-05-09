@@ -40,7 +40,6 @@ def photometry(request, sn_id, phot_id=None):
             if uploadform.is_valid():
                 #out returns -1 if the file is not correct
                 out=uploadPhotometry(request.FILES['file'], sn)
-
             else:
                 form=PhotometryForm()
                 return render_photometry_page(request, sn, form, uploadform=uploadform, out=out)
