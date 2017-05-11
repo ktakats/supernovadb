@@ -52,7 +52,8 @@ def query(request, sn_id):
         spectra = Spectrum.objects.filter(sn=sn)
     spdata = []
     for obj in spectra:
-        points = obj.spectrum
+        wv=obj.wavelength
+        flux = obj.flux
         spdata.append(
-            {"MJD": obj.MJD, "spectrum": [{"wavelength": p[0], "flux": p[1]} for p in points if not math.isnan(p[1])]})
+            {"MJD": obj.MJD, "spectrum": [{"wavelength": wv[p]/1000., "flux": flux[p]/1000.} for p in range(len(wv)) if not flux[p]==99999]})
     return HttpResponse(dumps({"data": spdata}))

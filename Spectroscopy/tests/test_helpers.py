@@ -15,5 +15,6 @@ class uploadSpectrumTest(TestCase):
         response=self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': 'test'})
         sp=Spectrum.objects.first()
         self.assertEqual(sp.MJD, 55055.0)
-        self.assertEqual(sp.spectrum[0][0], 3331.2495117188)
+        wv=sp.wavelength
+        self.assertEqual(wv[0]/1000., 3331.249)
         self.assertEqual(sp.notes, 'test')

@@ -37,7 +37,7 @@ class PhotometryTest(FunctionalTest):
 
         # After sending the file, the data appears in a table
         body = self.browser.find_element_by_tag_name("body").text
-        self.assertIn('55213.1', body)
+        self.assertIn('55064.4', body)
 
         # He uploads another file, however the format of this is incorrect, so he gets an error
         self.browser.find_element_by_id("id_file").send_keys(

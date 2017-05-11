@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
+from django_mysql.models import ListTextField
+
 
 from SNe.models import SN
 
@@ -12,7 +13,9 @@ class Spectrum(models.Model):
     sn = models.ForeignKey(SN, on_delete=models.CASCADE, related_name='spectroscopy')
     MJD = models.FloatField()
     notes = models.CharField(max_length=200, blank=True)
-    spectrum = ArrayField(ArrayField(models.FloatField()))
+    wavelength=ListTextField(base_field=models.IntegerField())
+    flux=ListTextField(base_field=models.IntegerField())
+    #spectrum = ArrayField(ArrayField(models.FloatField()))
 
     def as_dict(self):
         return {

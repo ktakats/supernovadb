@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'Comments',
     'django_tables2',
     'bootstrap3',
+    'django_mysql',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
