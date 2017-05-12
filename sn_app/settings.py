@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [u'massndb.pythonanywhere.com']
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
