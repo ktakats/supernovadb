@@ -13,8 +13,8 @@ class Spectrum(models.Model):
     sn = models.ForeignKey(SN, on_delete=models.CASCADE, related_name='spectroscopy')
     MJD = models.FloatField()
     notes = models.CharField(max_length=200, blank=True)
-    wavelength=ListTextField(base_field=models.IntegerField())
-    flux=ListTextField(base_field=models.IntegerField())
+    wavelength=ListTextField(base_field=models.IntegerField(), blank=True)
+    flux=ListTextField(base_field=models.IntegerField(), blank=True)
     #spectrum = ArrayField(ArrayField(models.FloatField()))
 
     def as_dict(self):
