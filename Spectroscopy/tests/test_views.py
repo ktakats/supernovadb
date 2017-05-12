@@ -2,10 +2,11 @@ from SNe.tests.base import UnitTests
 from SNe.models import SN
 from Spectroscopy.models import Spectrum
 from django.contrib import auth
+from decouple import config
 
 User=auth.get_user_model()
-TEST_SPECTRUM='/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.txt'
-SECOND_TEST_SPECTRUM='/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum2.txt'
+TEST_SPECTRUM=config('TEST_TOOLS')+'test_spectrum.txt'
+SECOND_TEST_SPECTRUM=config('TEST_TOOLS')+'test_spectrum2.txt'
 
 
 class SpectroscopyViewTest(UnitTests):
