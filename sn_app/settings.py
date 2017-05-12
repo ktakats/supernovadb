@@ -26,8 +26,8 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
 
-SECURE_SSL_REDIRECT = True
-ALLOWED_HOSTS = [u'massndb.pythonanywhere.com']
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', cast=bool)
+ALLOWED_HOSTS = ['localhost', u'massndb.pythonanywhere.com']
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -100,7 +100,10 @@ DATABASES = {
         'PASSWORD': config('DB_PWD'),
         'HOST': config('DB_HOST'),
         'PORT': '',
-    }
+        'TEST': {
+            'NAME': config('TEST_DB_NAME'),
+        },
+    },
 }
 
 
