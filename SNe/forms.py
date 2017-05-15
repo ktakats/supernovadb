@@ -36,7 +36,7 @@ class NewSNForm(forms.models.ModelForm):
         validators=[RegexValidator(regex='^(\+|-?)\d\d:\d\d:\d\d.\d(\d*?)$', message='Incorrect coordinate format'),
         validate_dec])
 
-    coinvestigators=forms.ModelMultipleChoiceField(queryset=None, required=False)
+    coinvestigators=forms.ModelMultipleChoiceField(queryset=None, required=False, label="Co-Is")
     projects=forms.ModelMultipleChoiceField(queryset=None, required=False)
 
 
@@ -48,7 +48,6 @@ class NewSNForm(forms.models.ModelForm):
             'sn_name': 'SN',
             'sntype': 'Type',
             'z': 'z',
-            'coinvestigators': 'Co-Is'
         }
 
         widgets={
@@ -113,24 +112,22 @@ class NewSNForm(forms.models.ModelForm):
 
 
 class NewProjectForm(forms.models.ModelForm):
-    coinvestigators=forms.ModelMultipleChoiceField(queryset=None, required=False)
-    sne=forms.ModelMultipleChoiceField(queryset=None, required=False)
+    coinvestigators=forms.ModelMultipleChoiceField(queryset=None, required=False, label="Co-Is")
+    sne=forms.ModelMultipleChoiceField(queryset=None, required=False, label="SNe")
 
     class Meta:
         model=Project
         fields=["title", "description", "coinvestigators", "sne"]
-        error_messages={
-            'title': {'required': "Give a title to your project"}
-        }
-        labels={
-            'coinvestigators': 'Co-Is',
-            'sne': 'SNe',
-        }
-        widgets={
+
+        widgets = {
             'description': forms.Textarea(attrs={
                 "rows": "4",
                 "cols": "25"
             })
+        }
+
+        error_messages={
+            'title': {'required': "Give a title to your project"}
         }
 
     def __init__(self, *args, **kwargs):
