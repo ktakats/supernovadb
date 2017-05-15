@@ -37,6 +37,7 @@ class NewSNForm(forms.models.ModelForm):
         validate_dec])
 
     coinvestigators=forms.ModelMultipleChoiceField(queryset=None, required=False)
+    projects=forms.ModelMultipleChoiceField(queryset=None, required=False)
 
 
     class Meta:
@@ -81,6 +82,7 @@ class NewSNForm(forms.models.ModelForm):
             if pi:
                 cois=[pi.id]
         self.fields['coinvestigators'].queryset=Users.objects.exclude(id__in=cois)
+        self.fields['projects'].queryset=Project.objects.filter(Q(pi__in=cois) | Q(coinvestigators__in=cois))
 
 
     def save(self, pi, id=None):
@@ -93,6 +95,11 @@ class NewSNForm(forms.models.ModelForm):
         for coi in data['coinvestigators']:
             sn.coinvestigators.add(coi)
         sn.save()
+        if len(data['projects'])>0:
+            for project in data['projects']:
+                p=Project.objects.get(id=project.id)
+                p.sne.add(sn)
+                p.save()
         return sn
 
     def validate_unique(self):

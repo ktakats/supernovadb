@@ -81,6 +81,31 @@ class NewSNFormTest(TestCase):
         sn=SN.objects.first()
         self.assertEqual(sn.coinvestigators.first(), coi)
 
+    def test_can_add_projects(self):
+        user = User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        project1=Project.objects.create(title="Bla", pi=user)
+        project2=Project.objects.create(title="Bla2", pi=user)
+        form=NewSNForm(data={'sn_name': 'SN 2999A', 'ra': '02:34:56.78', 'dec': '-59:53:24.6', 'projects': [project1.id, project2.id]}, user=user)
+        self.assertTrue(form.is_valid())
+        form.save(user)
+        sn=SN.objects.first()
+        self.assertEqual(project1.sne.first(), sn)
+        self.assertEqual(project2.sne.first(), sn)
+
+    def test_only_can_add_projects_where_user_is_investigator(self):
+        user1=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        user2=User.objects.create_user(email='test2@test.com', password="bla", first_name="Test2")
+        project1 = Project.objects.create(title="Bla", pi=user1)
+        project2 = Project.objects.create(title="Bla2", pi=user2)
+        project3=Project.objects.create(title="Bla3", pi=user2)
+        project3.coinvestigators.add(user1)
+        project3.save()
+        form=NewSNForm(user=user1)
+        self.assertIn(project1.title, form.as_p())
+        self.assertNotIn(project2.title, form.as_p())
+        self.assertIn(project3.title, form.as_p())
+
+
     def test_edit_sn_details(self):
         user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         sn=SN.objects.create(sn_name='SN 2999A', pi=user, ra=22.625, dec=65.575)
