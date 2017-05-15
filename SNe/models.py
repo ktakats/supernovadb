@@ -23,6 +23,7 @@ class SN(models.Model):
     host=models.CharField(max_length=20, blank=True, null=True)
     z=models.FloatField(blank=True, null=True)
     comments=models.ManyToManyField(Comment, related_name="sn_comment")
+    archived=models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural="SNe"

@@ -152,6 +152,13 @@ class NewProjectFormTest(TestCase):
         self.assertIn(sn2.sn_name, form.as_p())
         self.assertNotIn(sn3.sn_name, form.as_p())
 
+    def test_sne_doesnot_include_archived_sne(self):
+        user = User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        sn1 = SN.objects.create(sn_name='SN 2999A', pi=user)
+        sn2 = SN.objects.create(sn_name='SN 1999A', pi=user, archived=True)
+        form=NewProjectForm(user=user)
+        self.assertNotIn(sn2.sn_name, form.as_p())
+
     def test_save_form(self):
         user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         user2=User.objects.create_user(email='test2@test.com', password="bla", first_name="Test2")

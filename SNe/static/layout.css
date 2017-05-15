@@ -54,11 +54,20 @@ h1 a {
   position: relative;
 }
 
-.titlediv i{
+.titlediv .fa-pencil{
+  position: absolute;
+  top: 10%;
+  right: 13%;
+  color: #d8d6d6;
+  cursor: pointer;
+}
+
+.titlediv .fa-archive{
   position: absolute;
   top: 10%;
   right: 10%;
   color: #d8d6d6;
+  cursor: pointer;
 }
 
 

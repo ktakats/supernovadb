@@ -42,6 +42,13 @@ class SNModelTest(TestCase):
         sn=SN.objects.create(sn_name='SN 2017A', pi=pi, sntype="II-P", host="NGC 1234", z=0.01)
         self.assertEqual(sn.sntype, "II-P")
 
+    def test_sn_can_be_archived(self):
+        pi = User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        sn = SN.objects.create(sn_name='SN 2017A', pi=pi, sntype="II-P", host="NGC 1234", z=0.01)
+        self.assertFalse(sn.archived)
+        sn.archived=True
+        self.assertTrue(sn.archived)
+
     def test_sn_can_have_comments(self):
         pi=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         sn=SN.objects.create(sn_name='SN 2017A', pi=pi, sntype="II-P", host="NGC 1234", z=0.01)

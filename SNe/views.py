@@ -81,8 +81,15 @@ def edit_sn(request, sn_id):
     return render(request, 'SNe/edit_sn.html', {'form': form})
 
 @login_required(login_url='/')
+def archive_sn(request, sn_id):
+    sn=SN.objects.get(id=sn_id)
+    sn.archived=True
+    sn.save()
+    return redirect(reverse('my_stuff'))
+
+@login_required(login_url='/')
 def my_stuff(request):
-    sne=SN.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user)).distinct()
+    sne=SN.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user)).exclude(archived=True).distinct()
     projects=Project.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user)).distinct()
     return render(request, 'SNe/my_stuff.html', {'sne': sne, 'projects': projects})
 

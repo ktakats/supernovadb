@@ -149,10 +149,8 @@ class NewProjectForm(forms.models.ModelForm):
                 cois=[pi.id]
         self.fields['coinvestigators'].queryset=Users.objects.exclude(id__in=cois)
         #Without distinct returns the same object twice
-        self.fields['sne'].queryset=SN.objects.filter(Q(pi__in=cois) | Q(coinvestigators__in=cois)).exclude(id__in=sn).distinct()
-        #else:
-        #    self.fields['coinvestigators'].queryset=Users.objects.all()
-        #    self.fields['sne'].queryset=SN.objects.all()
+        self.fields['sne'].queryset=SN.objects.filter(Q(pi__in=cois) | Q(coinvestigators__in=cois)).exclude(Q(id__in=sn) | Q(archived=True)).distinct()
+
 
     def save(self, pi, id=None):
         data=self.cleaned_data

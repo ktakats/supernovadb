@@ -78,8 +78,18 @@ class SNPageTest(FunctionalTest):
         self.assertEqual(self.browser.find_element_by_tag_name("h1").text, "SN 1987A")
         self.browser.back()
 
+        #The SN he's done with can be archived
+        self.browser.find_element_by_css_selector(".fa-archive").click()
+        time.sleep(2)
+        self.browser.find_element_by_id("id_confirmbutton").click()
+        # after archiving the SN is not visible on any pages
+        self.browser.find_element_by_link_text("My stuff").click()
+        body=self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('SN 1987A', body)
 
-
+        self.browser.find_element_by_id('btn_new_sn').click()
+        body = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('SN 1987A', body)
 
 class EditSNDataTest(FunctionalTest):
 

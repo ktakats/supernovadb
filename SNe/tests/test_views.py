@@ -151,6 +151,25 @@ class EditSNViewTest(UnitTests):
         response=self.client.get('/sn/%d/edit/' % (sn.id))
         self.assertRedirects(response, '/?next=/sn/%d/edit/' % (sn.id))
 
+class ArchiveSNViewTest(UnitTests):
+
+    def test_view_redirects_to_my_stuff_page(self):
+        sn=self.login_and_create_new_SN()
+        response=self.client.post('/sn/%d/archive/' % (sn.id))
+        self.assertRedirects(response, '/my_stuff/')
+
+    def test_view_archives_sn(self):
+        sn = self.login_and_create_new_SN()
+        response=self.client.post('/sn/%d/archive/' % (sn.id))
+        sn=SN.objects.first()
+        self.assertTrue(sn.archived)
+
+    def test_view_requires_login(self):
+        user = User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        sn = SN.objects.create(sn_name='SN 2017A', pi=user)
+        response = self.client.post('/sn/%d/archive/' % (sn.id))
+        self.assertRedirects(response, '/?next=/sn/%d/archive/' % (sn.id))
+
 class MyStuffViewTest(UnitTests):
 
     def test_view_uses_mysn_template(self):
@@ -162,6 +181,13 @@ class MyStuffViewTest(UnitTests):
         sn=self.login_and_create_new_SN()
         response=self.client.get('/my_stuff/')
         self.assertIn(sn,response.context['sne'])
+
+    def test_view_lists_non_archived_sne(self):
+        sn = self.login_and_create_new_SN()
+        sn.archived=True
+        sn.save()
+        response = self.client.get('/my_stuff/')
+        self.assertNotIn(sn, response.context['sne'])
 
     def test_view_lists_projects(self):
         sn=self.login_and_create_new_SN()
