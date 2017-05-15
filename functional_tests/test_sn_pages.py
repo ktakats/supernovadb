@@ -127,7 +127,7 @@ class EditSNDataTest(FunctionalTest):
 
 class EditProjectDataTest(FunctionalTest):
 
-    def test_user_can_edit_sn_data(self):
+    def test_user_can_edit_project_data(self):
         #Joe goes to the SN site and adds an SN
         self.second_user()
         self.go_to_page_and_log_in()
@@ -158,6 +158,19 @@ class EditProjectDataTest(FunctionalTest):
         self.assertIn("Claudia", body)
         self.assertIn("Our project to study type II-Ps", body)
         self.assertIn("SN 1988A", body)
+
+        #Now he's done with the project and archives it
+        self.browser.find_element_by_css_selector('.fa-archive').click()
+        time.sleep(2)
+        self.browser.find_element_by_id("id_confirmbutton").click()
+        #Now the project is not in the My stuff page
+        self.browser.find_element_by_link_text('My stuff').click()
+        body=self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn("Joe's type II project", body)
+        #And can't be added to SNe either
+        self.browser.find_element_by_id('btn_new_sn').click()
+        body = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn("Joe's type II project", body)
 
 
 

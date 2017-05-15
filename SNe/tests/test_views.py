@@ -196,7 +196,7 @@ class MyStuffViewTest(UnitTests):
         response=self.client.get('/my_stuff/')
         self.assertIn(project, response.context['projects'])
 
-    def test_view_only_shows_related_projects(self):
+    def test_view_only_shows_projects_related_with_user(self):
         sn=self.login_and_create_new_SN()
         project1=Project.objects.create(title="Bla")
         project2=Project.objects.create(title="Bla", pi=User.objects.first())
@@ -204,6 +204,14 @@ class MyStuffViewTest(UnitTests):
         response=self.client.get('/my_stuff/')
         self.assertNotIn(project1, response.context['projects'])
         self.assertIn(project2, response.context['projects'])
+
+    def test_view_doesnot_show_archived_projects(self):
+        sn = self.login_and_create_new_SN()
+        project1 = Project.objects.create(title="Bla1", pi=User.objects.first())
+        project2 = Project.objects.create(title="Bla2", pi=User.objects.first(), archived=True)
+        response=self.client.get('/my_stuff/')
+        self.assertIn(project1, response.context['projects'])
+        self.assertNotIn(project2, response.context['projects'])
 
     def test_can_see_sne_as_coI(self):
         sn=self.login_and_create_new_SN()
@@ -281,6 +289,28 @@ class EditProjectViewTest(UnitTests):
         project=Project.objects.create(title="Bla", description="blabla", pi=User.objects.first())
         response=self.client.post('/projects/%d/edit/' % (project.id), data={'title': "Blabla", 'description': "blabla"})
         self.assertRedirects(response, '/projects/%d/' % (project.id))
+
+class ArchiveProjectViewTest(UnitTests):
+
+    def test_view_redirects_to_my_stuff(self):
+        sn=self.login_and_create_new_SN()
+        project = Project.objects.create(title="Bla", description="blabla", pi=User.objects.first())
+        response=self.client.post('/projects/%d/archive/' % (project.id))
+        self.assertRedirects(response, '/my_stuff/')
+
+    def test_view_archives_project(self):
+        sn = self.login_and_create_new_SN()
+        project = Project.objects.create(title="Bla", description="blabla", pi=User.objects.first())
+        response = self.client.post('/projects/%d/archive/' % (project.id))
+        project=Project.objects.first()
+        self.assertTrue(project.archived)
+
+    def test_view_requires_login(self):
+        user = User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        project = Project.objects.create(title="Bla", description="blabla", pi=User.objects.first())
+        response = self.client.post('/projects/%d/archive/' % (project.id))
+        self.assertRedirects(response, '/?next=/projects/%d/archive/' % (project.id))
+
 
 class SNCommentsViewTest(UnitTests):
 

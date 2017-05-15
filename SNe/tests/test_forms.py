@@ -105,6 +105,13 @@ class NewSNFormTest(TestCase):
         self.assertNotIn(project2.title, form.as_p())
         self.assertIn(project3.title, form.as_p())
 
+    def test_only_can_add_project_that_are_not_archived(self):
+        user = User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
+        project1 = Project.objects.create(title="Bla", pi=user)
+        project2 = Project.objects.create(title="Bla2", pi=user, archived=True)
+        form=NewSNForm(user=user)
+        self.assertIn(project1.title, form.as_p())
+        self.assertNotIn(project2.title, form.as_p())
 
     def test_edit_sn_details(self):
         user=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")

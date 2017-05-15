@@ -81,8 +81,10 @@ class NewSNForm(forms.models.ModelForm):
         else:
             if pi:
                 cois=[pi.id]
+        #Don't show users that are already PI or Co-Is
         self.fields['coinvestigators'].queryset=Users.objects.exclude(id__in=cois)
-        self.fields['projects'].queryset=Project.objects.filter(Q(pi__in=cois) | Q(coinvestigators__in=cois))
+        #Only show projects where the user is PI or Co-I
+        self.fields['projects'].queryset=Project.objects.filter(Q(pi__in=cois) | Q(coinvestigators__in=cois)).exclude(archived=True)
 
 
     def save(self, pi, id=None):

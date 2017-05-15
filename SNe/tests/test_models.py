@@ -90,6 +90,13 @@ class ProjectModelTest(TestCase):
         project=Project.objects.create(title="Bla")
         self.assertEqual(project.get_absolute_url(), '/projects/%d/' % (project.id))
 
+    def test_project_can_be_archived(self):
+        project = Project.objects.create(title="Bla")
+        self.assertFalse(project.archived)
+        project.archived=True
+        project.save()
+        self.assertTrue(project.archived)
+
     def test_project_can_have_comments(self):
         pi=User.objects.create_user(email='test@test.com', password="bla", first_name="Test")
         project=Project.objects.create(title="Bla", pi=pi)

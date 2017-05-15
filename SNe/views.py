@@ -90,7 +90,7 @@ def archive_sn(request, sn_id):
 @login_required(login_url='/')
 def my_stuff(request):
     sne=SN.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user)).exclude(archived=True).distinct()
-    projects=Project.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user)).distinct()
+    projects=Project.objects.filter(Q(pi=request.user) | Q(coinvestigators=request.user)).exclude(archived=True).distinct()
     return render(request, 'SNe/my_stuff.html', {'sne': sne, 'projects': projects})
 
 @login_required(login_url="/")
@@ -126,3 +126,10 @@ def edit_project(request, project_id):
             return redirect(project.get_absolute_url())
     form=NewProjectForm(instance=project)
     return render(request, 'SNe/edit_project.html', {'form': form})
+
+@login_required(login_url='/')
+def archive_project(request, project_id):
+    project=Project.objects.get(id=project_id)
+    project.archived=True
+    project.save()
+    return redirect(reverse('my_stuff'))

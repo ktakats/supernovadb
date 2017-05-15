@@ -1,7 +1,7 @@
 {% extends 'SNe/layout.html' %}
 
 {% block title %}{{project.title}}{% endblock %}
-{%block options%}<a href="{%url 'edit_project' project.id%}" title="Edit the details of this project"><i class="fa fa-pencil"></i></a>{%endblock%}
+{%block options%}<a href="{%url 'edit_project' project.id%}" title="Edit the details of this project"><i class="fa fa-pencil"></i></a> <a href="#confirm" data-toggle="modal" title="Archive this project (Doesn't archive the SNe)"><i class="fa fa-archive"></i></a>{%endblock%}
 {% block content %}
 
 <p><b>Description:</b> {{project.description}}</p>
@@ -28,6 +28,25 @@
       </ul>
     </div>
   </div>
+</div>
+
+<div id="confirm" class="modal fade" role=dialog>
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h3>Are you sure you want archive this project?</h3>
+        <form method="POST" action="/projects/{{project.id}}/archive/" id="id_confirm">
+          {%csrf_token%}
+        <button type="submit" id="id_confirmbutton">OK</button></form>
+        <a href="#" data-dismiss="modal" class="btn btn-default">Cancel</a>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 {%include "Comments/comments.html" with comments=project.comments.all form=commentform%}

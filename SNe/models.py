@@ -40,6 +40,7 @@ class Project(models.Model):
     coinvestigators=models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="project_coi")
     sne=models.ManyToManyField(SN, related_name="project_sne")
     comments=models.ManyToManyField(Comment, related_name="project_comment")
+    archived=models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('view_project', args=[self.id])
