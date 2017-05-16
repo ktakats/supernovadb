@@ -93,6 +93,13 @@ class SNViewTest(UnitTests):
         response=self.client.get('/sn/%d/' % (sn.id))
         self.assertContains(response, "id_comment")
 
+    def test_view_shows_projects(self):
+        sn=self.login_and_create_new_SN()
+        project=Project.objects.create(title="Bla", description="bla")
+        project.sne.add(sn)
+        project.save()
+        response=self.client.get('/sn/%d/' % (sn.id))
+        self.assertIn(project, response.context['projects'])
 
 class AddNewSNViewTest(UnitTests):
 

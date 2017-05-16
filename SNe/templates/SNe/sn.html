@@ -29,7 +29,12 @@
           {% for coi in sn.coinvestigators.all %}
           <li> {{coi.first_name}}</li>
           {% endfor %}
-        </ul></div>
+      </ul></div> </br>
+        <li class="coili"><b>Projects: </b></li><div class="coicolumn"><ul class="list-unstyled coilist">
+        {% for project in projects %}
+          <li><a href="{{project.get_absolute_url}}">{{project.title}}</a></li>
+        {% endfor %}
+      </ul></div>
       </ul>
   </div>
 </div>

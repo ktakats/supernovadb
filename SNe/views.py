@@ -64,8 +64,9 @@ def view_sn(request, sn_id):
             sn.save()
             return redirect(reverse('view_sn', args=(sn_id,)))
     ra, dec=convert_coords_to_string(sn.ra, sn.dec)
+    projects=Project.objects.filter(sne=sn).exclude(archived=True)
     commentform=CommentForm()
-    return render(request, 'SNe/sn.html', {'sn': sn, 'ra': ra, 'dec': dec, 'commentform': commentform})
+    return render(request, 'SNe/sn.html', {'sn': sn, 'ra': ra, 'dec': dec, 'projects': projects, 'commentform': commentform})
 
 @login_required(login_url='/')
 def edit_sn(request, sn_id):

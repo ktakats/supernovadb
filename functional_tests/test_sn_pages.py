@@ -53,6 +53,8 @@ class NewSNPageTest(FunctionalTest):
         error=self.browser.find_element_by_css_selector('.errorlist')
         self.assertEqual(error.text, 'This SN is already registered')
 
+
+
 class SNPageTest(FunctionalTest):
 
     def test_SN_page_functions(self):
@@ -90,6 +92,25 @@ class SNPageTest(FunctionalTest):
         self.browser.find_element_by_id('btn_new_sn').click()
         body = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('SN 1987A', body)
+
+    def test_user_can_see_projects_associated_with_sn(self):
+        # There's a new app for SNe! Joe goes and checks it out
+        self.second_user()
+        self.go_to_page_and_log_in()
+        #he creates an sn
+        self.add_new_sn()
+        #and a project
+        self.add_new_project()
+        #he goes to the SN's page and sees the project there
+        self.browser.find_element_by_link_text("My stuff").click()
+        self.browser.find_element_by_link_text("SN 1987A").click()
+        body=self.browser.find_element_by_tag_name('body').text
+        self.assertIn("Joe's type II project", body)
+
+        # clicking on the project takes the user to the project page
+        self.browser.find_element_by_link_text("Joe's type II project").click()
+        h1=self.browser.find_element_by_tag_name('h1').text
+        self.assertEqual(h1, "Joe's type II project")
 
 class EditSNDataTest(FunctionalTest):
 
