@@ -28,7 +28,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser=webdriver.Chrome("/usr/lib/chromium-browser/chromedriver")
-        self.browser.implicitly_wait(5)
+        self.browser.implicitly_wait(20)
 
     def tearDown(self):
         self.browser.quit()
