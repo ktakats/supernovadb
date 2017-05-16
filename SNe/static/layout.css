@@ -73,27 +73,27 @@ h1 a {
 
 /*forms*/
 
-#id_new_sn_form, #id_obslogform, #id_photometryform, #id_uploadphotometryform, #id_uploadspectroscopyform, #id_add_project_form, #id_comment_form, #id_edit_project_form, #id_edit_sn_form {
+#id_new_sn_form, #id_obslogform, #id_photometryform, #id_uploadphotometryform, #id_uploadspectroscopyform, #id_add_project_form, #id_comment_form, #id_edit_project_form, #id_edit_sn_form, #id_loginform {
   width: 80%;
   margin: 5% auto;
 }
 
-#id_new_sn_form label, input, #id_obslogform label, input, select, #id_photometryform label, input, #id_uploadphotometryform input, textarea, #id_uploadspectroscopyform label, input, textarea,i,input[type="file"], #id_add_project_form label, input, select, #id_comment_form textarea, #id_edit_project_form label, input, textarea, select, #id_edit_sn_form label, input, textarea, select {
+#id_new_sn_form label, input, #id_obslogform label, input, select, #id_photometryform label, input, #id_uploadphotometryform input, textarea, #id_uploadspectroscopyform label, input, textarea,i,input[type="file"], #id_add_project_form label, input, select, #id_comment_form textarea, #id_edit_project_form label, input, textarea, select, #id_edit_sn_form label, input, textarea, select,#id_loginform input {
   display: inline-block;
 }
 
-#id_new_sn_form label, #id_obslogform label,  #id_photometryform label, #id_uploadphotometryform label, #id_uploadspectroscopyform label, #id_add_project_form label, #id_comment_form label, #id_edit_project_form label, #id_edit_sn_form label {
+#id_new_sn_form label, #id_obslogform label,  #id_photometryform label, #id_uploadphotometryform label, #id_uploadspectroscopyform label, #id_add_project_form label, #id_comment_form label, #id_edit_project_form label, #id_edit_sn_form label, #id_loginform label {
   width: 20%;
   float: left;
   text-align: right;
 }
 
-#id_new_sn_form label +input, #id_obslogform label + input, label+select, #id_photometryform label+input, #id_uploadphotometryform label+input, label+textarea, #id_uploadspectroscopyform label+input, label+textarea, label+input[type="file"], #id_add_project_form label+input, label+select, #id_comment_form label+textarea, #id_edit_project_form label+input, label+textarea, label+select, #id_edit_sn_form label+input, label+textarea, label+select {
+#id_new_sn_form label +input, #id_obslogform label + input, label+select, #id_photometryform label+input, #id_uploadphotometryform label+input, label+textarea, #id_uploadspectroscopyform label+input, label+textarea, label+input[type="file"], #id_add_project_form label+input, label+select, #id_comment_form label+textarea, #id_edit_project_form label+input, label+textarea, label+select, #id_edit_sn_form label+input, label+textarea, label+select,#id_loginform label+input {
     width: 61%;
     margin: 0 15% 0 2%;
 }
 
-/*login form*/
+/*login form
 #id_loginform {
   width: 60%;
   margin: 5% auto;
@@ -111,7 +111,7 @@ h1 a {
    width: 51%;
     margin: 0 15% 0 2%;
 }
-
+*/
 
 /* table*/
 .table-container {

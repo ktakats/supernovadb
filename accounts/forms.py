@@ -17,6 +17,10 @@ class LoginForm(forms.models.ModelForm):
             'email': {'required': 'Please provide your email address'}
         }
 
+        labels={
+            'email': "Email"
+        }
+
 
     def clean(self):
         email=self.cleaned_data.get('email')
