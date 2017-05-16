@@ -18,11 +18,11 @@ class SN(models.Model):
     ra=models.FloatField(default=0.0)
     dec=models.FloatField(default=0.0)
     pi=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="pi")
-    coinvestigators=models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="coinvestigator")
+    coinvestigators=models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="coinvestigator", blank=True, null=True)
     sntype=models.CharField(max_length=5, blank=True, null=True)
     host=models.CharField(max_length=20, blank=True, null=True)
     z=models.FloatField(blank=True, null=True)
-    comments=models.ManyToManyField(Comment, related_name="sn_comment")
+    comments=models.ManyToManyField(Comment, related_name="sn_comment", blank=True, null=True)
     archived=models.BooleanField(default=False)
 
     class Meta:
@@ -37,9 +37,9 @@ class Project(models.Model):
     title=models.CharField(max_length=100, blank=False)
     description=models.CharField(max_length=500)
     pi=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="project_pi", null=True)
-    coinvestigators=models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="project_coi")
-    sne=models.ManyToManyField(SN, related_name="project_sne")
-    comments=models.ManyToManyField(Comment, related_name="project_comment")
+    coinvestigators=models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="project_coi", null=True, blank=True)
+    sne=models.ManyToManyField(SN, related_name="project_sne", blank=True, null=True)
+    comments=models.ManyToManyField(Comment, related_name="project_comment", blank=True, null=True)
     archived=models.BooleanField(default=False)
 
     def get_absolute_url(self):

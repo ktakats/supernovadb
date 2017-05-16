@@ -13,7 +13,7 @@ class Photometry(models.Model):
     Filter=models.CharField(max_length=2, choices=FILTERCHOICES)
     magnitude=models.FloatField()
     mag_error=models.FloatField()
-    notes=models.CharField(max_length=200, blank=True)
+    notes=models.CharField(max_length=200, blank=True, null=True)
 
     def as_dict(self):
         return {

@@ -8,11 +8,11 @@ class Obs(models.Model):
 
     sn=models.ForeignKey(SN, on_delete=models.CASCADE, related_name='observations')
     obs_date=models.DateTimeField()
-    obs_type=models.CharField(max_length=1, choices=(('S', 'Spectroscopy'), ('P', 'Photometry'), ('O', 'Other')), blank=True)
-    telescope=models.CharField(max_length=100)
-    instrument=models.CharField(max_length=100, blank=True)
-    setup=models.CharField(max_length=100, blank=True)
-    notes=models.CharField(max_length=200, blank=True)
+    obs_type=models.CharField(max_length=1, choices=(('S', 'Spectroscopy'), ('P', 'Photometry'), ('O', 'Other')), blank=True, null=True)
+    telescope=models.CharField(max_length=100, blank=True, null=True)
+    instrument=models.CharField(max_length=100, blank=True, null=True)
+    setup=models.CharField(max_length=100, blank=True, null=True)
+    notes=models.CharField(max_length=200, blank=True, null=True)
 
     class Meta:
         verbose_name_plural="Observations"
