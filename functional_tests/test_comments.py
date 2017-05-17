@@ -15,7 +15,6 @@ class CommentsTest(FunctionalTest):
 
         #The page refreshes, and he can see his comment, together with his name and the current time
         pub_time=datetime.now()
-        time.sleep(10)
         comment=self.browser.find_element_by_css_selector(".comments").text
         self.assertIn("Joe", comment)
         self.assertIn("I added this SN", comment)
