@@ -96,12 +96,11 @@ class PhotometryTest(FunctionalTest):
 
         # Redirected to the SN's page, Joe notices that here he can keep track of the photometry of the SN
         self.browser.find_element_by_link_text('Photometry').click()
-
+        self.fail()
         # He sees that he can add photometry by uploading a file
         self.browser.find_element_by_id("id_file").send_keys(
             "/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry.txt")
         self.browser.find_element_by_id('id_uploadbutton').click()
-        self.fail()
         time.sleep(10)
 
         # He decides to delete some of it
