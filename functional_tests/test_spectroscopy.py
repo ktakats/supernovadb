@@ -1,6 +1,8 @@
 from .base import FunctionalTest
 import time
+from decouple import config
 
+TEST_TOOLS_PATH=config('TEST_TOOLS')
 
 class SpectroscopyTest(FunctionalTest):
     def test_user_can_add_and_remove_reduced_spectrum_at_spectra_page(self):
@@ -18,7 +20,7 @@ class SpectroscopyTest(FunctionalTest):
         # Here he sees a form to submit a spectra as a file
         self.browser.find_element_by_id("id_MJD").send_keys("55043.2")
         self.browser.find_element_by_id("id_file").send_keys(
-            "/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.txt")
+            TEST_TOOLS_PATH + "test_spectrum.txt")
         self.browser.find_element_by_id("id_notes").send_keys("test spectrum")
         self.browser.find_element_by_id('id_uploadbutton').click()
 
@@ -31,14 +33,14 @@ class SpectroscopyTest(FunctionalTest):
         # He uploads another spectrum
         self.browser.find_element_by_id("id_MJD").send_keys("55053.3")
         self.browser.find_element_by_id("id_file").send_keys(
-            "/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum2.txt")
+            TEST_TOOLS_PATH + "test_spectrum2.txt")
         self.browser.find_element_by_id("id_notes").send_keys("Second test spectrum")
         self.browser.find_element_by_id('id_uploadbutton').click()
 
         # He tries to upload a pdf
         self.browser.find_element_by_id("id_MJD").send_keys("55053.3")
         self.browser.find_element_by_id("id_file").send_keys(
-            "/home/kati/Dropbox/munka/learning/sn_app/test_tools/test.pdf")
+            TEST_TOOLS_PATH + "test.pdf")
         self.browser.find_element_by_id("id_notes").send_keys("Thirs test spectrum")
         self.browser.find_element_by_id('id_uploadbutton').click()
         body = self.browser.find_element_by_tag_name("body").text
@@ -74,14 +76,14 @@ class SpectroscopyTest(FunctionalTest):
         # Here he sees a form to submit a spectra as a file
         self.browser.find_element_by_id("id_MJD").send_keys("55043.2")
         self.browser.find_element_by_id("id_file").send_keys(
-            "/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum.txt")
+            TEST_TOOLS_PATH + "test_spectrum.txt")
         self.browser.find_element_by_id("id_notes").send_keys("test spectrum")
         self.browser.find_element_by_id('id_uploadbutton').click()
 
         # He uploads another spectrum
         self.browser.find_element_by_id("id_MJD").send_keys("55053.3")
         self.browser.find_element_by_id("id_file").send_keys(
-            "/home/kati/Dropbox/munka/learning/sn_app/test_tools/test_spectrum2.txt")
+            TEST_TOOLS_PATH + "test_spectrum2.txt")
         self.browser.find_element_by_id("id_notes").send_keys("Second test spectrum")
         self.browser.find_element_by_id('id_uploadbutton').click()
 

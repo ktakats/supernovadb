@@ -1,5 +1,6 @@
 from .base import FunctionalTest
 import time
+from decouple import config
 
 TEST_TOOLS_PATH=config('TEST_TOOLS')
 
