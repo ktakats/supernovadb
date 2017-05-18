@@ -1,6 +1,7 @@
 from .base import FunctionalTest
 import time
 
+TEST_TOOLS_PATH=config('TEST_TOOLS')
 
 class PhotometryTest(FunctionalTest):
     def test_user_can_add_photometric_point_to_light_curve_log(self):
@@ -32,7 +33,7 @@ class PhotometryTest(FunctionalTest):
 
         # He sees that he can add photometry by uploading a file
         self.browser.find_element_by_id("id_file").send_keys(
-            "/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry.txt")
+            TEST_TOOLS_PATH + "photometry.txt")
         self.browser.find_element_by_id('id_uploadbutton').click()
 
         # After sending the file, the data appears in a table
@@ -41,14 +42,14 @@ class PhotometryTest(FunctionalTest):
 
         # He uploads another file, however the format of this is incorrect, so he gets an error
         self.browser.find_element_by_id("id_file").send_keys(
-            "/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry_incorrect.txt")
+            TEST_TOOLS_PATH + "photometry_incorrect.txt")
         self.browser.find_element_by_id('id_uploadbutton').click()
         body = self.browser.find_element_by_tag_name("body").text
         self.assertIn("The file format is incorrect. Please check the requirements", body)
 
         # He tries to upload a wrong file type
         self.browser.find_element_by_id("id_file").send_keys(
-            "/home/kati/Dropbox/munka/learning/sn_app/test_tools/test.pdf")
+            TEST_TOOLS_PATH +"test.pdf")
         self.browser.find_element_by_id('id_uploadbutton').click()
         body = self.browser.find_element_by_tag_name("body").text
         self.assertIn("Incorrect file type", body)
@@ -96,10 +97,10 @@ class PhotometryTest(FunctionalTest):
 
         # Redirected to the SN's page, Joe notices that here he can keep track of the photometry of the SN
         self.browser.find_element_by_link_text('Photometry').click()
-        self.fail()
+
         # He sees that he can add photometry by uploading a file
         self.browser.find_element_by_id("id_file").send_keys(
-            "/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry.txt")
+            TEST_TOOLS_PATH + "photometry.txt")
         self.browser.find_element_by_id('id_uploadbutton').click()
         time.sleep(10)
 
@@ -119,7 +120,7 @@ class PhotometryTest(FunctionalTest):
         # He uploads his photometry file
         self.browser.find_element_by_link_text('Photometry').click()
         self.browser.find_element_by_id("id_file").send_keys(
-            "/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry_incorrect.txt")
+            TEST_TOOLS_PATH + "photometry_incorrect.txt")
         self.browser.find_element_by_id('id_uploadbutton').click()
         time.sleep(10)
 
