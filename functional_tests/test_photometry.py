@@ -101,6 +101,7 @@ class PhotometryTest(FunctionalTest):
         self.browser.find_element_by_id("id_file").send_keys(
             "/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry.txt")
         self.browser.find_element_by_id('id_uploadbutton').click()
+        time.sleep(10)
 
         # He decides to delete some of it
         self.browser.find_element_by_css_selector(".selection").click()
@@ -120,6 +121,7 @@ class PhotometryTest(FunctionalTest):
         self.browser.find_element_by_id("id_file").send_keys(
             "/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry_incorrect.txt")
         self.browser.find_element_by_id('id_uploadbutton').click()
+        time.sleep(10)
 
         # He sees a button promising to plot the light curve
         self.browser.find_element_by_id("id_plotbutton").click()
