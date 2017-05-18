@@ -101,6 +101,7 @@ class PhotometryTest(FunctionalTest):
         self.browser.find_element_by_id("id_file").send_keys(
             "/home/kati/Dropbox/munka/learning/sn_app/test_tools/photometry.txt")
         self.browser.find_element_by_id('id_uploadbutton').click()
+        self.fail()
         time.sleep(10)
 
         # He decides to delete some of it
