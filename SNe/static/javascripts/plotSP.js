@@ -1,3 +1,36 @@
+$("#id_plotbutton").on("click", function(){
+  var idlist=getSelectValues('selection');
+  var url=window.location.pathname + "query/";
+  $.get(url, {'ids': idlist}, function(data){
+    data=JSON.parse(data);
+    plotSpectrum(data);
+  });
+
+  if($(".SP").is(":visible")){
+    $(".SP").hide();
+    $(this).text("Plot spectra");
+  }
+  else{
+    $(".SP").show();
+    $(this).text("Hide spectra");
+  }
+})
+
+function toggle(source) {
+        checkboxes = document.getElementsByName('selection');
+        for(var i in checkboxes)
+            checkboxes[i].checked = source.checked;
+};
+
+function getSelectValues(checkboxName) {
+  var checkboxes = document.querySelectorAll('input[name="' + checkboxName + '"]:checked'), values = [];
+    Array.prototype.forEach.call(checkboxes, function(el) {
+        values.push(el.value);
+    });
+    return values;
+};
+
+//Plot spectra
 function plotSpectrum(indata){
   data=indata.data;
   d3.selectAll('.SP svg').remove();

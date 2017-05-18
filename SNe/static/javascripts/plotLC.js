@@ -1,3 +1,35 @@
+$("#id_plotbutton").on("click", function(){
+  var url=window.location.pathname + "query/";
+  console.log(url)
+  $.get(url, function(data){
+    data=JSON.parse(data);
+    plotCurve(data);
+  });
+
+  if($(".LC").is(":visible")){
+    $(".LC").hide();
+    $(this).text("Plot light curve");
+  }
+  else{
+    $(".LC").show();
+    $(this).text("Hide light curve");
+  }
+});
+
+// When the user clicks on <div>, open the popup
+function PopupFunction() {
+    var popup = document.getElementById("photometryhelp");
+    popup.classList.toggle("show");
+  };
+
+function toggle(source) {
+        checkboxes = document.getElementsByName('selection');
+        for(var i in checkboxes)
+            checkboxes[i].checked = source.checked;
+};
+
+//Plotting the light curve
+
 function plotCurve(indata){
 
   /*Get data from input*/
