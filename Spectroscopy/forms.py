@@ -1,10 +1,15 @@
 from django import forms
 from django.core.exceptions import ValidationError
+import magic
+
+ALLOWED_FILE_TYPES=["text/plain"]
 
 class UploadSpectrumForm(forms.Form):
 
     def validate_file_type(file):
-        if file.content_type!="text/plain":
+        file.seek(0)
+        file_type = magic.from_buffer(file.read(1024), mime=True)
+        if file_type not in ALLOWED_FILE_TYPES:
             raise ValidationError("Incorrect file type")
 
     MJD=forms.DecimalField(max_digits=7, decimal_places=2)

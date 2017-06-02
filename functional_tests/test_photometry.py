@@ -49,11 +49,36 @@ class PhotometryTest(FunctionalTest):
         self.assertIn("The file format is incorrect. Please check the requirements", body)
 
         # He tries to upload a wrong file type
-        self.browser.find_element_by_id("id_file").send_keys(
-            TEST_TOOLS_PATH +"test.pdf")
+        self.browser.find_element_by_id("id_file").send_keys(TEST_TOOLS_PATH +"test.pdf")
         self.browser.find_element_by_id('id_uploadbutton').click()
         body = self.browser.find_element_by_tag_name("body").text
         self.assertIn("Incorrect file type", body)
+
+    def test_user_can_use_different_ascii_file_types(self):
+        # Joe goes to the SN page, adds a new SN
+        self.go_to_page_and_log_in()
+        self.add_new_sn()
+
+        # Redirected to the SN's page, Joe notices that here he can keep track of the photometry of the SN
+        self.browser.find_element_by_link_text('Photometry').click()
+
+        # He tries to upload a *txt file
+        self.browser.find_element_by_id("id_file").send_keys(TEST_TOOLS_PATH + "photometry.txt")
+        self.browser.find_element_by_id('id_uploadbutton').click()
+        body = self.browser.find_element_by_tag_name("body").text
+        self.assertNotIn("Incorrect file type", body)
+
+        #He tries to upload a *dat file
+        self.browser.find_element_by_id("id_file").send_keys(TEST_TOOLS_PATH + "photometry.dat")
+        self.browser.find_element_by_id('id_uploadbutton').click()
+        body = self.browser.find_element_by_tag_name("body").text
+        self.assertNotIn("Incorrect file type", body)
+
+        #He tries to upload a *ascii file
+        self.browser.find_element_by_id("id_file").send_keys(TEST_TOOLS_PATH + "photometry.ascii")
+        self.browser.find_element_by_id('id_uploadbutton').click()
+        body = self.browser.find_element_by_tag_name("body").text
+        self.assertNotIn("Incorrect file type", body)
 
     def test_user_can_edit_and_delete_photometric_point(self):
         # Joe goes to the SN page, adds a new SN

@@ -61,6 +61,38 @@ class SpectroscopyTest(FunctionalTest):
         self.assertIn('55053.3', body)
         self.assertNotIn('55043.2', body)
 
+    def test_user_can_use_different_file_extensions(self):
+        # Joe goes to the SN page, adds a new SN
+        self.go_to_page_and_log_in()
+        self.add_new_sn()
+
+        # He tries to add a *txt file
+        self.browser.find_element_by_link_text('Spectroscopy').click()
+        # He uploads another spectrum
+        self.browser.find_element_by_id("id_MJD").send_keys("55053.3")
+        self.browser.find_element_by_id("id_file").send_keys(TEST_TOOLS_PATH + "test_spectrum2.txt")
+        self.browser.find_element_by_id("id_notes").send_keys("Second test spectrum")
+        self.browser.find_element_by_id('id_uploadbutton').click()
+        body = self.browser.find_element_by_tag_name("body").text
+        self.assertNotIn("Incorrect file type", body)
+
+        #He tries to add a *dat file
+        self.browser.find_element_by_id("id_MJD").send_keys("55053.3")
+        self.browser.find_element_by_id("id_file").send_keys(TEST_TOOLS_PATH + "test_spectrum2.dat")
+        self.browser.find_element_by_id("id_notes").send_keys("Second test spectrum")
+        self.browser.find_element_by_id('id_uploadbutton').click()
+        body = self.browser.find_element_by_tag_name("body").text
+        self.assertNotIn("Incorrect file type", body)
+
+        #And an ascii one
+        self.browser.find_element_by_id("id_MJD").send_keys("55053.3")
+        self.browser.find_element_by_id("id_file").send_keys(TEST_TOOLS_PATH + "test_spectrum2.ascii")
+        self.browser.find_element_by_id("id_notes").send_keys("Second test spectrum")
+        self.browser.find_element_by_id('id_uploadbutton').click()
+        body = self.browser.find_element_by_tag_name("body").text
+        self.assertNotIn("Incorrect file type", body)
+
+
     def test_user_can_delete_multiple_spectra(self):
         # Joe goes to the SN page, adds a new SN
         self.go_to_page_and_log_in()
