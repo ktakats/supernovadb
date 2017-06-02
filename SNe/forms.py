@@ -42,16 +42,22 @@ class NewSNForm(forms.models.ModelForm):
 
     class Meta:
         model=SN
-        fields=['sn_name', 'sntype', 'host', 'z', 'coinvestigators']
+        fields=['sn_name', 'sntype', 'host', 'z', 'reference_date', 'coinvestigators']
 
         labels={
             'sn_name': 'SN',
             'sntype': 'Type',
+            'reference_date': 'Ref. date',
             'z': 'z',
         }
 
+        help_texts={
+            'reference_date': 'Discovery date, explosion date etc. Use MJD!'
+        }
+
         widgets={
-            'z': forms.TextInput()
+            'z': forms.TextInput(),
+            'reference_date': forms.TextInput(attrs={'placeholder': 'e.g.: 55060.0 (discovery)'})
         }
 
         error_messages={
@@ -89,7 +95,7 @@ class NewSNForm(forms.models.ModelForm):
     def save(self, pi, id=None):
         data=self.cleaned_data
         coords=SkyCoord(data['ra'], data['dec'], unit=(u.hourangle, u.deg))
-        sn=SN(sn_name=data['sn_name'], ra=coords.ra.deg, dec=coords.dec.deg, pi=pi, sntype=data['sntype'], host=data['host'], z=data['z'])
+        sn=SN(sn_name=data['sn_name'], ra=coords.ra.deg, dec=coords.dec.deg, pi=pi, sntype=data['sntype'], host=data['host'], z=data['z'], reference_date=data['reference_date'])
         if not id==None:
             sn.id=id
         sn.save()

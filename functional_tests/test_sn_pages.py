@@ -21,13 +21,17 @@ class NewSNPageTest(FunctionalTest):
         self.browser.find_element_by_id("id_sntype").send_keys('II-P')
         self.browser.find_element_by_id("id_host").send_keys('NGC 1234')
         self.browser.find_element_by_id("id_coinvestigators").send_keys("Claudia")
-        self.browser.find_element_by_id("id_z").send_keys("0.01\n")
+        self.browser.find_element_by_id("id_z").send_keys("0.01")
+        self.browser.find_element_by_id("id_reference_date").send_keys("55060.0 (discovery)\n")
 
         #It brings him to the newly created page of the SN, that shows the coordinates too
         title=self.browser.find_element_by_css_selector('h1').text
         body=self.browser.find_element_by_tag_name('body').text
         self.assertIn('SN 1987A', title)
         self.assertIn('05:35:27.99', body)
+        self.assertIn('NGC 1234', body)
+        self.assertIn('0.01', body)
+        self.assertIn('55060.0 (discovery)', body)
 
     def test_user_cannot_submit_blank_form(self):
         #Joe goes to the New SN form and tries to submit a blank form

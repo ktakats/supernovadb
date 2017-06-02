@@ -22,6 +22,7 @@ class SN(models.Model):
     sntype=models.CharField(max_length=5, blank=True, null=True)
     host=models.CharField(max_length=20, blank=True, null=True)
     z=models.FloatField(blank=True, null=True)
+    reference_date=models.CharField(max_length=100, blank=True, null=True)
     comments=models.ManyToManyField(Comment, related_name="sn_comment", blank=True, null=True)
     archived=models.BooleanField(default=False)
 

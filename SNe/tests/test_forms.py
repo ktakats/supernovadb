@@ -10,6 +10,7 @@ class NewSNFormTest(TestCase):
     def test_form_has_placeholders(self):
         form=NewSNForm()
         self.assertIn('00:00:00.00', form.as_p())
+        self.assertIn('e.g.: 55060.0 (discovery)', form.as_p())
 
     def test_form_validation_for_blank_items(self):
         form=NewSNForm(data={})

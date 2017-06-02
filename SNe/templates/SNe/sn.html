@@ -19,6 +19,7 @@
         <li><b>Dec:</b> {{dec}}</li>
         <li><b>Host:</b> {{sn.host}}</li>
         <li><b>z:</b> {{sn.z}}</li>
+        <li><b>Ref. date:</b> {{sn.reference_date}}</li>
       </ul>
     </div>
 
@@ -60,5 +61,6 @@
 
 
 {%include "Comments/comments.html" with comments=sn.comments.all form=commentform%}
+
 
 {% endblock %}
