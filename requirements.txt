@@ -13,6 +13,7 @@ psycopg2==2.6.2
 pyparsing==2.2.0
 python-dateutil==2.6.0
 python-decouple==3.0
+python-magic==0.4.13
 pytz==2016.10
 selenium==3.0.2
 simplejson==3.10.0
