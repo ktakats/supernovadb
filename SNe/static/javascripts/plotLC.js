@@ -34,6 +34,8 @@ function plotCurve(indata){
 
   /*Get data from input*/
   var data=indata.data;
+  var refdate=indata.reference_date
+  var refmode=indata.reference_mode
   /*remove old plot*/
   d3.selectAll('.LC svg').remove();
 
@@ -45,6 +47,10 @@ function plotCurve(indata){
   /*Default x and y range*/
   var x0=[d3.min(data, function(d){return d.MJD})-10, d3.max(data, function(d){return d.MJD;})+10];
   var y0=[d3.min(data, function(d){return d.magnitude})-2, d3.max(data, function(d){return d.magnitude})+2]
+  /* if there's a reference date, add a second axis*/
+  if(refdate){
+    var x1=[x0[0]-refdate, x0[1]-refdate]
+    }
 
   var Filters=[];
   for (var i=0; i<data.length; i++){
@@ -62,6 +68,12 @@ function plotCurve(indata){
   var xScale=d3.scaleLinear()
     .domain(x0)
     .range([0, width]);
+
+   if(refdate){
+    var x1Scale=d3.scaleLinear()
+    .domain(x1)
+    .range([0, width]);
+   }
 
 
   var colors=d3.scaleSequential()
@@ -122,24 +134,24 @@ function plotCurve(indata){
           var circ=d3.select(this);
           circ.attr("class", "mouseover");
           circ.transition()
-            .delay(100)
+            .delay(10)
             .attr("r", 10)
           tip.transition()
-            .delay(100)
+            .delay(50)
             .style("opacity", 0.8);
-          tip.html("<span>MJD: "+ d.MJD+"</span> </br> <span>Filter: " + d.Filter+"</span> </br> <span>Mag: " + d.magnitude + "+-" + d.mag_error +"</span> ")
-            .style("left", d3.event.pageX + "px")
-            .style("top", d3.event.pageY -80 +"px")
-            .style("font-size", "1.2em")
+          tip.html("<span>MJD: "+ d.MJD + "</span> </br> <span> Days since " + refmode + ": " + (Math.round((d.MJD - refdate)*100)/100) + "</span> </br> <span>Filter: " + d.Filter+"</span> </br> <span>Mag: " + d.magnitude + "+-" + d.mag_error +"</span> ")
+            .style("left", ($(window).width())/2-300+"px")
+            .style("top", "353px")
+            .style("font-size", "1.1em")
           })
         .on("mouseout", function(d){
             var circ=d3.select(this);
             circ.attr("class", "mouseout")
             circ.transition()
-              .delay(100)
+              .delay(200)
               .attr("r", 6)
             tip.transition()
-              .delay(100)
+              .delay(200)
               .style("opacity", 0)
           })
 
@@ -151,7 +163,9 @@ function plotCurve(indata){
    var axiswidth=margin.left;
    var xAxis=d3.axisBottom(xScale);
    var yAxis=d3.axisLeft(yScale)
-
+   if(refdate){
+    var x1Axis=d3.axisTop(x1Scale)
+   }
 
    canvas.append("g")
      .call(xAxis)
@@ -162,6 +176,13 @@ function plotCurve(indata){
     .call(yAxis)
     .attr("class", "y-axis")
     .attr("transform", "translate("+margin.left+","+margin.top+")");
+
+  if(refdate){
+    canvas.append("g")
+    .call(x1Axis)
+    .attr("class", "x1-axis")
+    .attr("transform", "translate(" + margin.left + "," + margin.top +")")
+  }
 
 // add labels
 
@@ -181,6 +202,16 @@ function plotCurve(indata){
       .attr("dy", -margin.left*0.7)
       .attr("transform", "rotate(-90)")
       .style("fill", "black")
+
+     if(refdate){
+        canvas.select(".x1-axis")
+        .append("text")
+        .text("Days since " + refmode)
+        .attr("text-anchor", "middle")
+        .attr("dx", (width)/2)
+        .attr("dy", -margin.top*0.7)
+        .style("fill", "black")
+     }
 
 //Functions
 
@@ -230,10 +261,16 @@ function plotCurve(indata){
       if (!idleTimeout) {return idleTimeout = setTimeout(idled, idleDelay);}
       xScale.domain(x0);
       yScale.domain(y0);
+      if(refdate){
+        x1Scale.domain(x1)
+      }
     }
     else{
       xScale.domain([s[0][0]-margin.left, s[1][0]-margin.left].map(xScale.invert,xScale))
       yScale.domain([s[0][1]-margin.top, s[1][1]-margin.top].map(yScale.invert,yScale))
+      if(refdate){
+        x1Scale.domain([s[0][0]-margin.left, s[1][0]-margin.left].map(x1Scale.invert, x1Scale))
+      }
       canvas.select(".brush").call(brush.move, null);
     }
     zoom();
@@ -247,6 +284,9 @@ function plotCurve(indata){
     var t = canvas.transition().duration(750);
     canvas.select(".x-axis").transition(t).call(xAxis);
     canvas.select(".y-axis").transition(t).call(yAxis);
+    if(refdate){
+        canvas.select(".x1-axis").transition(t).call(x1Axis)
+    }
     canvas.selectAll("circle").transition(t)
       .attr("cx", function(d) {
         var p= xScale(d.MJD)+margin.left;

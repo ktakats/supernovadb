@@ -88,6 +88,14 @@ class queryViewTest(UnitTests):
         response=self.client.get('/sn/%d/photometry/query/' % (sn.id))
         self.assertContains(response, "53003.50")
 
+    def test_query_returns_reference_date(self):
+        sn = self.login_and_create_new_SN()
+        sn.reference_date="53000.5 (discovery)"
+        sn.save()
+        phot = Photometry.objects.create(sn=sn, MJD=53003.5, Filter='V', magnitude=16.7, mag_error=0.02,                                       notes="this sn")
+        response = self.client.get('/sn/%d/photometry/query/' % (sn.id))
+        self.assertContains(response, 53000.5)
+
     def test_view_requires_login(self):
         sn=self.login_and_create_new_SN()
         self.client.logout()

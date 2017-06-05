@@ -160,6 +160,7 @@ table thead th.desc {
 /*LC plot*/
 .LC, .SP {
   margin: 2% auto;
+  position: relative;
 }
 .LC svg, .SP svg{
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.32), 0 3px 12px 0 rgba(0, 0, 0, 0.24);
@@ -167,7 +168,7 @@ table thead th.desc {
 
 .tooltip{
   position: absolute;
-  text-align: center;
+  text-align: left;
   background-color: #79ACA9;
   color: white;
   border-radius: 2px;

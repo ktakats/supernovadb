@@ -73,4 +73,10 @@ def queryPhot(request, sn_id):
     sn=SN.objects.get(id=sn_id)
     phot=Photometry.objects.filter(sn=sn)
     photdata=[obj.as_dict() for obj in phot]
-    return HttpResponse(json.dumps({"data": photdata}))
+    if sn.reference_date:
+        refdate, refmode=sn.reference_date.encode('utf8').strip().split(" ")
+        refdate=float(refdate)
+        refmode=refmode.strip("(").strip(")")
+    else:
+        refmode, refdate=None, None
+    return HttpResponse(json.dumps({"data": photdata, "reference_date": refdate, "reference_mode": refmode}))
