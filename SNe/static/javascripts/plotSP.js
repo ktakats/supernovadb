@@ -32,7 +32,12 @@ function getSelectValues(checkboxName) {
 
 //Plot spectra
 function plotSpectrum(indata){
-  data=indata.data;
+  var data=indata.data;
+  var refdate=indata.reference_date;
+  var refmode=indata.reference_mode;
+
+    console.log(refdate)
+
   d3.selectAll('.SP svg').remove();
 
   /*dimensions*/
@@ -119,9 +124,16 @@ function plotSpectrum(indata){
            tip.transition()
             .delay(300)
             .style("opacity", 0.8)
-           tip.html("<span>MJD: "+dat.MJD + "</span>")
-            .style("left", d3.event.pageX + "px")
-            .style("top", d3.event.pageY -80 +"px")
+           tip.html(function(){
+           if(refdate){
+              return "<span>MJD: "+dat.MJD + "</span> </br> <span>Days since "+ refmode + ": " + (Math.round((dat.MJD-refdate)*100)/100)
+            }
+           else{
+            return "<span>MJD: "+dat.MJD + "</span>"
+           }
+           })
+            .style("left", ($(window).width())/2-300 + "px")
+            .style("top",  ($(window).height())/2 +"px")
             .style("font-size", "1.2em")
          })
        .on("mouseout", function(d){

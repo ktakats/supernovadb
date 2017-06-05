@@ -56,4 +56,15 @@ def query(request, sn_id):
         flux = obj.flux
         spdata.append(
             {"MJD": obj.MJD, "spectrum": [{"wavelength": wv[p]/1000., "flux": flux[p]/1000.} for p in range(len(wv)) if not flux[p]==99999]})
-    return HttpResponse(dumps({"data": spdata}))
+
+    if sn.reference_date:
+        try:
+            refdate,refmode=sn.reference_date.encode('utf8').strip().split(" ")
+            refdate=float(refdate)
+            refmode=refmode.strip("(").strip(")")
+        except ValueError:
+            refdate=float(sn.reference_date.encode('utf8').strip())
+            refmode=None
+    else:
+        refdate,refmode=None, None
+    return HttpResponse(dumps({"data": spdata, "reference_date": refdate, "reference_mode": refmode}))

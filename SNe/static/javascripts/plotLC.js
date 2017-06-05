@@ -139,7 +139,14 @@ function plotCurve(indata){
           tip.transition()
             .delay(50)
             .style("opacity", 0.8);
-          tip.html("<span>MJD: "+ d.MJD + "</span> </br> <span> Days since " + refmode + ": " + (Math.round((d.MJD - refdate)*100)/100) + "</span> </br> <span>Filter: " + d.Filter+"</span> </br> <span>Mag: " + d.magnitude + "+-" + d.mag_error +"</span> ")
+          tip.html(function(){
+            if(refdate){
+                return "<span>MJD: "+ d.MJD + "</span> </br> <span> Days since " + refmode + ": " + (Math.round((d.MJD - refdate)*100)/100) + "</span> </br> <span>Filter: " + d.Filter+"</span> </br> <span>Mag: " + d.magnitude + "+-" + d.mag_error +"</span> "
+            }
+            else{
+                return "<span>MJD: "+ d.MJD + "</span> </br> <span>Filter: " + d.Filter+"</span> </br> <span>Mag: " + d.magnitude + "+-" + d.mag_error +"</span> "
+            }
+          })
             .style("left", ($(window).width())/2-300+"px")
             .style("top", "353px")
             .style("font-size", "1.1em")

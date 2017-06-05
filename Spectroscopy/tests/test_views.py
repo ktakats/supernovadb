@@ -70,6 +70,15 @@ class queryViewTest(UnitTests):
         self.assertContains(response, "55055.0")
         self.assertContains(response, "55045.0")
 
+    def test_query_returns_reference_date(self):
+        sn = self.login_and_create_new_SN()
+        sn.reference_date=55050.0
+        sn.save()
+        myfile = open(TEST_SPECTRUM)
+        self.client.post('/sn/%d/spectroscopy/' % (sn.id), {'file': myfile, 'MJD': 55055.0, 'notes': ""})
+        response = self.client.get('/sn/%d/spectroscopy/query/' % (sn.id))
+        self.assertContains(response, 55050.0)
+
     def test_view_requires_login(self):
         sn=self.login_and_create_new_SN()
         myfile=open(TEST_SPECTRUM)
