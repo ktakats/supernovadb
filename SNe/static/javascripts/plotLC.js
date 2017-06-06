@@ -36,6 +36,7 @@ function plotCurve(indata){
   var data=indata.data;
   var refdate=indata.reference_date
   var refmode=indata.reference_mode
+  if(refmode==null){refmode="reference"}
   /*remove old plot*/
   d3.selectAll('.LC svg').remove();
 

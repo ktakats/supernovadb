@@ -35,8 +35,8 @@ function plotSpectrum(indata){
   var data=indata.data;
   var refdate=indata.reference_date;
   var refmode=indata.reference_mode;
+  if(refmode==null){refmode="reference"}
 
-    console.log(refdate)
 
   d3.selectAll('.SP svg').remove();
 
