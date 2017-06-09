@@ -34,9 +34,12 @@ function plotCurve(indata){
 
   /*Get data from input*/
   var data=indata.data;
-  var refdate=indata.reference_date
-  var refmode=indata.reference_mode
+  var refdate=indata.reference_date;
+  var refmode=indata.reference_mode;
   if(refmode==null){refmode="reference"}
+  var spectra=indata.spectra;
+  if(spectra.length==0)spectra=null;
+
   /*remove old plot*/
   d3.selectAll('.LC svg').remove();
 
@@ -49,9 +52,16 @@ function plotCurve(indata){
   var x0=[d3.min(data, function(d){return d.MJD})-10, d3.max(data, function(d){return d.MJD;})+10];
   var y0=[d3.min(data, function(d){return d.magnitude})-2, d3.max(data, function(d){return d.magnitude})+2]
   /* if there's a reference date, add a second axis*/
+
+  if(spectra){
+    sp0=d3.min(spectra, function(d){return d.MJD})-10
+    sp1=d3.max(spectra, function(d){return d.MJD})+10
+    if(sp0<x0[0]){x0[0]=sp0}
+    if(sp1>x0[1]){x0[1]=sp1}
+  }
   if(refdate){
     var x1=[x0[0]-refdate, x0[1]-refdate]
-    }
+  }
 
   var Filters=[];
   for (var i=0; i<data.length; i++){
@@ -164,6 +174,51 @@ function plotCurve(indata){
           })
 
       dEnter.call(addError)
+
+
+      //mark dates of spectra
+        if(spectra){
+
+        var spEnter=d.enter().data(spectra).append("g")
+
+        spEnter.append("line")
+            .attr('class', 'spectratick')
+            .attr("clip-path", "url(#clipBox)")
+            .attr('x1', function(d){return xScale(d.MJD)+margin.left})
+            .attr('x2', function(d){return xScale(d.MJD)+margin.left})
+            .attr('y1', function(d){console.log(yScale.range()[1]);return yScale.range()[0]+margin.top+20})
+            .attr('y2', function(d){return yScale.range()[0]+margin.top+40})
+            .on('mouseover', function(d){
+                var line=d3.select(this);
+                line.transition()
+                    .delay(50)
+                    .style('stroke-width', 4)
+                tip.transition()
+                    .delay(50)
+                    .style('opacity', 0.8)
+                tip.html(function(){
+                    if(refdate){
+                        return "<span> Spectrum </span> </br> <span> MJD: " + d.MJD + "</span> </br> </span> Days since " + refmode + ": " + Math.round((d.MJD - refdate)*100)/100 + "</span>"
+                    }
+                    else {
+                        return  "<span> Spectrum </span> </br> <span> MJD: " + d.MJD + "</span>"
+                    }
+
+                })
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", "100px")
+                .style("font-size", "1.1em")
+            })
+            .on("mouseout", function(d){
+                var line=d3.select(this);
+                line.transition()
+                    .delay(50)
+                    .style('stroke-width', 2)
+                tip.transition()
+                    .delay(50)
+                    .style('opacity', 0)
+            })
+        }
 
 
   // add axes
@@ -304,6 +359,12 @@ function plotCurve(indata){
         var p=yScale(d.magnitude)+margin.top;
         return p;
         });
+
+    canvas.selectAll(".spectratick").transition(t)
+        .attr("x1", function(d){return xScale(d.MJD)+margin.left;})
+        .attr('x2', function(d){return xScale(d.MJD)+margin.left})
+        .attr('y1', function(d){return yScale.range()[0]+margin.top+20})
+        .attr('y2', function(d){return yScale.range()[0]+margin.top+40});
 
       [".errorbar", ".errortop", ".errorbottom"].forEach(function(myclass, index){
         canvas.selectAll(myclass).transition(t)

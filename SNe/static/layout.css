@@ -175,6 +175,11 @@ table thead th.desc {
   border: solid #79ACA9;
 }
 
+.spectratick{
+  stroke-width: 2;
+  stroke: black;
+}
+
 .axis text{
   font-size: 1.2em;
 }

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.forms.utils import ErrorList
 from django_tables2 import RequestConfig
 from SNe.models import SN
+from Spectroscopy.models import Spectrum
 from .models import Photometry
 from .forms import PhotometryForm, UploadPhotometryFileForm
 from .tables import PhotometryTable
@@ -73,6 +74,10 @@ def queryPhot(request, sn_id):
     sn=SN.objects.get(id=sn_id)
     phot=Photometry.objects.filter(sn=sn)
     photdata=[obj.as_dict() for obj in phot]
+    #get spectra of the SN
+    sp=Spectrum.objects.filter(sn=sn)
+    spdata=[obj.as_dict() for obj in sp]
+    #get reference date and mode if exsists
     if sn.reference_date:
         try:
             refdate, refmode=sn.reference_date.encode('utf8').strip().split(" ")
@@ -84,4 +89,4 @@ def queryPhot(request, sn_id):
 
     else:
         refmode, refdate=None, None
-    return HttpResponse(json.dumps({"data": photdata, "reference_date": refdate, "reference_mode": refmode}))
+    return HttpResponse(json.dumps({"data": photdata, "reference_date": refdate, "reference_mode": refmode, 'spectra': spdata}))

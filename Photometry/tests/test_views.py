@@ -1,5 +1,6 @@
 from SNe.tests.base import UnitTests
 from Photometry.models import Photometry
+from Spectroscopy.models import Spectrum
 from SNe.models import SN
 from django.contrib import auth
 
@@ -102,3 +103,10 @@ class queryViewTest(UnitTests):
         phot=Photometry.objects.create(sn=sn, MJD=53003.5, Filter='V', magnitude=16.7, mag_error=0.02, notes="this sn")
         response=self.client.get('/sn/%d/photometry/query/' % (sn.id))
         self.assertRedirects(response, '/?next=/sn/%d/photometry/query/' % (sn.id))
+
+    def test_view_returns_list_of_spectra_taken(self):
+        sn = self.login_and_create_new_SN()
+        Sp = Spectrum.objects.create(sn=sn, MJD='55052.2', wavelength=[3000, 3500], flux=[-15, -16])
+        Sp = Spectrum.objects.create(sn=sn, MJD='55055.2', wavelength=[3000, 3500], flux=[-15, -16])
+        response = self.client.get('/sn/%d/photometry/query/' % (sn.id))
+        self.assertContains(response, '55055.2')
